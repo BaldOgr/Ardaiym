@@ -2,6 +2,7 @@ package com.turlygazhy.dao;
 
 import com.turlygazhy.connection_pool.ConnectionPool;
 import com.turlygazhy.dao.impl.*;
+import com.turlygazhy.entity.VolunteersGroup;
 
 import java.sql.Connection;
 
@@ -111,5 +112,25 @@ public class DaoFactory {
 
     public ParticipantOfStockDao getParticipantOfStackDao(){
         return new ParticipantOfStockDao(connection);
+    }
+
+    public CarDao getCarDao() {
+        return new CarDao(connection);
+    }
+
+    public VolunteersGroupDao getVolunteersGroupDao() {
+        return new VolunteersGroupDao(connection);
+    }
+
+    public StatusDao getStatusDao() {
+        return new StatusDao(connection);
+    }
+
+    public FamiliesDao getFamiliesDao() {
+        return new FamiliesDao(connection);
+    }
+
+    public SurveyDao getSurveyDao() {
+        return new SurveyDao(connection);
     }
 }

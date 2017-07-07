@@ -76,4 +76,9 @@ public class User {
     public void setRules(int rules) {
         this.rules = rules;
     }
+
+    @Override
+    public String toString() {
+        return "/id" + id + " - " + name + "\n";
+    }
 }

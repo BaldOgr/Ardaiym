@@ -26,6 +26,10 @@ public class NewDistributionCommand extends Command {
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
+        if (!userDao.isAdmin(chatId)){
+            sendMessage(6, chatId, bot);
+            return true;
+        }
         if (waitingType == null) {
             sendMessage(42, chatId, bot);   // Для кого рассылка
             waitingType = WaitingType.FOR_WHOM;

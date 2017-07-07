@@ -26,6 +26,10 @@ public class EditDescriptionCommand extends Command {
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
+        if (!userDao.isAdmin(chatId)){
+            sendMessage(6, chatId, bot);
+            return true;
+        }
         if (waitingType == null) {
             bot.sendMessage(new SendMessage()
                     .setChatId(chatId)

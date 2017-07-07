@@ -16,7 +16,17 @@ public enum CommandType {
     SHOW_NEWS(8),
     NEW_DISTRIBUTION(9),
     SHOW_STOCK(10),
-    EDIT_DESCRIPTION(11);
+    EDIT_DESCRIPTION(11),
+    CHOOSE_CAR(12),
+    CHOOSE_FAMILIES(13),
+    HAS_CAR(14),
+    ABOUT_US(15),
+    CONTACTS(16),
+    CALENDAR(17),
+    ADMIN_CONTROL_MENU(18),
+    MANUAL_STOCK_COMMAND(19),
+    SURVEY(20);
+
 
     private final int id;
 

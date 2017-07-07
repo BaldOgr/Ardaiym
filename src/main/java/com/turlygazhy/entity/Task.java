@@ -12,6 +12,7 @@ public class Task {
     String name;
     List<Dates> dates;
     List<Participant> participants;
+    boolean finished;
 
     public Task() {
         dates = new ArrayList<>();
@@ -70,5 +71,13 @@ public class Task {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

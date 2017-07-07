@@ -26,6 +26,10 @@ public class NewStockCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         initMessage(update, bot);
+        if (!userDao.isAdmin(chatId)){
+            sendMessage(6, chatId, bot);
+            return true;
+        }
 
         if (waitingType == null) {
             sendMessage(30, chatId, bot);           // Введите название акции

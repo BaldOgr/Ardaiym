@@ -2,6 +2,7 @@ package com.turlygazhy.dao.impl;
 
 import com.turlygazhy.dao.AbstractDao;
 import com.turlygazhy.dao.DaoFactory;
+import com.turlygazhy.entity.Dates;
 import com.turlygazhy.entity.Participant;
 
 import java.sql.Connection;
@@ -116,5 +117,15 @@ public class ParticipantOfStockDao extends AbstractDao {
             participants.add(parseParticipant(rs));
         }
         return participants;
+    }
+
+    public boolean hasParticipant(Long chatId, int taskId, int datesId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM PARTICIPANTS_OF_STOCK WHERE USER_ID = ? AND TYPE_OF_WORK_ID = ? AND DATES_ID = ?");
+        ps.setLong(1, chatId);
+        ps.setInt(2, taskId);
+        ps.setInt(3, datesId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        return rs.next();
     }
 }

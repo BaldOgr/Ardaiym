@@ -23,8 +23,6 @@ public class AddToParticipantOfStock extends Command {
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        initMessage(update, bot);
-
         if (waitingType == null) {
             if (update.getCallbackQuery() == null) {
                 bot.sendMessage(new SendMessage()
@@ -43,11 +41,19 @@ public class AddToParticipantOfStock extends Command {
         }
         switch (waitingType) {
             case CHOOSE_STOCK:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(2, chatId, bot);    // Главное меню
+                    return true;
+                }
                 int stockId = Integer.parseInt(updateMessageText);
                 sendTypeOfWorkList(bot, stockId);
                 return false;
 
             case CHOOSE_TYPE_OF_WORK:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(2, chatId, bot);    // Главное меню
+                    return true;
+                }
                 int typeOfWorkId = Integer.parseInt(update.getCallbackQuery().getData());
                 for (Task task : stock.getTaskList()) {
                     if (task.getId() == typeOfWorkId) {
@@ -58,20 +64,34 @@ public class AddToParticipantOfStock extends Command {
                 if (task.getDates().size() > 1) {
                     bot.sendMessage(new SendMessage()
                             .setChatId(chatId)
-                            .setText(messageDao.getMessageText(38))
+                            .setText(messageDao.getMessageText(38))     // Выберите дату
                             .setReplyMarkup(getDatesKeyboard()));
                     waitingType = WaitingType.CHOOSE_DATE;
                     return false;
                 } else {
+                    if (participantOfStockDao.hasParticipant(chatId, task.getId(), task.getDates().get(0).getId())) {
+                        sendMessage(57, chatId, bot);   // Вы уже участвуете в данной работе
+                        return false;
+                    }
                     addParticipant(task.getDates().get(0).getId());
-                    sendMessage(2, chatId, bot);
+                    sendMessage(40, chatId, bot);   // Готово
+                    sendMessage(2, chatId, bot);    // Главное меню
                     return true;
                 }
 
             case CHOOSE_DATE:
-                addParticipant(Integer.parseInt(update.getCallbackQuery().getData()));
-                sendMessage(40, chatId, bot);
-                sendMessage(2, chatId, bot);
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(2, chatId, bot);    // Главное меню
+                    return true;
+                }
+                int dateId = Integer.parseInt(update.getCallbackQuery().getData());
+                if (participantOfStockDao.hasParticipant(chatId, task.getId(), dateId)) {
+                    sendMessage(57, chatId, bot);   // Вы уже участвуете в данной работе
+                    return false;
+                }
+                addParticipant(dateId);
+                sendMessage(40, chatId, bot);   // Готово
+                sendMessage(2, chatId, bot);    // Главное меню
                 return true;
 
         }

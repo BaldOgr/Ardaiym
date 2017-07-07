@@ -11,7 +11,7 @@ public class Stock {
     String title;
     String titleForAdmin;
     String description;
-    boolean finished;
+    int status;
     String report;
     List<Task> taskList;
 
@@ -66,12 +66,12 @@ public class Stock {
         this.description = description;
     }
 
-    public boolean isFinished() {
-        return finished;
+    public int getStatus() {
+        return status;
     }
 
-    public void setFinished(boolean finished) {
-        this.finished = finished;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getReport() {
@@ -80,5 +80,10 @@ public class Stock {
 
     public void setReport(String report) {
         this.report = report;
+    }
+
+    @Override
+    public String toString() {
+        return "/id" + id + " - " + title;
     }
 }

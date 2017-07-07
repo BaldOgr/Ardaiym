@@ -108,7 +108,7 @@ public class PersonalAreaCommand extends Command {
             case TEXT:
                 if (!updateMessageText.equals(buttonDao.getButtonText(10))) {
                     report = new Report();
-                    report.setParticipant(participant.getId());
+                    report.setParticipantId(participant.getId());
                     report.setText(updateMessageText);
                     reportDao.insertReport(report);
                     sendMessage("DONE", chatId, bot);

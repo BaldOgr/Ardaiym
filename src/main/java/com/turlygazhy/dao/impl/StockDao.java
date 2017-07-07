@@ -36,7 +36,7 @@ public class StockDao extends AbstractDao {
     private Stock parseStock(ResultSet rs) throws SQLException {
         Stock stock = new Stock();
         stock.setId(rs.getInt("ID"));
-        stock.setFinished(rs.getBoolean("FINISHED"));
+        stock.setStatus(rs.getInt("STATUS"));
         stock.setDescription(rs.getString("DESCRIPTION"));
         stock.setTitle(rs.getString("TITLE"));
         stock.setTitleForAdmin(rs.getString("TITLE_FOR_ADMIN"));
@@ -64,7 +64,7 @@ public class StockDao extends AbstractDao {
 
     public List<Stock> getUndoneStockList() throws SQLException {
         List<Stock> stockList = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE FINISHED = FALSE");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE STATUS != 4");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){
@@ -75,12 +75,20 @@ public class StockDao extends AbstractDao {
 
     public List<Stock> getDoneStockList() throws SQLException {
         List<Stock> stockList = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE FINISHED = TRUE");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE STATUS = 4");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){
             stockList.add(parseStock(rs));
         }
         return stockList;
+    }
+
+    public void updateStock(Stock stock) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK SET STATUS = ?, REPORT = ? WHERE ID = ?");
+        ps.setInt(1, stock.getStatus());
+        ps.setString(2, stock.getReport());
+        ps.setInt(3, stock.getId());
+        ps.execute();
     }
 }

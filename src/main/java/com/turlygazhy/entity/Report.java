@@ -20,11 +20,11 @@ public class Report {
         this.id = id;
     }
 
-    public int getParticipant() {
+    public int getParticipantId() {
         return participantId;
     }
 
-    public void setParticipant(int participant) {
+    public void setParticipantId(int participant) {
         this.participantId = participant;
     }
 

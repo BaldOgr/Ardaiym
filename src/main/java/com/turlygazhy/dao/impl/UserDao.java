@@ -62,7 +62,7 @@ public class UserDao {
     }
 
     public boolean isAdmin(Long chatId) throws SQLException {
-        return Objects.equals(2, getUserByChatId(chatId).getRules());
+        return getUserByChatId(chatId).getRules() > 1;
     }
     public boolean isSuperAdmin(Long chatId) throws SQLException {
         return Objects.equals(3, getUserByChatId(chatId).getRules());
@@ -82,6 +82,35 @@ public class UserDao {
     public List<User> getUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER");
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()){
+            users.add(parseUser(rs));
+        }
+        return users;
+    }
+
+    public User getUserById(int userId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE ID = ?");
+        ps.setLong(1, userId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        if (rs.next()) {
+            return parseUser(rs);
+        }
+        return null;
+    }
+
+    public void updateUser(User user) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("UPDATE USER SET RULES = ? WHERE ID = ?");
+        ps.setInt(1, user.getRules());
+        ps.setInt(2, user.getId());
+        ps.execute();
+    }
+
+    public List<User> getAdmins() throws SQLException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES = 2");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){

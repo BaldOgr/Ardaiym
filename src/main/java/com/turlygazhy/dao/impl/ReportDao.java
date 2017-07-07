@@ -48,7 +48,7 @@ public class ReportDao {
 
     public void insertReport(Report report) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO REPORT (PARTICIPANT_ID, TEXT, PHOTO) VALUES (?, ?, ?)");
-        ps.setInt(1, report.getParticipant());
+        ps.setInt(1, report.getParticipantId());
         ps.setString(2, report.getText());
         ps.setString(3, report.getPhoto());
         ps.execute();

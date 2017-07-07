@@ -14,9 +14,10 @@ import java.sql.SQLException;
  */
 public class SignUpCommand extends Command {
     User user;
+
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        if (waitingType == null){
+        if (waitingType == null) {
             sendMessage(11, chatId, bot);   // Введите ваше ФИО
             user = new User();
             user.setChatId(chatId);
@@ -24,7 +25,7 @@ public class SignUpCommand extends Command {
             return false;
         }
 
-        switch (waitingType){
+        switch (waitingType) {
             case NAME:
                 user.setName(updateMessageText);
                 sendMessage(12, chatId, bot);   // Введите вашу дату рождения
@@ -58,12 +59,16 @@ public class SignUpCommand extends Command {
                 return false;
 
             case PHONE_NUMBER:
-                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                if (updateMessageText != null && updateMessageText.equals(buttonDao.getButtonText(10))) {
                     sendMessage(10, chatId, bot);   // Ваш пол
                     waitingType = WaitingType.SEX;
                     return false;
                 }
-                user.setPhoneNumber(updateMessageText);
+                if (updateMessage.getContact() != null) {
+                    user.setPhoneNumber(updateMessage.getContact().getPhoneNumber());
+                } else {
+                    user.setPhoneNumber(updateMessageText);
+                }
                 sendMessage(13, chatId, bot);
                 waitingType = WaitingType.CITY;
                 return false;

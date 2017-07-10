@@ -41,6 +41,7 @@ public class StockDao extends AbstractDao {
         stock.setTitle(rs.getString("TITLE"));
         stock.setTitleForAdmin(rs.getString("TITLE_FOR_ADMIN"));
         stock.setReport(rs.getString("REPORT"));
+        stock.setAddedBy(factory.getUserDao().getUserByChatId(rs.getLong("ADDED_BY")));
         stock.setTaskList(DaoFactory.getFactory().getTypeOfWorkDao().getTypeOfWorkList(stock.getId()));
         return stock;
     }
@@ -85,10 +86,15 @@ public class StockDao extends AbstractDao {
     }
 
     public void updateStock(Stock stock) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK SET STATUS = ?, REPORT = ? WHERE ID = ?");
+        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK SET STATUS = ?, REPORT = ?, ADDED_BY = ? WHERE ID = ?");
         ps.setInt(1, stock.getStatus());
         ps.setString(2, stock.getReport());
-        ps.setInt(3, stock.getId());
+        if (stock.getAddedBy() != null) {
+            ps.setLong(3, stock.getAddedBy().getChatId());
+        } else {
+            ps.setLong(3, 0);
+        }
+        ps.setInt(4, stock.getId());
         ps.execute();
     }
 }

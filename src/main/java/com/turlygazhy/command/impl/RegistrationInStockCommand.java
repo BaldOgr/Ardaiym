@@ -15,10 +15,11 @@ import java.sql.SQLException;
  * Created by daniyar on 03.07.17.
  */
 public class RegistrationInStockCommand extends Command {
-
+    int stockId;
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
+            stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
             sendMessage(59, chatId, bot);   // Вы на машине?
             waitingType = WaitingType.CHOOSE;
             return false;
@@ -37,8 +38,9 @@ public class RegistrationInStockCommand extends Command {
                 Car car = new Car();
                 car.setName(updateMessageText);
                 car.setUserId(chatId);
+                car.setStockId(stockId);
                 carDao.insertCar(car);
-                volunteersGroupDao.insertVolunteer(userDao.getUserByChatId(chatId), car.getId());
+                volunteersGroupDao.insertVolunteer(userDao.getUserByChatId(chatId), car.getId(), stockId);
                 sendMessage(61, chatId, bot);
                 return true;
         }

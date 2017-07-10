@@ -18,12 +18,13 @@ import java.util.List;
  * Created by daniyar on 03.07.17.
  */
 public class ChooseCarCommand extends Command {
-
+    int stockId;
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
+            stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
             bot.sendMessage(new SendMessage()
-                    .setText("Choose car")
+                    .setText(messageDao.getMessageText(93)) // Выберите машину
                     .setChatId(chatId)
                     .setReplyMarkup(getCarKeyboard()));
             waitingType = WaitingType.CHOOSE;
@@ -34,8 +35,8 @@ public class ChooseCarCommand extends Command {
             case CHOOSE:
                 int carId = Integer.parseInt(updateMessageText);
                 User user = userDao.getUserByChatId(chatId);
-                volunteersGroupDao.insertVolunteer(user, carId);
-                VolunteersGroup group = volunteersGroupDao.getVolunteersGroup(carId);
+                volunteersGroupDao.insertVolunteer(user, carId, stockId);
+                VolunteersGroup group = volunteersGroupDao.getVolunteersGroup(carId, stockId);
                 StringBuilder sb = new StringBuilder();
                 for (User user1 : group.getUsers()){
                     sb.append(user1.getName()).append("\n");

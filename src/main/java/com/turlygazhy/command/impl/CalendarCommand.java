@@ -47,7 +47,10 @@ public class CalendarCommand extends Command {
                 for (Stock stock : stocks) {
                     sb.append(stock.toString()).append("\n");
                 }
-                sendMessage(sb.toString());
+                bot.sendMessage(new SendMessage()
+                        .setText(sb.toString())
+                        .setChatId(chatId)
+                        .setReplyMarkup(keyboardMarkUpDao.select(10)));
                 waitingType = WaitingType.CHOOSE_STOCK;
                 return false;
 
@@ -67,13 +70,8 @@ public class CalendarCommand extends Command {
                 }
                 int stockId = Integer.parseInt(updateMessageText.substring(3));
                 stock = stockDao.getStock(stockId);
-                String message = "<b>" + stock.getTitle() + "</b>" + "\n\n"
-                        + stock.getDescription() + "\n\n";
-                if (stock.getStatus() == 4){
-                    message = message.concat(stock.getReport());
-                }
                 bot.sendMessage(new SendMessage()
-                        .setText(message)
+                        .setText(stock.parseStockForMessage())
                         .setChatId(chatId)
                         .setParseMode(ParseMode.HTML));
                 return false;

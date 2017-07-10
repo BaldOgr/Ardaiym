@@ -21,9 +21,10 @@ public class CarDao extends AbstractDao {
     }
 
     public void insertCar(Car car) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO CARS (NAME, USER_ID) VALUES(?, ?)");
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO CARS (NAME, USER_ID, STOCK_ID) VALUES(?, ?, ?)");
         ps.setString(1, car.getName());
         ps.setLong(2, car.getUserId());
+        ps.setInt(3, car.getStockId());
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()){

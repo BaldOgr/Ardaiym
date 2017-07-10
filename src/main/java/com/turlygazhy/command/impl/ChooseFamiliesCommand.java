@@ -4,7 +4,6 @@ import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Location;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -16,6 +15,7 @@ import java.util.List;
  * Created by daniyar on 03.07.17.
  */
 public class ChooseFamiliesCommand extends Command {
+    int stockId;
     VolunteersGroup group;
     List<Family> families;
     Family family;
@@ -25,13 +25,16 @@ public class ChooseFamiliesCommand extends Command {
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
             //////      Проверяем, выбирала ли группа семьи ////////
-            group = volunteersGroupDao.getVolunteersGroup(chatId);
+            stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
+
+            group = volunteersGroupDao.getVolunteersGroup(chatId, stockId);
             if (group != null) {
-                families = familiesDao.getFamilyListByCarId(group.getCar().getId());
+                families = familiesDao.getFamilyListByCar(group.getCar());
                 if (families.size() != 0) {             // Если да, то выводим семьи
                     sendFamiliesList();
                     waitingType = WaitingType.CHOOSE_FAMILY;
                 } else {                            // Если нет, то даем им выбор
+                    sendUnchoosedFamiliesCount();
                     sendMessage(65, chatId, bot);   // Сколько семей вы хотите?
                     waitingType = WaitingType.COUNT;
                 }
@@ -41,14 +44,21 @@ public class ChooseFamiliesCommand extends Command {
 
         switch (waitingType) {
             case COUNT:
+                families = familiesDao.getFamilyListByCar(group.getCar());
+                if (families.size() != 0){
+                    sendFamiliesList();
+                    sendMessage(messageDao.getMessageText(94) + families.size(), chatId, bot);   // Один из участников группы уже выбрал количество семей -
+                    return false;
+                }
                 int count = Integer.parseInt(updateMessageText);
-                group = volunteersGroupDao.getVolunteersGroup(chatId);
+                group = volunteersGroupDao.getVolunteersGroup(chatId, stockId);
                 families = familiesDao.getFamilyList(count);
                 sendFamiliesList();
                 for (Family family : families) {
                     family.setCarId(group.getCar().getId());
                     familiesDao.updateFamily(family);
                 }
+                sendUnchoosedFamiliesCountToAdmin();
                 waitingType = WaitingType.CHOOSE_FAMILY;
                 return false;
 
@@ -73,6 +83,10 @@ public class ChooseFamiliesCommand extends Command {
                     family.setFinished(true);
                     familiesDao.updateFamily(family);
                     families.remove(family);
+                    if (families.size() == 0){
+                        sendMessage(92, chatId, bot);   // Вы выполнили задание!
+                        return true;
+                    }
                     sendFamiliesList();
                     return false;
                 }
@@ -135,11 +149,20 @@ public class ChooseFamiliesCommand extends Command {
                         break;
                 }
                 familiesDao.updateFamily(family);
-                sendMessage("Done");
+                sendMessage(40, chatId, bot);   // Готово
                 sendFamilyInfo();
                 return false;
         }
         return false;
+    }
+
+    private void sendUnchoosedFamiliesCount() throws SQLException, TelegramApiException {
+        sendMessage(String.valueOf(familiesDao.getUnchoosedFamilies().size()) + " " + messageDao.getMessageText(95), chatId, bot);
+    }
+
+    private void sendUnchoosedFamiliesCountToAdmin() throws SQLException, TelegramApiException {
+        Long adminChatId = stockDao.getStock(stockId).getAddedBy().getChatId();
+        sendMessage(String.valueOf(familiesDao.getUnchoosedFamilies().size()) + " " + messageDao.getMessageText(95), adminChatId, bot);
     }
 
     private void sendFamilyInfo() throws SQLException, TelegramApiException {

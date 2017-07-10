@@ -7,6 +7,7 @@ public class Car {
     int id;
     String name;
     Long userId;
+    int stockId;
 
     public Long getUserId() {
         return userId;
@@ -30,5 +31,13 @@ public class Car {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(int stockId) {
+        this.stockId = stockId;
     }
 }

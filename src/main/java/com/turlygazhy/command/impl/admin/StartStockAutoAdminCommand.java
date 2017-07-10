@@ -30,51 +30,49 @@ public class StartStockAutoAdminCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         initMessage(update, bot);
-        if (!userDao.isAdmin(chatId)){
+        if (!userDao.isAdmin(chatId)) {
             sendMessage(6, chatId, bot);
             return true;
         }
 
         if (users == null) {
-            users = new ArrayList<>();
-            for (Task task : stock.getTaskList()) {
-                for (Participant participant : task.getParticipants()) {
-                    if (!hasUser(participant.getUser().getChatId(), users)) {
-                        users.add(participant.getUser().getChatId());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
-                    }
-                }
-            }
+            addAllUsersInStock();
         }
 
-        switch (stock.getStatus()) {
-            case 1:
-                sendMessage(62, chatId, bot);   // Раздать список машин?
-                waitingType = WaitingType.CAR_LIST;
-                break;
-            case 2:
-                sendMessage(66, chatId, bot);   // Раздать список семей?
-                waitingType = WaitingType.FAMILY_LIST;
-                break;
-            case 3:
-                sendMessage(67, chatId, bot);   // Завершить акцию?
-                waitingType = WaitingType.COMMAND;
-                break;
-        }
 
         if (waitingType == null) {
-            String messageText = messageDao.getMessageText(58) + "\n"
-                    + stock.getTitle() + "\n";
-            for (Long userChatId : users) {
-                bot.sendMessage(new SendMessage()
-                        .setChatId(userChatId)
-                        .setText(messageText)
-                        .setReplyMarkup(getKeyboard()));
+            if (stock.getStatus() == 0) {
+                familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
+                String messageText = messageDao.getMessageText(58) + "\n"
+                        + stock.getTitle() + "\n";
+                for (Long userChatId : users) {
+                    bot.sendMessage(new SendMessage()
+                            .setChatId(userChatId)
+                            .setText(messageText)
+                            .setReplyMarkup(getKeyboard()));
+                }
+                stock.setStatus(1);
+                stock.setAddedBy(userDao.getUserByChatId(chatId));
+                stockDao.updateStock(stock);
+                sendMessage(62, chatId, bot);   // Раздать список машин?
+                waitingType = WaitingType.CAR_LIST;
+                return false;
+            } else {
+                switch (stock.getStatus()) {
+                    case 1:
+                        sendMessage(62, chatId, bot);   // Раздать список машин?
+                        waitingType = WaitingType.CAR_LIST;
+                        break;
+                    case 2:
+                        sendMessage(66, chatId, bot);   // Раздать список семей?
+                        waitingType = WaitingType.FAMILY_LIST;
+                        break;
+                    case 3:
+                        sendMessage(67, chatId, bot);   // Завершить акцию?
+                        waitingType = WaitingType.COMMAND;
+                        break;
+                }
             }
-            stock.setStatus(1);
-            stockDao.updateStock(stock);
-            sendMessage(62, chatId, bot);   // Раздать список машин?
-            waitingType = WaitingType.CAR_LIST;
-            return false;
         }
 
         switch (waitingType) {
@@ -86,7 +84,10 @@ public class StartStockAutoAdminCommand extends Command {
                         users.remove(car.getUserId());
                     }
                     for (Long userChatId : users) {
-                        sendMessage(63, userChatId, bot);   // Выберите машину
+                        bot.sendMessage(new SendMessage()
+                                .setChatId(userChatId)
+                                .setText(messageDao.getMessageText(63))   // Выберите машину
+                                .setReplyMarkup(getChooseCarKeyboard()));
                     }
                     stock.setStatus(2);
                     stockDao.updateStock(stock);
@@ -98,8 +99,12 @@ public class StartStockAutoAdminCommand extends Command {
             case FAMILY_LIST:
                 if (updateMessageText.equals(buttonDao.getButtonText(59))) {    // Раздать список семей
                     sendMessage("Working...");
+                    addAllUsersInStock();
                     for (Long userChatId : users) {
-                        sendMessage(64, userChatId, bot);   // Выберите семьи
+                        bot.sendMessage(new SendMessage()
+                                .setChatId(userChatId)
+                                .setText(messageDao.getMessageText(64))   // Выберите семьи
+                                .setReplyMarkup(getChooseFamiliesKeyboard()));
                     }
                     sendMessage("Done!");
                     stock.setStatus(3);
@@ -120,10 +125,10 @@ public class StartStockAutoAdminCommand extends Command {
                 stock.setReport(updateMessageText);
                 stock.setStatus(4);
                 stockDao.updateStock(stock);
-                sendMessage("Interviewing...");
-                for (Long chatId : users){
-                    sendMessage("Interview", chatId, bot);
-                }
+                familiesDao.downloadFamiliesToGoogle(stock.getId());
+                sendMessage(91, chatId, bot);   // Рассылавем опрос
+                sendSurvey();
+                sendMessage(40, chatId, bot);   // Готово
                 return true;
         }
 
@@ -131,13 +136,75 @@ public class StartStockAutoAdminCommand extends Command {
         return false;
     }
 
+    private ReplyKeyboard getChooseFamiliesKeyboard() throws SQLException {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(61));
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(61));
+        row.add(button);
+        rows.add(row);
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
+    private ReplyKeyboard getChooseCarKeyboard() throws SQLException {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(60));
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(60));
+        row.add(button);
+        rows.add(row);
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
+    private void addAllUsersInStock() {
+        users = new ArrayList<>();
+        for (Task task : stock.getTaskList()) {
+            for (Participant participant : task.getParticipants()) {
+                if (!hasUser(participant.getUser().getChatId(), users)) {
+                    users.add(participant.getUser().getChatId());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
+                }
+            }
+        }
+    }
+
+    private void sendSurvey() throws SQLException, TelegramApiException {
+        StringBuilder sb = new StringBuilder();
+        sb.append(stock.getTitle()).append("\n").append(messageDao.getMessageText(80));
+        for (User user : userDao.getUsers()) {
+            bot.sendMessage(new SendMessage()
+                    .setChatId(user.getChatId())
+                    .setText(sb.toString())
+                    .setReplyMarkup(getSurveyKeyboard()));
+        }
+    }
+
+    private ReplyKeyboard getSurveyKeyboard() throws SQLException {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(80));
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(80));
+        row.add(button);
+        rows.add(row);
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
+
     private ReplyKeyboard getKeyboard() throws SQLException {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(buttonDao.getButtonText(55));
-        button.setCallbackData("cmd=" + buttonDao.getButtonText(55));
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(55));
         row.add(button);
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);

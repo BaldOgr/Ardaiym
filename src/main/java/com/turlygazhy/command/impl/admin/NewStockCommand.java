@@ -1,13 +1,17 @@
 package com.turlygazhy.command.impl.admin;
 
+import com.fasterxml.jackson.core.base.ParserMinimalBase;
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,7 +30,7 @@ public class NewStockCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         initMessage(update, bot);
-        if (!userDao.isAdmin(chatId)){
+        if (!userDao.isAdmin(chatId)) {
             sendMessage(6, chatId, bot);
             return true;
         }
@@ -69,6 +73,25 @@ public class NewStockCommand extends Command {
                 return false;
 
             case DATE:
+                if (updateMessageText.equals("next")) {
+                    shownDates++;
+                    bot.editMessageText(new EditMessageText()
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(34))
+                            .setMessageId(updateMessage.getMessageId())
+                            .setReplyMarkup(getDeadlineKeyboard(shownDates)));
+                    return false;
+                }
+                if (updateMessageText.equals("prev")) {
+                    shownDates--;
+                    bot.editMessageText(new EditMessageText()
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(34))
+                            .setMessageId(updateMessage.getMessageId())
+                            .setReplyMarkup(getDeadlineKeyboard(shownDates)));
+                    return false;
+                }
+
                 Dates date = new Dates();
                 date.setDate(updateMessageText);
                 typeOfWork.addDates(date);
@@ -92,12 +115,17 @@ public class NewStockCommand extends Command {
                     sendMessage(36, chatId, bot);
                     stockDao.insertStock(stock);
                     StringBuilder sb = new StringBuilder();
-                    sb.append(messageDao.getMessageText(24)).append(stock.getTitle());
+                    sb.append("<b>").append(messageDao.getMessageText(24)).append("</b>: ").append(stock.getTitle());
                     for (User user : userDao.getUsers()) {
-                        bot.sendMessage(new SendMessage()
-                                .setChatId(user.getChatId())
-                                .setText(sb.toString())
-                                .setReplyMarkup(getKeyboard()));
+                        try {
+                            bot.sendMessage(new SendMessage()
+                                    .setChatId(user.getChatId())
+                                    .setText(sb.toString())
+                                    .setParseMode(ParseMode.HTML)
+                                    .setReplyMarkup(getKeyboard()));
+                        } catch (TelegramApiRequestException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                     sendMessage(39, chatId, bot);
                     return true;
@@ -114,7 +142,7 @@ public class NewStockCommand extends Command {
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(buttonDao.getButtonText(43));
-        button.setCallbackData("id="+ stock.getId()+" cmd="+buttonDao.getButtonText(43));
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(43));
         row.add(button);
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);

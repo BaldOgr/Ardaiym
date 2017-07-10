@@ -94,13 +94,17 @@ public class SheetsAdapter {
 
         for (List row : values) {
             Family family = new Family();
-            family.setName((String) row.get(0));
-            family.setPhoneNumber((String) row.get(1));
-            family.setAddress((String) row.get(2));
-            family.setLongitude(Double.parseDouble((String) row.get(3)));
-            family.setLatitude(Double.parseDouble((String) row.get(4)));
-            family.setGroup(Integer.parseInt((String) row.get(5)));
-            families.add(family);
+            try {
+                family.setName((String) row.get(0));
+                family.setPhoneNumber((String) row.get(1));
+                family.setAddress((String) row.get(2));
+                family.setLongitude(Double.parseDouble((String) row.get(3)));
+                family.setLatitude(Double.parseDouble((String) row.get(4)));
+                family.setGroup(Integer.parseInt((String) row.get(5)));
+                families.add(family);
+            } catch (IndexOutOfBoundsException ex){
+                System.out.println("Nothing on this");
+            }
         }
         return families;
     }

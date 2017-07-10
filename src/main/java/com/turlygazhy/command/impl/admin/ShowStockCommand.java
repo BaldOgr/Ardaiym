@@ -35,7 +35,7 @@ public class ShowStockCommand extends Command {
         if (command != null) {
             if (command.execute(update, bot)) {
                 command = null;
-                sendMessage(53, chatId, bot);   // Меню акции
+                sendStockInfo();
             }
             return false;
         }
@@ -72,17 +72,7 @@ public class ShowStockCommand extends Command {
                 }
                 int stockId = Integer.parseInt(updateMessageText.substring(3));
                 stock = stockDao.getStock(stockId);
-                StringBuilder sb = new StringBuilder();
-                sb.append("<b>").append(messageDao.getMessageText(47)).append(": </b>").append(stock.getTitle()).append("\n")
-                        .append("<b>").append(messageDao.getMessageText(79)).append(": </b>").append(stock.getDescription());
-                SendMessage message = new SendMessage().setChatId(chatId).setText(sb.toString()).setParseMode(ParseMode.HTML);
-                if (stock.getStatus() == 4) {
-                    message = message.setReplyMarkup(keyboardMarkUpDao.select(15));
-                } else {
-                    message = message.setReplyMarkup(keyboardMarkUpDao.select(16));
-                }
-                bot.sendMessage(message);
-                waitingType = WaitingType.COMMAND;
+                sendStockInfo();
                 return false;
 
             case COMMAND:
@@ -100,7 +90,7 @@ public class ShowStockCommand extends Command {
                     List<String> reports = objects.get(0);
                     List<Integer> rating = objects.get(1);
                     int stockRating = 0;
-                    sb = new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
 
                     if (rating.size() != 0) {
                         for (Integer rate : rating) {
@@ -117,7 +107,7 @@ public class ShowStockCommand extends Command {
                             }
                         }
                     }
-                    if (sb.toString().length() == 0){
+                    if (sb.toString().length() == 0) {
                         sendMessage(84, chatId, bot);   // Нет результатов
                         return false;
                     }
@@ -140,8 +130,10 @@ public class ShowStockCommand extends Command {
                 } else {
                     command = new StartStockManualAdminCommand(stock);
                 }
-                familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
-                command.execute(update, bot);
+                if (command.execute(update, bot)) {
+                    command = null;
+                    sendStockInfo();
+                }
                 return false;
 
             case TEXT:
@@ -150,6 +142,7 @@ public class ShowStockCommand extends Command {
                     return false;
                 }
                 stock.setReport(updateMessageText);
+                stock.setAddedBy(userDao.getUserByChatId(chatId));
                 stockDao.updateStock(stock);
                 familiesDao.downloadFamiliesToGoogle(stock.getId());
                 sendMessage(40, chatId, bot);   // Готово
@@ -164,10 +157,24 @@ public class ShowStockCommand extends Command {
                 }
                 stock.setReport(updateMessageText);
                 stockDao.updateStock(stock);
-                sendStockList();
+                sendMessage(stock.parseStockForMessage(), chatId, bot);
                 return false;
         }
         return false;
+    }
+
+    private void sendStockInfo() throws TelegramApiException, SQLException {
+        SendMessage message = new SendMessage()
+                .setChatId(chatId)
+                .setText(stock.parseStockForMessage())
+                .setParseMode(ParseMode.HTML);
+        if (stock.getStatus() == 4) {
+            message = message.setReplyMarkup(keyboardMarkUpDao.select(15));
+        } else {
+            message = message.setReplyMarkup(keyboardMarkUpDao.select(16));
+        }
+        bot.sendMessage(message);
+        waitingType = WaitingType.COMMAND;
     }
 
     private void sendStockList() throws SQLException, TelegramApiException {
@@ -175,7 +182,10 @@ public class ShowStockCommand extends Command {
         for (Stock stock : stocks) {
             sb.append("/id").append(stock.getId()).append(" - ").append(stock.getTitleForAdmin()).append("\n");
         }
-        sendMessage(sb.toString(), chatId, bot);
+        bot.sendMessage(new SendMessage()
+                .setText(sb.toString())
+                .setChatId(chatId)
+                .setReplyMarkup(keyboardMarkUpDao.select(10)));
         waitingType = WaitingType.CHOOSE_STOCK;
     }
 

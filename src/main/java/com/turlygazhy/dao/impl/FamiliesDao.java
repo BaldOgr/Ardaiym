@@ -1,6 +1,7 @@
 package com.turlygazhy.dao.impl;
 
 import com.turlygazhy.dao.AbstractDao;
+import com.turlygazhy.entity.Car;
 import com.turlygazhy.entity.Family;
 import com.turlygazhy.entity.User;
 import com.turlygazhy.tool.SheetsAdapter;
@@ -60,27 +61,16 @@ public class FamiliesDao extends AbstractDao {
         return families;
     }
 
-    public List<Family> getFamilyListByCarId(int carId) throws SQLException {
+    public List<Family> getFamilyListByCar(Car car) throws SQLException {
         List<Family> families = new ArrayList<>();
         PreparedStatement ps = connection.prepareStatement("select * from families where car_id = ?");
-        ps.setInt(1, carId);
+        ps.setInt(1, car.getId());
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
             families.add(parseFamily(rs));
         }
         return families;
-    }
-
-    public Family getFamily(int familyId) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("select * from families where id = ?");
-        ps.setInt(1, familyId);
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        if (rs.next()) {
-            return parseFamily(rs);
-        }
-        return null;
     }
 
     public void updateFamily(Family family) throws SQLException {
@@ -109,14 +99,6 @@ public class FamiliesDao extends AbstractDao {
         ResultSet rs = ps.getGeneratedKeys();
         rs.next();
         family.setId(rs.getInt(1));
-    }
-
-    public boolean hasFamilies(int carId) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("select * from families where car_id = ?");
-        ps.setInt(1, carId);
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        return rs.next();
     }
 
     public List<Family> getFamilyList() throws SQLException {
@@ -205,14 +187,28 @@ public class FamiliesDao extends AbstractDao {
         }
         try {
             SheetsAdapter.writeData(writeData);
+            ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?; " +
+                    "DELETE FROM FAMILY_GROUPS;" +
+                    "DELETE FROM GROUPS_OF_VOLUNTEERS;" +
+                    "DELETE FROM VOLUNTEERS_GROUP WHERE STOCK_ID = ?;" +
+                    "DELETE FROM CARS WHERE STOCK_ID = ?;");
+            for (int i = 1; i < 4; i++) {
+                ps.setInt(i, id);
+            }
+            ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?; " +
-                "DELETE FROM FAMILY_GROUPS;" +
-                "DELETE FROM GROUPS_OF_VOLUNTEERS;" +
-                "DELETE FROM VOLUNTEERS_GROUP;");
-        ps.setInt(1, id);
+    }
+
+    public List getUnchoosedFamilies() throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families where car_id = 0");
         ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
+        }
+        return families;
     }
 }

@@ -1,5 +1,10 @@
 package com.turlygazhy.entity;
 
+import com.turlygazhy.dao.DaoFactory;
+import com.turlygazhy.dao.impl.MessageDao;
+
+import java.sql.SQLException;
+
 /**
  * Created by daniyar on 03.07.17.
  */
@@ -87,16 +92,24 @@ public class Family {
         return group;
     }
 
-    @Override
-    public String toString() {
-        return "/id" + id + " - " + name + "\nAddress: " + address;
-    }
-
     public void setStockId(int stockId) {
         this.stockId = stockId;
     }
 
     public int getStockId() {
         return stockId;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            MessageDao messageDao = DaoFactory.getFactory().getMessageDao();
+            return "/id" + id + " - " + name + "\n" +
+                    messageDao.getMessageText(96) + address + "\n" +
+                    messageDao.getMessageText(97) + phoneNumber;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

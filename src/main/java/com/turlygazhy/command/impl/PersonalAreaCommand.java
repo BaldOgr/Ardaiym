@@ -5,6 +5,7 @@ import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.Participant;
 import com.turlygazhy.entity.Report;
 import com.turlygazhy.entity.WaitingType;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -75,7 +76,8 @@ public class PersonalAreaCommand extends Command {
                 participant = participantOfStockDao.getParticipantById(participantId);
                 SendMessage message = new SendMessage()
                         .setText(participant.toString())
-                        .setChatId(chatId);
+                        .setChatId(chatId)
+                        .setParseMode(ParseMode.HTML);
                 if (participant.isFinished()) {
                     message = message.setReplyMarkup(keyboardMarkUpDao.select(11));
                 } else {
@@ -91,7 +93,10 @@ public class PersonalAreaCommand extends Command {
                     for (Participant pr : participants) {
                         sb.append("/id").append(pr.getId()).append(" - ").append(taskDao.getTypeOfWork(pr.getTypeOfWorkId()).getName()).append("\n");
                     }
-                    sendMessage(sb.toString(), chatId, bot);
+                    bot.sendMessage(new SendMessage()
+                            .setText(sb.toString())
+                            .setChatId(chatId)
+                            .setReplyMarkup(keyboardMarkUpDao.select(10)));
                     waitingType = WaitingType.CHOOSE_TASK;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(25))) {    // Выполнено
@@ -106,23 +111,23 @@ public class PersonalAreaCommand extends Command {
                 return false;
 
             case TEXT:
-                if (!updateMessageText.equals(buttonDao.getButtonText(10))) {
-                    report = new Report();
-                    report.setParticipantId(participant.getId());
-                    report.setText(updateMessageText);
-                    reportDao.insertReport(report);
-                    sendMessage("DONE", chatId, bot);
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {   // Назад
+                    message = new SendMessage()
+                            .setText(participant.toString())
+                            .setChatId(chatId);
+                    if (participant.isFinished()) {
+                        message = message.setReplyMarkup(keyboardMarkUpDao.select(10));
+                    } else {
+                        message = message.setReplyMarkup(keyboardMarkUpDao.select(6));
+                    }
+                    bot.sendMessage(message);
+                    waitingType = WaitingType.TASK_COMMAND;
                 }
-                message = new SendMessage()
-                        .setText(participant.toString())
-                        .setChatId(chatId);
-                if (participant.isFinished()) {
-                    message = message.setReplyMarkup(keyboardMarkUpDao.select(10));
-                } else {
-                    message = message.setReplyMarkup(keyboardMarkUpDao.select(6));
-                }
-                bot.sendMessage(message);
-                waitingType = WaitingType.TASK_COMMAND;
+                report = new Report();
+                report.setParticipantId(participant.getId());
+                report.setText(updateMessageText);
+                reportDao.insertReport(report);
+                sendMessage(40, chatId, bot);   // Готово
                 return false;
         }
 
@@ -139,7 +144,10 @@ public class PersonalAreaCommand extends Command {
         for (Participant pr : participants) {
             sb.append("/id").append(pr.getId()).append(" - ").append(taskDao.getTypeOfWork(pr.getTypeOfWorkId()).getName()).append("\n");
         }
-        sendMessage(sb.toString(), chatId, bot);
+        bot.sendMessage(new SendMessage()
+                .setText(sb.toString())
+                .setChatId(chatId)
+                .setReplyMarkup(keyboardMarkUpDao.select(10)));
         waitingType = WaitingType.CHOOSE_TASK;
     }
 }

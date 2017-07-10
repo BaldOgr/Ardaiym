@@ -11,6 +11,7 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -141,11 +142,22 @@ public class ManualStockCommand extends Command {
     }
 
     private void sendFamiliesList() throws SQLException, TelegramApiException {
-        StringBuilder sb = new StringBuilder();
-        for (Family family : families) {
-            sb.append(family).append("\n");
+        int count = families.size();
+        Iterator iterator = families.listIterator();
+        for (int i = 0; i < count; i++) {
+            StringBuilder sb = new StringBuilder();
+            if (!iterator.hasNext()){
+                break;
+            }
+            for (int j = 0; j < 50; j++) {
+                if (iterator.hasNext()){
+                    sb.append(iterator.next().toString()).append("\n");
+                } else {
+                    break;
+                }
+            }
+            sendMessage(sb.toString(), chatId, bot);
         }
-        sendMessage(sb.toString());
         waitingType = WaitingType.CHOOSE_FAMILY;
     }
 }

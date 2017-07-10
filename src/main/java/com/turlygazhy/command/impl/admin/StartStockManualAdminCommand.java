@@ -12,8 +12,6 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,11 +33,16 @@ public class StartStockManualAdminCommand extends Command {
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         initMessage(update, bot);
         if (!userDao.isAdmin(chatId)) {
-            sendMessage(6, chatId, bot);
+            sendMessage(6, chatId, bot);    // Главное меню
             return true;
         }
 
         if (waitingType == null) {
+            if (stock.getStatus() == 3){
+                sendMessage(98, chatId, bot);   //Акция уже началась, чтобы закончить, нажмите кнопку "Закончить акцию"
+                return true;
+            }
+            familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
             List<Family> families = familiesDao.getFamilyList();
             for (Family family : families) {
                 if (!hasFamily(family, familyGroups)) {
@@ -66,6 +69,11 @@ public class StartStockManualAdminCommand extends Command {
         switch (waitingType) {
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(64))) {    // Выбрать семьи
+                    if (userVolunteers.size() == 0){
+                        sendMessage(86, chatId, bot);   // Выберите минимум 1 волонтера
+                        sendUserList();
+                        return false;
+                    }
                     sendMessage(71, chatId, bot);   // Выберите семьи
                     sendFamiliesList();
                     familiesForVolunteers = new ArrayList<>();
@@ -84,6 +92,11 @@ public class StartStockManualAdminCommand extends Command {
                 return false;
             case CHOOSE_FAMILY:
                 if (updateMessageText.equals(buttonDao.getButtonText(67))) {    // Добавить новую группу
+                    if (familiesForVolunteers.size() == 0){
+                        sendMessage(87, chatId, bot);   // Выберите минимум 1 семью
+                        sendFamiliesList();
+                        return false;
+                    }
                     familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId());
                     familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId());
                     usersOnStock.add(userVolunteers);
@@ -99,6 +112,9 @@ public class StartStockManualAdminCommand extends Command {
                     familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId());
                     usersOnStock.add(userVolunteers);
                     distributeAll();
+                    stock.setStatus(3);
+                    stock.setAddedBy(userDao.getUserByChatId(chatId));
+                    stockDao.updateStock(stock);
                     return false;
                 }
                 int familyGroupId = Integer.parseInt(updateMessageText.substring(3));
@@ -125,16 +141,22 @@ public class StartStockManualAdminCommand extends Command {
     }
 
     private void distributeAll() throws SQLException, TelegramApiException {
-        sendMessage("Distributing...");
+        sendMessage(50, chatId, bot);   // Начинаю рассылку
         for (List<User> users : usersOnStock) {
             for (User user : users) {
-                bot.sendMessage(new SendMessage()
-                        .setText(messageDao.getMessageText(76))     // Начинаем акцию
-                        .setChatId(user.getChatId())
-                        .setReplyMarkup(getKeyboard()));
+                try {
+                    bot.sendMessage(new SendMessage()
+                            .setText(messageDao.getMessageText(76))     // Начинаем акцию
+                            .setChatId(user.getChatId())
+                            .setReplyMarkup(getKeyboard()));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    sendMessage("BAN FROM: " + user.getName(), chatId, bot);
+                }
             }
         }
-        sendMessage("Distributed");
+        sendMessage(40, chatId, bot);   // Готово
+        sendMessage(7,chatId, bot);     // Меню админов
     }
 
     private ReplyKeyboard getKeyboard() throws SQLException {

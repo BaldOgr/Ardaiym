@@ -2,7 +2,7 @@ package com.turlygazhy.dao;
 
 import com.turlygazhy.connection_pool.ConnectionPool;
 import com.turlygazhy.dao.impl.*;
-import com.turlygazhy.entity.VolunteersGroup;
+import com.turlygazhy.entity.RequestCall;
 
 import java.sql.Connection;
 
@@ -94,43 +94,20 @@ public class DaoFactory {
         return new SavedResultsDao(connection);
     }
 
-    public TaskDao getTypeOfWorkDao() {
-        return new TaskDao(connection);
+    public QuestionDao getQuestionDao() {
+        return new QuestionDao(connection);
     }
 
-    public ReportDao getReportDao() {
-        return new ReportDao(connection);
+    public AnswerDao getAnswerDao() {
+        return new AnswerDao(connection);
     }
 
-    public DatesDao getDatesDao() {
-        return new DatesDao(connection);
+    public RequestCallDao getRequestCallDao() {
+        return new RequestCallDao(connection);
     }
 
-    public StockDao getStockDao(){
-        return new StockDao(connection);
+    public VoteDao getVoteDao() {
+        return new VoteDao(connection);
     }
 
-    public ParticipantOfStockDao getParticipantOfStackDao(){
-        return new ParticipantOfStockDao(connection);
-    }
-
-    public CarDao getCarDao() {
-        return new CarDao(connection);
-    }
-
-    public VolunteersGroupDao getVolunteersGroupDao() {
-        return new VolunteersGroupDao(connection);
-    }
-
-    public StatusDao getStatusDao() {
-        return new StatusDao(connection);
-    }
-
-    public FamiliesDao getFamiliesDao() {
-        return new FamiliesDao(connection);
-    }
-
-    public SurveyDao getSurveyDao() {
-        return new SurveyDao(connection);
-    }
 }

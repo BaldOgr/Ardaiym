@@ -2,18 +2,27 @@ package com.turlygazhy.command.impl;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
+import com.turlygazhy.entity.Answer;
+import com.turlygazhy.entity.Question;
 import com.turlygazhy.entity.User;
 import com.turlygazhy.entity.WaitingType;
+import org.telegram.telegrambots.api.objects.Contact;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by daniyar on 29.06.17.
  */
 public class SignUpCommand extends Command {
     User user;
+    List<Question> questions;
+    Question question;
+    Answer answer;
+    Iterator iterator;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -81,8 +90,66 @@ public class SignUpCommand extends Command {
                 }
                 user.setCity(updateMessageText);
                 userDao.insertUser(user);
+                questions = questionDao.getQuestions(false);
+                if (questions.size() != 0){
+                    iterator = questions.iterator();
+                    question = (Question) iterator.next();
+                    sendMessage(question.getText());
+                    waitingType = WaitingType.ANSWER;
+                    return false;
+                }
                 sendMessage(15, chatId, bot);       // Готово! Чтобы войти в главное меню, напишите /start
                 return true;
+
+            case ANSWER:
+                answer = new Answer();
+                answer.setQuestion(question);
+                answer.setUserId(chatId);
+                switch (question.getType()){
+                    case 0: // Ответ - текст
+                        answer.setText(updateMessageText);
+                        break;
+                    case 1: // Ответ - фото
+                        if (updateMessage.getPhoto() != null) {
+                            answer.setPhoto(updateMessage.getPhoto().get(0).getFileId());
+                        } else {
+                            sendMessage(36, chatId, bot );  // Отправьте фото
+                            return false;
+                        }
+                        break;
+                    case 2: // Ответ - аудио
+                        if (updateMessage.getAudio() != null) {
+                            answer.setAudio(updateMessage.getAudio().getFileId());
+                        } else {
+                            sendMessage(37, chatId, bot);   // Запишите аудио
+                            return false;
+                        }
+                        break;
+                    case 3: // Ответ - контакт
+                        Contact contact = updateMessage.getContact();
+                        if (contact != null){
+                            answer.setContactUserId(Long.valueOf(contact.getUserID()));
+                            answer.setContactPhoneNumber(contact.getPhoneNumber());
+                            answer.setContactFirstName(contact.getFirstName());
+                            answer.setContactSecondName(contact.getLastName());
+                        } else {
+                            answer.setContactPhoneNumber(updateMessageText);
+                        }
+                        break;
+                }
+                answerDao.insertAnswer(answer);
+                if (iterator.hasNext()){
+                    question = (Question) iterator.next();
+                    sendMessage(question.getText());
+                    return false;
+                } else {
+                    user = new User();
+                    user.setChatId(chatId);
+                    userDao.insertUser(user);
+                    sendMessage(15, chatId, bot);   // Готово! Вопросов больше нет
+                    return true;
+                }
+
         }
 
         return false;

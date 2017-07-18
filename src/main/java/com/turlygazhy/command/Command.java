@@ -5,9 +5,8 @@ import com.turlygazhy.dao.DaoFactory;
 import com.turlygazhy.dao.GoalDao;
 import com.turlygazhy.dao.impl.*;
 import com.turlygazhy.entity.Message;
-import com.turlygazhy.entity.VolunteersGroup;
 import com.turlygazhy.entity.WaitingType;
-import com.turlygazhy.tool.SheetsAdapter;
+import com.turlygazhy.reminder.Reminder;
 import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendContact;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -46,15 +45,9 @@ public abstract class Command {
     protected GoalDao goalDao = factory.getGoalDao();
     protected ThesisDao thesisDao = factory.getThesisDao();
     protected SavedResultsDao savedResultsDao = factory.getSavedResultsDao();
-    protected ParticipantOfStockDao participantOfStockDao = factory.getParticipantOfStackDao();
-    protected TaskDao taskDao = factory.getTypeOfWorkDao();
-    protected ReportDao reportDao = factory.getReportDao();
-    protected StockDao stockDao = factory.getStockDao();
-    protected CarDao carDao = factory.getCarDao();
-    protected VolunteersGroupDao volunteersGroupDao = factory.getVolunteersGroupDao();
-    protected StatusDao statusDao = factory.getStatusDao();
-    protected FamiliesDao familiesDao = factory.getFamiliesDao();
-    protected SurveyDao surveyDao = factory.getSurveyDao();
+    protected QuestionDao questionDao = factory.getQuestionDao();
+    protected AnswerDao answerDao = factory.getAnswerDao();
+    protected RequestCallDao requestCallDao = factory.getRequestCallDao();
 
     protected WaitingType waitingType;
     protected org.telegram.telegrambots.api.objects.Message updateMessage;
@@ -64,12 +57,6 @@ public abstract class Command {
 
     public void initMessage(Update update, Bot bot) throws TelegramApiException, SQLException {
         this.bot = bot;
-//        try {
-//            SheetsAdapter.writeData("14s83d9z4xwEmyOWwWSWPrA3QvDVE0NKl0JMGmf8dXjU", "Лист1",
-//                    'A', 2, updateMessageText);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         updateMessage = update.getMessage();
         if (updateMessage == null) {
             CallbackQuery callbackQuery = update.getCallbackQuery();

@@ -42,22 +42,26 @@ public class StockDao extends AbstractDao {
         stock.setTitleForAdmin(rs.getString("TITLE_FOR_ADMIN"));
         stock.setReport(rs.getString("REPORT"));
         stock.setAddedBy(factory.getUserDao().getUserByChatId(rs.getLong("ADDED_BY")));
-        stock.setTaskList(DaoFactory.getFactory().getTypeOfWorkDao().getTypeOfWorkList(stock.getId()));
+        stock.setCTA(rs.getBoolean("CTA"));
+        if (stock.isCTA()) {
+            stock.setTaskList(DaoFactory.getFactory().getTypeOfWorkDao().getTypeOfWorkList(stock.getId()));
+        }
         return stock;
     }
 
     public void insertStock(Stock stock) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO STOCK (TITLE, TITLE_FOR_ADMIN, DESCRIPTION, REPORT) VALUES (?, ?, ?, ?)");
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO STOCK (TITLE, TITLE_FOR_ADMIN, DESCRIPTION, REPORT, CTA) VALUES (?, ?, ?, ?, ?)");
         ps.setString(1, stock.getTitle());
         ps.setString(2, stock.getTitleForAdmin());
         ps.setString(3, stock.getDescription());
         ps.setString(4, stock.getReport());
+        ps.setBoolean(5, stock.isCTA());
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()) {
             stock.setId(rs.getInt(1));
         }
-        for (Task task : stock.getTaskList()){
+        for (Task task : stock.getTaskList()) {
             task.setStockId(stock.getId());
         }
         DaoFactory.getFactory().getTypeOfWorkDao().insertTypeOfWorkList(stock.getTaskList());
@@ -68,7 +72,7 @@ public class StockDao extends AbstractDao {
         PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE STATUS != 4");
         ps.execute();
         ResultSet rs = ps.getResultSet();
-        while (rs.next()){
+        while (rs.next()) {
             stockList.add(parseStock(rs));
         }
         return stockList;
@@ -79,7 +83,7 @@ public class StockDao extends AbstractDao {
         PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE STATUS = 4");
         ps.execute();
         ResultSet rs = ps.getResultSet();
-        while (rs.next()){
+        while (rs.next()) {
             stockList.add(parseStock(rs));
         }
         return stockList;

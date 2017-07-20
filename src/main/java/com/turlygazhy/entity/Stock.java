@@ -19,6 +19,7 @@ public class Stock {
     String report;
     List<Task> taskList;
     User addedBy;
+    private boolean CTA;
 
     public Stock() {
         taskList = new ArrayList<>();
@@ -109,5 +110,13 @@ public class Stock {
     @Override
     public String toString() {
         return "/id" + id + " - " + title;
+    }
+
+    public void setCTA(boolean CTA) {
+        this.CTA = CTA;
+    }
+
+    public boolean isCTA() {
+        return CTA;
     }
 }

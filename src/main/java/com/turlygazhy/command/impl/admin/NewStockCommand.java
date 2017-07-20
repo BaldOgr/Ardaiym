@@ -114,20 +114,8 @@ public class NewStockCommand extends Command {
                 if (updateMessageText.equals(buttonDao.getButtonText(42))) {
                     sendMessage(36, chatId, bot);
                     stockDao.insertStock(stock);
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("<b>").append(messageDao.getMessageText(24)).append("</b>: ").append(stock.getTitle());
-                    for (User user : userDao.getUsers()) {
-                        try {
-                            bot.sendMessage(new SendMessage()
-                                    .setChatId(user.getChatId())
-                                    .setText(sb.toString())
-                                    .setParseMode(ParseMode.HTML)
-                                    .setReplyMarkup(getKeyboard()));
-                        } catch (TelegramApiRequestException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    sendMessage(39, chatId, bot);
+                    sendMessage(39, chatId, bot);   // Готово!
+                    sendMessage(stock.parseStockForMessage());
                     return true;
                 }
                 return false;

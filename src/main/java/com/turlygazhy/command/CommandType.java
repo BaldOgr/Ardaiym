@@ -25,7 +25,8 @@ public enum CommandType {
     CALENDAR(17),
     ADMIN_CONTROL_MENU(18),
     MANUAL_STOCK_COMMAND(19),
-    SURVEY(20);
+    SURVEY(20),
+    NEW_TEXT(21);
 
 
     private final int id;

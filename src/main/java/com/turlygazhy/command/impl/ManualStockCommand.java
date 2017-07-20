@@ -33,9 +33,10 @@ public class ManualStockCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
+            int stockId = Integer.parseInt(updateMessageText.substring(8, updateMessageText.indexOf(" ")));
             groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId());
             users = familiesDao.getUsersByGroupId(groupId);
-            families = familiesDao.getFamilyListByGroupId(groupId);
+            families = familiesDao.getFamilyListByGroupId(groupId, stockId);
             sendFamiliesList();
             return false;
         }

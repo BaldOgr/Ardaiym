@@ -98,7 +98,7 @@ public class StartStockManualAdminCommand extends Command {
                         return false;
                     }
                     familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId());
-                    familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId());
+                    familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     usersOnStock.add(userVolunteers);
                     userVolunteers = new ArrayList<>();
                     familiesForVolunteers = new ArrayList<>();
@@ -109,7 +109,7 @@ public class StartStockManualAdminCommand extends Command {
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(68))) {    // Закончить и начать акцию
                     familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId());
-                    familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId());
+                    familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     usersOnStock.add(userVolunteers);
                     distributeAll();
                     stock.setStatus(3);
@@ -166,7 +166,7 @@ public class StartStockManualAdminCommand extends Command {
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(buttonDao.getButtonText(72));
-        button.setCallbackData("cmd=" + buttonDao.getButtonText(72));
+        button.setCallbackData("stockid=" + stock.getId() + " cmd=" + buttonDao.getButtonText(72));
         row.add(button);
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);
@@ -181,7 +181,7 @@ public class StartStockManualAdminCommand extends Command {
         sendMessage(sb.toString(), chatId, bot);
     }
 
-    private void sendUserList() throws TelegramApiException {
+    private void sendUserList() throws TelegramApiException, SQLException {
         if (users.size() == 0) {
             bot.sendMessage(new SendMessage()
                     .setChatId(chatId)

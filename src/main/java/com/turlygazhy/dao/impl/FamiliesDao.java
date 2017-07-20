@@ -112,15 +112,17 @@ public class FamiliesDao extends AbstractDao {
         return families;
     }
 
-    public List<Family> getFamilyListByGroupId(int familyGroupId) throws SQLException {
+    public List<Family> getFamilyListByGroupId(int familyGroupId, int stockId) throws SQLException {
         List<Family> families = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("select * from FAMILY_GROUPS where group_id = ?");
+        PreparedStatement ps = connection.prepareStatement("select * from FAMILY_GROUPS where group_id = ? and STOCK_ID = ?");
         ps.setInt(1, familyGroupId);
+        ps.setInt(2, stockId);
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
-            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ?");
+            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ? and STOCK_ID = ?");
             ps.setInt(1, rs.getInt("FAMILY_GROUP_ID"));
+            ps.setInt(2, stockId);
             ps.execute();
             ResultSet resultSet = ps.getResultSet();
             while (resultSet.next()) {
@@ -139,11 +141,12 @@ public class FamiliesDao extends AbstractDao {
         }
     }
 
-    public void insertFamilyGroups(List<Integer> familiesForVolunteers, int id) throws SQLException {
+    public void insertFamilyGroups(List<Integer> familiesForVolunteers, int id, int stock_id) throws SQLException {
         for (Integer familyGroupId : familiesForVolunteers) {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO FAMILY_GROUPS (GROUP_ID, FAMILY_GROUP_ID) values(?, ?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO FAMILY_GROUPS (GROUP_ID, FAMILY_GROUP_ID, STOCK_ID) values(?, ?, ?)");
             ps.setInt(1, id);
             ps.setInt(2, familyGroupId);
+            ps.setInt(3, stock_id);
             ps.execute();
         }
     }
@@ -187,14 +190,14 @@ public class FamiliesDao extends AbstractDao {
         }
         try {
             SheetsAdapter.writeData(writeData);
-            ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?; " +
-                    "DELETE FROM FAMILY_GROUPS;" +
-                    "DELETE FROM GROUPS_OF_VOLUNTEERS;" +
-                    "DELETE FROM VOLUNTEERS_GROUP WHERE STOCK_ID = ?;" +
-                    "DELETE FROM CARS WHERE STOCK_ID = ?;");
-            for (int i = 1; i < 4; i++) {
-                ps.setInt(i, id);
-            }
+            ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?; DELETE FROM FAMILY_GROUPS; DELETE FROM GROUPS_OF_VOLUNTEERS;");
+            ps.setInt(1, id);
+            ps.execute();
+            ps = connection.prepareStatement("DELETE FROM VOLUNTEERS_GROUP WHERE STOCK_ID = ?; ");
+            ps.setInt(1, id);
+            ps.execute();
+            ps = connection.prepareStatement("DELETE FROM CARS WHERE STOCK_ID = ?;");
+            ps.setInt(1, id);
             ps.execute();
         } catch (Exception e) {
             e.printStackTrace();

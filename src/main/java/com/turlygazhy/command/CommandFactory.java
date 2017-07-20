@@ -51,6 +51,8 @@ public class CommandFactory {
                 return new ManualStockCommand();
             case SURVEY:
                 return new SurveyCommand();
+            case NEW_TEXT:
+                return new NewTextCommand();
             default:
                 throw new NotRealizedMethodException("Not realized for type: " + type);
         }

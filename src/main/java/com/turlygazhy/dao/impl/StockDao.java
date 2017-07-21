@@ -101,4 +101,9 @@ public class StockDao extends AbstractDao {
         ps.setInt(4, stock.getId());
         ps.execute();
     }
+
+    public Stock getStockWithUnchoosedtask(int stockId, Long chatId) {
+
+        return null;
+    }
 }

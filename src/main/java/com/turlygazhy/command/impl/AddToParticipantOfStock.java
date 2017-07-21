@@ -3,6 +3,7 @@ package com.turlygazhy.command.impl;
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -12,6 +13,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,24 +22,12 @@ import java.util.List;
 public class AddToParticipantOfStock extends Command {
     Stock stock;
     Task task = null;
+    Dates dates;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
-            if (update.getCallbackQuery() == null) {
-                bot.sendMessage(new SendMessage()
-                        .setText(messageDao.getMessageText(37))
-                        .setChatId(chatId)
-                        .setReplyMarkup(getStocksKeyboard()));
-                waitingType = WaitingType.CHOOSE_STOCK;
-                return false;
-            } else {
-                String data = update.getCallbackQuery().getData();
-                String stockIdString = data.substring(data.indexOf("id=") + 3, data.indexOf(" "));
-                int stockId = Integer.valueOf(stockIdString);
-                sendTypeOfWorkList(bot, stockId);
-                return false;
-            }
+            sendFirstMessage(update);
         }
         switch (waitingType) {
             case CHOOSE_STOCK:
@@ -46,7 +36,7 @@ public class AddToParticipantOfStock extends Command {
                     return true;
                 }
                 int stockId = Integer.parseInt(updateMessageText);
-                sendTypeOfWorkList(bot, stockId);
+                sendTypeOfWorkList(stockId);
                 return false;
 
             case CHOOSE_TYPE_OF_WORK:
@@ -73,10 +63,9 @@ public class AddToParticipantOfStock extends Command {
                         sendMessage(57, chatId, bot);   // Вы уже участвуете в данной работе
                         return false;
                     }
-                    addParticipant(task.getDates().get(0).getId());
-                    sendMessage(40, chatId, bot);   // Готово
-                    sendMessage(2, chatId, bot);    // Главное меню
-                    return true;
+                    dates = task.getDates().get(0);
+                    sendTaskInfo();
+                    return false;
                 }
 
             case CHOOSE_DATE:
@@ -85,17 +74,64 @@ public class AddToParticipantOfStock extends Command {
                     return true;
                 }
                 int dateId = Integer.parseInt(update.getCallbackQuery().getData());
+                for (Dates dates1 : task.getDates()) {
+                    if (dates1.getId() == dateId) {
+                        dates = dates1;
+                        break;
+                    }
+                }
                 if (participantOfStockDao.hasParticipant(chatId, task.getId(), dateId)) {
                     sendMessage(57, chatId, bot);   // Вы уже участвуете в данной работе
                     return false;
                 }
-                addParticipant(dateId);
                 sendMessage(40, chatId, bot);   // Готово
-                sendMessage(2, chatId, bot);    // Главное меню
-                return true;
+                sendTaskInfo();
+                return false;
+
+            case CHOOSE:
+                if (updateMessageText.equals(buttonDao.getButtonText(111))) {   // Хочу еще одно задание!
+                    stock.getTaskList().remove(task);
+                    task = null;
+                    sendFirstMessage(update);
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(112))) {   // Мне достаточно
+                    sendMessage(2, chatId, bot);    // Главное меню
+                    return true;
+                }
+                return false;
 
         }
         return false;
+    }
+
+    private void sendFirstMessage(Update update) throws SQLException, TelegramApiException {
+        if (update.getCallbackQuery() == null || stock != null) {
+            bot.sendMessage(new SendMessage()
+                    .setText(messageDao.getMessageText(37))
+                    .setChatId(chatId)
+                    .setReplyMarkup(getStocksKeyboard()));
+            waitingType = WaitingType.CHOOSE_STOCK;
+        } else {
+            String data = update.getCallbackQuery().getData();
+            String stockIdString = data.substring(data.indexOf("id=") + 3, data.indexOf(" "));
+            int stockId = Integer.valueOf(stockIdString);
+            sendTypeOfWorkList(stockId);
+        }
+    }
+
+    private void sendTaskInfo() throws SQLException, TelegramApiException {
+        addParticipant(dates.getId());
+        sendMessage(40, chatId, bot);   // Готово
+        String message = "<b>" + messageDao.getMessageText(104) + "</b>" + stock.getTitle() + "\n"
+                + "<b>" + messageDao.getMessageText(89) + ": " + "</b>" + task.getName() + "\n"
+                + "<b>" + messageDao.getMessageText(105) + "</b>" + dates.getDate();
+        bot.sendMessage(new SendMessage()
+                .setChatId(chatId)
+                .setText(message)
+                .setParseMode(ParseMode.HTML)
+                .setReplyMarkup(keyboardMarkUpDao.select(40)));
+        waitingType = WaitingType.CHOOSE;
     }
 
     private void addParticipant(int dateId) throws SQLException {
@@ -122,8 +158,18 @@ public class AddToParticipantOfStock extends Command {
         return keyboardMarkup;
     }
 
-    private void sendTypeOfWorkList(Bot bot, int stockId) throws SQLException, TelegramApiException {
+    private void sendTypeOfWorkList(int stockId) throws SQLException, TelegramApiException {
         stock = stockDao.getStock(stockId);
+        Iterator iterator = stock.getTaskList().iterator();
+        while (iterator.hasNext()) {
+            Task task = (Task) iterator.next();
+            for (Participant participant : task.getParticipants()) {
+                if (participant.getUser().getChatId().equals(chatId)) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
         bot.sendMessage(new SendMessage()
                 .setText(messageDao.getMessageText(41))
                 .setChatId(chatId)

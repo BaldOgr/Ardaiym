@@ -26,7 +26,8 @@ public enum CommandType {
     ADMIN_CONTROL_MENU(18),
     MANUAL_STOCK_COMMAND(19),
     SURVEY(20),
-    NEW_TEXT(21);
+    NEW_TEXT(21),
+    SEND_STATISTIC_TO_USERS(22);
 
 
     private final int id;

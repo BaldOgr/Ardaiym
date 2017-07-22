@@ -14,7 +14,7 @@ import java.util.List;
 public class Participant {
     int id;
     int typeOfWorkId;
-    int dateId;
+    Dates date;
     User user;
     List<Report> reports;
     boolean finished;
@@ -46,12 +46,12 @@ public class Participant {
         reports.add(report);
     }
 
-    public int getDateId() {
-        return dateId;
+    public Dates getDate() {
+        return date;
     }
 
-    public void setDateId(int dateId) {
-        this.dateId = dateId;
+    public void setDate(Dates date) {
+        this.date = date;
     }
 
     public int getId() {
@@ -86,14 +86,13 @@ public class Participant {
         try {
             Task task = factory.getTypeOfWorkDao().getTypeOfWork(typeOfWorkId);
             Stock stock = factory.getStockDao().getStock(task.getStockId());
-            Dates dates = factory.getDatesDao().getDatesById(dateId);
             StringBuilder sb = new StringBuilder();
             sb.append("<b>").append(stock.getTitle()).append("</b>\n\n")
                     .append("<b>").append(messageDao.getMessageText(79)).append(": </b>\n")
                     .append("\t").append(stock.getDescription()).append("\n")
                     .append("<b>").append(messageDao.getMessageText(89)).append(": </b>\n")
                     .append("\t").append(task.getName()).append("\n")
-                    .append(dates.getDate()).append("\n");
+                    .append(date.getDate()).append("\n");
             if (finished) {
                 sb.append(buttonDao.getButtonText(25)).append("\n<b>");    // Выполнено
                 sb.append(messageDao.getMessageText(88)).append(": </b>\n");    // Отчеты

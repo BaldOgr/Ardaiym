@@ -2,9 +2,11 @@ package com.turlygazhy.command;
 
 import com.turlygazhy.command.impl.*;
 import com.turlygazhy.command.impl.admin.*;
+import com.turlygazhy.command.impl.auto_mode.ChooseCarCommand;
+import com.turlygazhy.command.impl.auto_mode.ChooseFamiliesCommand;
+import com.turlygazhy.command.impl.ManualStockCommand;
+import com.turlygazhy.command.impl.auto_mode.RegistrationInStockCommand;
 import com.turlygazhy.exception.NotRealizedMethodException;
-
-import static com.turlygazhy.command.CommandType.CONTACTS;
 
 /**
  * Created by user on 1/2/17.
@@ -53,6 +55,8 @@ public class CommandFactory {
                 return new SurveyCommand();
             case NEW_TEXT:
                 return new NewTextCommand();
+            case SEND_STATISTIC_TO_USERS:
+                return new SendStatisticToUsersCommand();
             default:
                 throw new NotRealizedMethodException("Not realized for type: " + type);
         }

@@ -113,6 +113,7 @@ public class NewStockCommand extends Command {
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(42))) {
                     sendMessage(36, chatId, bot);
+                    stock.setAddedBy(userDao.getUserByChatId(chatId));
                     stock.setCTA(true);
                     stockDao.insertStock(stock);
                     sendMessage(39, chatId, bot);   // Готово!

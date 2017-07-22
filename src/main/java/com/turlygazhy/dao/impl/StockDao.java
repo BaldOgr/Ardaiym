@@ -50,12 +50,13 @@ public class StockDao extends AbstractDao {
     }
 
     public void insertStock(Stock stock) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO STOCK (TITLE, TITLE_FOR_ADMIN, DESCRIPTION, REPORT, CTA) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO STOCK (TITLE, TITLE_FOR_ADMIN, DESCRIPTION, REPORT, CTA, ADDED_BY) VALUES (?, ?, ?, ?, ?, ?)");
         ps.setString(1, stock.getTitle());
         ps.setString(2, stock.getTitleForAdmin());
         ps.setString(3, stock.getDescription());
         ps.setString(4, stock.getReport());
         ps.setBoolean(5, stock.isCTA());
+        ps.setLong(6, stock.getAddedBy().getChatId());
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()) {

@@ -42,7 +42,7 @@ public class TaskDao extends AbstractDao {
         task.setName(rs.getString("NAME"));
         task.setStockId(rs.getInt("STOCK_ID"));
         task.setParticipants(DaoFactory.getFactory().getParticipantOfStackDao().getParticipantListByTypeOfWorkID(task.getId()));
-        task.setDates(DaoFactory.getFactory().getDatesDao().getDates(task.getId()));
+        task.setDates(DaoFactory.getFactory().getDatesDao().getDatesbyTaskId(task.getId()));
         task.setFinished(rs.getBoolean("FINISHED"));
         return task;
     }

@@ -1,4 +1,4 @@
-package com.turlygazhy.command.impl;
+package com.turlygazhy.command.impl.auto_mode;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;

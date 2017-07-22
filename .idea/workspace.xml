@@ -1,22 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f52d78da-66f9-4589-adc4-802d74492cc1" name="Default" comment="Change survey.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamilyRateDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/FamilyRate.java" />
+    <list default="true" id="f52d78da-66f9-4589-adc4-802d74492cc1" name="Default" comment="Send statistic to admin and users.&#10;Remove dates or task from stock if you have already joined.">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/SendStatisticToUsersCommand.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Change.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ChooseCarCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/ChooseCarCommand.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ChooseFamiliesCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/ChooseFamiliesCommand.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/FamiliesCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/FamiliesCommand.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/RegistrationInStockCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/RegistrationInStockCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/Poligon.class" afterPath="$PROJECT_DIR$/target/classes/Poligon.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/Bot.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/Bot.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/Conversation.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/Conversation.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/Main.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/Command.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/Command.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/CommandFactory$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/CommandFactory$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/CommandFactory.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/CommandFactory.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/CommandType.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/CommandType.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/AddToParticipantOfStock$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/AddToParticipantOfStock$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/AddToParticipantOfStock.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/AddToParticipantOfStock.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/PersonalAreaCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/PersonalAreaCommand$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/PersonalAreaCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/PersonalAreaCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/ShowInfoCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/ShowInfoCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/ShowNewsCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/ShowNewsCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/SignUpCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/SignUpCommand$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/SignUpCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/SignUpCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/AdminMenuCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/AdminMenuCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/EditDescriptionCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/EditDescriptionCommand$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/EditDescriptionCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/EditDescriptionCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewDistributionCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewDistributionCommand$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewDistributionCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewDistributionCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewStockCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewStockCommand$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewStockCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/NewStockCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/ShowStockCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/ShowStockCommand$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/ShowStockCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/ShowStockCommand.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/connection_pool/ConnectionPool.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/connection_pool/ConnectionPool.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/connection_pool/ConnectionPoolException.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/connection_pool/ConnectionPoolException.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/AbstractDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/AbstractDao.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/DaoFactory.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/DaoFactory.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/GoalDao$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/GoalDao$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/GoalDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/GoalDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ButtonDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ButtonDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/CommandDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/CommandDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ConstDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ConstDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/DatesDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/DatesDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/GroupDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/GroupDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/KeyWordDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/KeyWordDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/KeyboardMarkUpDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/KeyboardMarkUpDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ListDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ListDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ListKeyboardDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ListKeyboardDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/MemberDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/MemberDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/MessageDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/MessageDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ParticipantOfStockDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ParticipantOfStockDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ReportDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ReportDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ReservationDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ReservationDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao$2.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao$3.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/SavedResultsDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/StockDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/StockDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/TaskDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/TaskDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ThesisDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/ThesisDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/UserDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/UserDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Button.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Button.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Const.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Const.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Dates.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Dates.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Goal.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Goal.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Group.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Group.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Member.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Member.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Message.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Message.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/MessageElement.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/MessageElement.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/MonthResult.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/MonthResult.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Participant.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Participant.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Report.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Report.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Reservation.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Reservation.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/SavedResult.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/SavedResult.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/SendResultToGroup.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/SendResultToGroup.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Stock.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Stock.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Task.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Task.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Thesis.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Thesis.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/User.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/User.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/UserReadingResult.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/UserReadingResult.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/UserResult.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/UserResult.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/WaitingType.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/WaitingType.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Week.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/Week.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/WeekResult.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/entity/WeekResult.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/CannotHandleUpdateException.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/CannotHandleUpdateException.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/CommandNotFoundException.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/CommandNotFoundException.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/NoResultForChartException.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/NoResultForChartException.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/NotRealizedMethodException.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/NotRealizedMethodException.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/ZeroKeyboardException.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/exception/ZeroKeyboardException.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/Reminder.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/Reminder.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/AbstractTask.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/AbstractTask.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/EndDayTask.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/EndDayTask.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/EveryNightTask.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/EveryNightTask.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/PushUpTask.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/reminder/timer_task/PushUpTask.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/service/CommandService.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/service/CommandService.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/service/Service.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/service/Service.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/tool/Chart.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/tool/Chart.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/tool/DateUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/tool/DateUtil.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/templates.iml" afterPath="$PROJECT_DIR$/.idea/templates.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/Command.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/Command.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sql/ardaiym.sql" afterPath="$PROJECT_DIR$/sql/ardaiym.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandType.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AddToParticipantOfStock.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AddToParticipantOfStock.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/DaoFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/DaoFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/WaitingType.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/WaitingType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/DatesDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/DatesDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/ParticipantOfStockDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/ParticipantOfStockDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/TaskDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/TaskDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Participant.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Participant.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,107 +123,21 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/Ardaiym$Main.coverage" NAME="Main Coverage Results" MODIFIED="1500732647556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.turlygazhy.*</FILTER>
+    </SUITE>
+  </component>
   <component name="FavoritesManager">
     <favorites_list name="Ardaiym" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SurveyCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java">
+      <file leaf-file-name="ardaiym.sql" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sql/ardaiym.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FamilyRateDao.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamilyRateDao.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="17" column="119" lean-forward="false" selection-start-line="17" selection-start-column="119" selection-end-line="17" selection-end-column="119" />
-              <folding>
-                <marker date="1500617476149" expanded="true" signature="507:585" ph=" INSERT statement (FAMILY_RATE)" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FamiliesDao.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2300">
-              <caret line="189" column="47" lean-forward="false" selection-start-line="189" selection-start-column="47" selection-end-line="189" selection-end-column="47" />
-              <folding>
-                <marker date="1500705744430" expanded="true" signature="729:764" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="1525:1564" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="1967:2006" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="2348:2475" ph=" UPDATE statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="2994:3113" ph=" INSERT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="3744:3766" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="4159:4222" ph=" SELECT statement (FAMILY_GROUPS)" />
-                <marker date="1500705744430" expanded="true" signature="4432:4490" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="5020:5085" ph=" INSERT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1500705744430" expanded="true" signature="5449:5528" ph=" INSERT statement (FAMILY_GROUPS)" />
-                <marker date="1500705744430" expanded="true" signature="5864:5917" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1500705744430" expanded="true" signature="6283:6335" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1500705744430" expanded="true" signature="6666:6707" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1500705744430" expanded="true" signature="7447:7486" ph=" SELECT statement (FAMILIES)" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Conversation.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Conversation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NewStockCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1635">
-              <caret line="127" column="5" lean-forward="false" selection-start-line="127" selection-start-column="5" selection-end-line="127" selection-end-column="5" />
-              <folding>
-                <element signature="docComment;class#NewStockCommand#0" expanded="false" />
-                <element signature="method#getDeadlineKeyboard#0;class#NewStockCommand#0" expanded="false" />
-                <element signature="e#7272#7348#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NewDistributionCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ManualStockCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="35" column="12" lean-forward="false" selection-start-line="35" selection-start-column="12" selection-end-line="38" selection-end-column="76" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShowStockCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2940">
-              <caret line="211" column="71" lean-forward="false" selection-start-line="211" selection-start-column="71" selection-end-line="211" selection-end-column="71" />
+            <state relative-caret-position="117">
+              <caret line="92" column="31" lean-forward="false" selection-start-line="92" selection-start-column="31" selection-end-line="92" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -161,16 +172,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/VolunteersGroup.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/CarsDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/VaolunteersGroupDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StatusDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/StartStockCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/FamiliesCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ContactsCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AboutUsCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockAdminCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/User.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/EditDescriptionCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AdminControlCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ShowInfoCommand.java" />
@@ -180,7 +181,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/SurveyDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Report.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Participant.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/CalendarCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ChooseCarCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/VolunteersGroupDao.java" />
@@ -192,26 +192,37 @@
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ChooseFamiliesCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Family.java" />
         <option value="$PROJECT_DIR$/sql/ardaiym.sql" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/tool/ButtonsLeaf.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SignUpCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Stock.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewTextCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AddToParticipantOfStock.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/FamilyRate.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamilyRateDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/DaoFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/Command.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/AbstractDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/manual/ChooseCarCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/manual/ManualStockCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/ManualStockCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Change.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/ChooseFamiliesCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/RegistrationInStockCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Participant.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/DatesDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/ParticipantOfStockDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandFactory.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandType.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SendStatisticToUsersCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AddToParticipantOfStock.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/SendStatisticToUsersCommand.java" />
       </list>
     </option>
   </component>
@@ -343,17 +354,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="turlygazhy" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Ardaiym" type="b2602c69:ProjectViewProjectNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="turlygazhy" type="462c0819:PsiDirectoryNode" />
               <item name="dao" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -365,6 +365,15 @@
               <item name="turlygazhy" type="462c0819:PsiDirectoryNode" />
               <item name="dao" type="462c0819:PsiDirectoryNode" />
               <item name="impl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Ardaiym" type="b2602c69:ProjectViewProjectNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="turlygazhy" type="462c0819:PsiDirectoryNode" />
+              <item name="entity" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -387,18 +396,18 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///home/daniyar/IdeaProjects/templates/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java&#10;initMessage&#9;PSI&#9;JAVA://com.turlygazhy.command.Command#initMessage" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl" />
-      <recent name="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.turlygazhy.command.impl" />
+      <recent name="com.turlygazhy.entity" />
+      <recent name="com.turlygazhy.command.impl.admin" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.turlygazhy.command.impl.admin" />
       <recent name="com.turlygazhy.command.impl" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.turlygazhy.entity" />
-      <recent name="com.turlygazhy.command.impl.admin" />
-      <recent name="com.turlygazhy.command.impl" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -658,7 +667,14 @@
       <option name="project" value="LOCAL" />
       <updated>1500612963074</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Change survey. Added questions.">
+      <created>1500709404160</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1500709404160</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -672,16 +688,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1366" height="741" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32901135" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3987034" sideWeight="0.5030303" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42345276" sideWeight="0.5060606" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4039088" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.4939394" order="13" side_tool="false" content_ui="tabs" />
@@ -690,18 +705,18 @@
       <window_info id="MaxCompute Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="MaxCompute Job" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="MaxCompute Job Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3151515" sideWeight="0.5056543" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="MaxCompute Project Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42345276" sideWeight="0.4969697" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42345276" sideWeight="0.4939394" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -781,11 +796,13 @@
     <MESSAGE value="New registration form.&#10;New stock form." />
     <MESSAGE value="Now you can join to stock several times" />
     <MESSAGE value="Change survey." />
-    <option name="LAST_COMMIT_MESSAGE" value="Change survey." />
+    <MESSAGE value="Change survey. Added questions." />
+    <MESSAGE value="Send statistic to admin and users.&#10;Remove dates or task from stock if you have already joined." />
+    <option name="LAST_COMMIT_MESSAGE" value="Send statistic to admin and users.&#10;Remove dates or task from stock if you have already joined." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="62" />
+      <option name="time" value="65" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -794,80 +811,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/WaitingType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="310" lean-forward="false" selection-start-line="6" selection-start-column="310" selection-end-line="6" selection-end-column="310" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/service/CommandService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AdminControlCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/MessageDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/SurveyDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Participant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="97" column="87" lean-forward="false" selection-start-line="97" selection-start-column="87" selection-end-line="97" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Report.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="56" column="20" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="37" column="16" lean-forward="false" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/CalendarCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="52" column="71" lean-forward="false" selection-start-line="52" selection-start-column="71" selection-end-line="52" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ChooseCarCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="38" column="73" lean-forward="false" selection-start-line="38" selection-start-column="73" selection-end-line="38" selection-end-column="73" />
         </state>
       </provider>
     </entry>
@@ -927,25 +874,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sql/ardaiym.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11115">
-          <caret line="741" column="112" lean-forward="false" selection-start-line="741" selection-start-column="112" selection-end-line="741" selection-end-column="112" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1530">
           <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ChooseFamiliesCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -956,21 +888,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="4" lean-forward="false" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Stock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1125">
-          <caret line="118" column="28" lean-forward="false" selection-start-line="118" selection-start-column="28" selection-end-line="118" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SignUpCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-82">
@@ -978,14 +895,6 @@
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/RegistrationInStockCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-40">
-          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1006,27 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/TaskDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="38" column="17" lean-forward="false" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="46" column="81" lean-forward="false" selection-start-line="46" selection-start-column="81" selection-end-line="46" selection-end-column="81" />
-          <folding>
-            <marker date="1500572684695" expanded="true" signature="682:714" ph=" SELECT statement (STOCK)" />
-            <marker date="1500572684695" expanded="true" signature="1741:1832" ph=" INSERT statement (STOCK)" />
-            <marker date="1500572684695" expanded="true" signature="2592:2629" ph=" SELECT statement (STOCK)" />
-            <marker date="1500572684695" expanded="true" signature="2986:3022" ph=" SELECT statement (STOCK)" />
-            <marker date="1500572684695" expanded="true" signature="3327:3393" ph=" UPDATE statement (STOCK)" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -1039,13 +927,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="313">
           <caret line="103" column="18" lean-forward="false" selection-start-line="103" selection-start-column="18" selection-end-line="103" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/FamilyRate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="24" lean-forward="false" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -1087,26 +968,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/Command.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="57" column="71" lean-forward="false" selection-start-line="57" selection-start-column="71" selection-end-line="57" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AddToParticipantOfStock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="52" column="17" lean-forward="true" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -1129,26 +994,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
           <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1635">
-          <caret line="127" column="5" lean-forward="false" selection-start-line="127" selection-start-column="5" selection-end-line="127" selection-end-column="5" />
-          <folding>
-            <element signature="docComment;class#NewStockCommand#0" expanded="false" />
-            <element signature="method#getDeadlineKeyboard#0;class#NewStockCommand#0" expanded="false" />
-            <element signature="e#7272#7348#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="35" column="12" lean-forward="false" selection-start-line="35" selection-start-column="12" selection-end-line="38" selection-end-column="76" />
           <folding />
         </state>
       </provider>
@@ -1192,21 +1037,246 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/FamilyRate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+        <state relative-caret-position="30">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamilyRateDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="17" column="119" lean-forward="false" selection-start-line="17" selection-start-column="119" selection-end-line="17" selection-end-column="119" />
+        <state relative-caret-position="135">
+          <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
           <folding>
             <marker date="1500617476149" expanded="true" signature="507:585" ph=" INSERT statement (FAMILY_RATE)" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/ChooseCarCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="56" column="40" lean-forward="false" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/FamiliesCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/ChooseFamiliesCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-510">
+          <caret line="120" column="29" lean-forward="false" selection-start-line="120" selection-start-column="29" selection-end-line="120" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Change.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="517">
+          <caret line="123" column="21" lean-forward="false" selection-start-line="123" selection-start-column="21" selection-end-line="123" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/auto_mode/RegistrationInStockCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Task.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="21" column="21" lean-forward="false" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
+          <folding>
+            <element signature="e#426#427#0" expanded="true" />
+            <element signature="e#461#462#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Participant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="874">
+          <caret line="94" column="32" lean-forward="false" selection-start-line="94" selection-start-column="32" selection-end-line="94" selection-end-column="32" />
+          <folding>
+            <element signature="e#1023#1024#0" expanded="true" />
+            <element signature="e#1050#1051#0" expanded="true" />
+            <element signature="e#1089#1090#0" expanded="true" />
+            <element signature="e#1121#1122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/UserOfList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/Stock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="31" column="16" lean-forward="false" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
+          <folding>
+            <element signature="e#629#630#0" expanded="false" />
+            <element signature="e#669#670#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/TaskDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="43" column="102" lean-forward="false" selection-start-line="43" selection-start-column="102" selection-end-line="43" selection-end-column="102" />
+          <folding>
+            <marker date="1500717323165" expanded="true" signature="777:822" ph=" SELECT statement (TYPE_OF_WORK)" />
+            <marker date="1500717323165" expanded="true" signature="1685:1740" ph=" INSERT statement (TYPE_OF_WORK)" />
+            <marker date="1500717323165" expanded="true" signature="2803:2842" ph=" SELECT statement (TYPE_OF_WORK)" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/DatesDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="26" column="10" lean-forward="false" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+          <folding>
+            <marker date="1500717323309" expanded="true" signature="555:587" ph=" SELECT statement (DATES)" />
+            <marker date="1500717323309" expanded="true" signature="955:1000" ph=" SELECT statement (DATES)" />
+            <marker date="1500717323309" expanded="true" signature="1590:1645" ph=" INSERT statement (DATES)" />
+            <marker date="1500717323309" expanded="true" signature="2175:2207" ph=" SELECT statement (DATES)" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/ParticipantOfStockDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="62" column="50" lean-forward="false" selection-start-line="62" selection-start-column="50" selection-end-line="62" selection-end-column="50" />
+          <folding>
+            <marker date="1500717323205" expanded="true" signature="768:829" ph=" SELECT statement (PARTICIPANTS_OF_STOCK)" />
+            <marker date="1500717323205" expanded="true" signature="1181:1230" ph=" SELECT statement (PARTICIPANTS_OF_STOCK)" />
+            <marker date="1500717323205" expanded="true" signature="2201:2288" ph=" INSERT statement (PARTICIPANTS_OF_STOCK)" />
+            <marker date="1500717323205" expanded="true" signature="2954:3012" ph=" UPDATE statement (PARTICIPANTS_OF_STOCK)" />
+            <marker date="1500717323205" expanded="true" signature="3613:3683" ph=" SELECT statement (PARTICIPANTS_OF_STOCK)" />
+            <marker date="1500717323205" expanded="true" signature="4238:4291" ph=" SELECT statement (PARTICIPANTS_OF_STOCK)" />
+            <marker date="1500717323205" expanded="true" signature="4669:4763" ph=" SELECT statement (PARTICIPANTS_OF_STOCK)" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="58" column="52" lean-forward="false" selection-start-line="58" selection-start-column="52" selection-end-line="58" selection-end-column="52" />
+          <folding>
+            <marker date="1500718256026" expanded="true" signature="682:714" ph=" SELECT statement (STOCK)" />
+            <marker date="1500718256026" expanded="true" signature="1741:1845" ph=" INSERT statement (STOCK)" />
+            <marker date="1500718256026" expanded="true" signature="2660:2697" ph=" SELECT statement (STOCK)" />
+            <marker date="1500718256026" expanded="true" signature="3054:3090" ph=" SELECT statement (STOCK)" />
+            <marker date="1500718256026" expanded="true" signature="3395:3461" ph=" UPDATE statement (STOCK)" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1286">
+          <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="4" lean-forward="false" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewStockCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="115" column="67" lean-forward="false" selection-start-line="115" selection-start-column="67" selection-end-line="115" selection-end-column="67" />
+          <folding>
+            <element signature="docComment;class#NewStockCommand#0" expanded="false" />
+            <element signature="method#getDeadlineKeyboard#0;class#NewStockCommand#0" expanded="false" />
+            <element signature="e#7343#7419#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/SendStatisticToUsersCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="18" column="12" lean-forward="true" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1321#1510#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/CommandFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="58" column="40" lean-forward="false" selection-start-line="58" selection-start-column="40" selection-end-line="58" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AddToParticipantOfStock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="237" column="92" lean-forward="false" selection-start-line="237" selection-start-column="92" selection-end-line="237" selection-end-column="92" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;class#AddToParticipantOfStock#0" expanded="false" />
+            <element signature="method#sendTaskInfo#0;class#AddToParticipantOfStock#0" expanded="false" />
+            <element signature="method#addParticipant#0;class#AddToParticipantOfStock#0" expanded="false" />
+            <element signature="e#8230#8419#0" expanded="false" />
+            <element signature="method#getStocksKeyboard#0;class#AddToParticipantOfStock#0" expanded="false" />
+            <element signature="method#getDatesKeyboard#0;class#AddToParticipantOfStock#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sql/ardaiym.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="92" column="31" lean-forward="false" selection-start-line="92" selection-start-column="31" selection-end-line="92" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>

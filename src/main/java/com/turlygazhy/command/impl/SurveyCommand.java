@@ -54,20 +54,14 @@ public class SurveyCommand extends Command {
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(57))) {    // Нет
-                    changeType();
-                    if (type == Type.DONE) {
-                        return true;
-                    }
+                    return changeType();
                 }
                 return false;
 
 
             case CHOOSE_FAMILY:
                 if (updateMessageText.equals(buttonDao.getButtonText(42))) {    // Готово
-                    changeType();
-                    if (type == Type.DONE) {
-                        return true;
-                    }
+                    return changeType();
                 }
                 int familyId = Integer.parseInt(updateMessageText);
                 for (Family family : families) {
@@ -103,31 +97,31 @@ public class SurveyCommand extends Command {
         return false;
     }
 
-    private void changeType() throws SQLException, TelegramApiException {
+    private boolean changeType() throws SQLException, TelegramApiException {
         switch (type) {
             case GOOD_FAMILIES:
                 sendMessage(107, chatId, bot);  // Есть ли семьи, которые Вам сильно понравились?
                 waitingType = WaitingType.CHOOSE;
                 type = Type.LIKE;
-                return;
+                return false;
 
             case LIKE:
                 sendMessage(108, chatId, bot);  // Есть ли семьи, которые Вам НЕ понравились,
                 waitingType = WaitingType.CHOOSE;
                 type = Type.DID_NOT_LIKE;
-                return;
+                return false;
 
             case DID_NOT_LIKE:
                 sendMessage(109, chatId, bot);  // Хотели бы отправить коментарий к определенной семье?
                 waitingType = WaitingType.CHOOSE;
                 type = Type.COMMENT;
-                return;
+                return false;
 
             case COMMENT:
                 sendMessage(110, chatId, bot);  // Спасибо! Нам важно Ваше мнение!
-                type = Type.DONE;
-                return;
+                return true;
         }
+        return false;
     }
 
     private void sendFamilyList() throws SQLException, TelegramApiException {

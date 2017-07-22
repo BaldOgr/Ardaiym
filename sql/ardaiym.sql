@@ -342,7 +342,7 @@ INSERT INTO PUBLIC.KEYBOARD(ID, BUTTON_IDS, INLINE, COMMENT) VALUES
 (27, '7;10', FALSE, 'request contact'),
 (28, '64', FALSE, 'Choose family'),
 (29, '67,68', FALSE, 'done'),
-(30, '65,66', FALSE, 'auto or manual'),
+(30, '65,66', FALSE, 'auto or auto_mode'),
 (31, '69,70;71;10', FALSE, 'admin control command'),
 (32, '72', TRUE, ''),
 (33, '73,75;74', FALSE, 'in stock menu'),

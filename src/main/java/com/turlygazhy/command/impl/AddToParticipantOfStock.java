@@ -28,6 +28,7 @@ public class AddToParticipantOfStock extends Command {
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
             sendFirstMessage(update);
+            return false;
         }
         switch (waitingType) {
             case CHOOSE_STOCK:
@@ -90,8 +91,12 @@ public class AddToParticipantOfStock extends Command {
 
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(111))) {   // Хочу еще одно задание!
-                    stock.getTaskList().remove(task);
+                    task.getDates().remove(dates);  // Удаляем дату, куда зарегистрировался пользователь
+                    if (task.getDates().size() == 0) {   // Если в работе больше нет дат, то удаляем работу
+                        stock.getTaskList().remove(task);
+                    }
                     task = null;
+                    dates = null;
                     sendFirstMessage(update);
                     return false;
                 }
@@ -121,7 +126,7 @@ public class AddToParticipantOfStock extends Command {
     }
 
     private void sendTaskInfo() throws SQLException, TelegramApiException {
-        addParticipant(dates.getId());
+        addParticipant();
         sendMessage(40, chatId, bot);   // Готово
         String message = "<b>" + messageDao.getMessageText(104) + "</b>" + stock.getTitle() + "\n"
                 + "<b>" + messageDao.getMessageText(89) + ": " + "</b>" + task.getName() + "\n"
@@ -132,42 +137,27 @@ public class AddToParticipantOfStock extends Command {
                 .setParseMode(ParseMode.HTML)
                 .setReplyMarkup(keyboardMarkUpDao.select(40)));
         waitingType = WaitingType.CHOOSE;
-    }
-
-    private void addParticipant(int dateId) throws SQLException {
-        Participant participant = new Participant();
-        participant.setTypeOfWorkId(task.getId());
-        participant.setUser(userDao.getUserByChatId(chatId));
-        participant.setDateId(dateId);
-        task.addParticipantOfStocks(participant);
-        participantOfStockDao.insertParticipant(participant);
-    }
-
-    private ReplyKeyboard getDatesKeyboard() {
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        for (Dates dates : task.getDates()) {
-            List<InlineKeyboardButton> row = new ArrayList<>();
-            InlineKeyboardButton button = new InlineKeyboardButton();
-            button.setText(dates.getDate());
-            button.setCallbackData(String.valueOf(dates.getId()));
-            row.add(button);
-            rows.add(row);
-        }
-        keyboardMarkup.setKeyboard(rows);
-        return keyboardMarkup;
+        sendStockInfoToAdmin();
     }
 
     private void sendTypeOfWorkList(int stockId) throws SQLException, TelegramApiException {
         stock = stockDao.getStock(stockId);
-        Iterator iterator = stock.getTaskList().iterator();
-        while (iterator.hasNext()) {
-            Task task = (Task) iterator.next();
-            for (Participant participant : task.getParticipants()) {
-                if (participant.getUser().getChatId().equals(chatId)) {
-                    iterator.remove();
-                    break;
+        Iterator taskIterator = stock.getTaskList().iterator();
+        while (taskIterator.hasNext()) {
+            Task task = (Task) taskIterator.next();
+            Iterator datesIterator = task.getDates().iterator();
+
+            while (datesIterator.hasNext()) {
+                Dates date = (Dates) datesIterator.next();
+                for (Participant participant : task.getParticipants()) {
+                    if (date.getId() == participant.getDate().getId()) {
+                        datesIterator.remove();
+                        break;
+                    }
                 }
+            }
+            if (task.getDates().size() == 0) {
+                taskIterator.remove();
             }
         }
         bot.sendMessage(new SendMessage()
@@ -175,6 +165,38 @@ public class AddToParticipantOfStock extends Command {
                 .setChatId(chatId)
                 .setReplyMarkup(getTypeOfWorkKeyboard()));
         waitingType = WaitingType.CHOOSE_TYPE_OF_WORK;
+    }
+
+
+    private void addParticipant() throws SQLException {
+        Participant participant = new Participant();
+        participant.setTypeOfWorkId(task.getId());
+        participant.setUser(userDao.getUserByChatId(chatId));
+        participant.setDate(dates);
+        task.addParticipantOfStocks(participant);
+        participantOfStockDao.insertParticipant(participant);
+    }
+
+    ///////// Отправляем статистику админу /////////
+    private void sendStockInfoToAdmin() throws SQLException, TelegramApiException {
+        Stock stock = stockDao.getStock(this.stock.getId());
+        StringBuilder sb = new StringBuilder();
+        sb.append("<b>").append(messageDao.getMessageText(47)).append(": </b>").append(stock.getTitle()).append("\n");
+        for (Task task : stock.getTaskList()) {
+            sb.append("\t<b>").append(task.getName()).append(":</b>\n");
+            for (Dates dates : task.getDates()) {
+                sb.append("\t\t<b>").append(dates.getDate()).append(":</b>\n");
+                task.getParticipants().forEach(obj -> {
+                    if (dates.getDate().equals(obj.getDate().getDate()))
+                        sb.append("\t\t\t").append(obj.getUser().getName()).append("\n");
+                });
+            }
+        }
+        bot.sendMessage(new SendMessage()
+                .setChatId(stock.getAddedBy().getChatId())
+                .setText(sb.toString())
+                .setParseMode(ParseMode.HTML)
+                .setReplyMarkup(getDistributeStatisticKeyboard()));
     }
 
     private InlineKeyboardMarkup getStocksKeyboard() throws SQLException {
@@ -200,6 +222,35 @@ public class AddToParticipantOfStock extends Command {
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(typeOfWork.getName());
             button.setCallbackData(String.valueOf(typeOfWork.getId()));
+            row.add(button);
+            rows.add(row);
+        }
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
+    private InlineKeyboardMarkup getDistributeStatisticKeyboard() throws SQLException {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(115));
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(115));
+        row.add(button);
+        rows.add(row);
+
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
+    private ReplyKeyboard getDatesKeyboard() {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        for (Dates dates : task.getDates()) {
+            List<InlineKeyboardButton> row = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(dates.getDate());
+            button.setCallbackData(String.valueOf(dates.getId()));
             row.add(button);
             rows.add(row);
         }

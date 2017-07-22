@@ -2,7 +2,6 @@ package com.turlygazhy.dao.impl;
 
 import com.turlygazhy.dao.AbstractDao;
 import com.turlygazhy.dao.DaoFactory;
-import com.turlygazhy.entity.Dates;
 import com.turlygazhy.entity.Participant;
 
 import java.sql.Connection;
@@ -49,7 +48,7 @@ public class ParticipantOfStockDao extends AbstractDao {
     private Participant parseParticipant(ResultSet rs) throws SQLException {
         Participant participant = new Participant();
         participant.setId(rs.getInt("ID"));
-        participant.setDateId(rs.getInt("DATES_ID"));
+        participant.setDate(factory.getDatesDao().getDateById(rs.getInt("DATES_ID")));
         participant.setTypeOfWorkId(rs.getInt("TYPE_OF_WORK_ID"));
         participant.setUser(DaoFactory.getFactory().getUserDao().getUserByChatId(rs.getLong("USER_ID")));
         participant.setReports(DaoFactory.getFactory().getReportDao().getReports(participant.getId()));
@@ -61,7 +60,7 @@ public class ParticipantOfStockDao extends AbstractDao {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO PARTICIPANTS_OF_STOCK (TYPE_OF_WORK_ID, USER_ID, DATES_ID) VALUES (?, ?, ?)");
         ps.setInt(1, participant.getTypeOfWorkId());
         ps.setLong(2, participant.getUser().getChatId());
-        ps.setInt(3, participant.getDateId());
+        ps.setInt(3, participant.getDate().getId());
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()){

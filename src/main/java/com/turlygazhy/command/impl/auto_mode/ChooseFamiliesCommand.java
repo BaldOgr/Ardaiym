@@ -1,7 +1,8 @@
-package com.turlygazhy.command.impl;
+package com.turlygazhy.command.impl.auto_mode;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
+import com.turlygazhy.command.impl.ManualStockCommand;
 import com.turlygazhy.entity.*;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.objects.Location;
@@ -19,7 +20,7 @@ public class ChooseFamiliesCommand extends Command {
     VolunteersGroup group;
     List<Family> families;
     Family family;
-    private ManualStockCommand.Change change;
+    private Change change;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -99,25 +100,25 @@ public class ChooseFamiliesCommand extends Command {
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(76))) {   // ФИО
                     sendMessage(78, chatId, bot);   //  Введите новую информацию
-                    change = ManualStockCommand.Change.NAME;
+                    change = Change.NAME;
                     waitingType = WaitingType.TEXT;
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(77))) {   // Номер телефона
                     sendMessage(78, chatId, bot);   //  Введите новую информацию
-                    change = ManualStockCommand.Change.PHONE_NUMBER;
+                    change = Change.PHONE_NUMBER;
                     waitingType = WaitingType.TEXT;
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(78))) {   // Адрес
                     sendMessage(78, chatId, bot);   //  Введите новую информацию
-                    change = ManualStockCommand.Change.ADDRESS;
+                    change = Change.ADDRESS;
                     waitingType = WaitingType.TEXT;
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(79))) {   // Положение на карте
                     sendMessage(78, chatId, bot);   //  Введите новую информацию
-                    change = ManualStockCommand.Change.LOCATION;
+                    change = Change.LOCATION;
                     waitingType = WaitingType.TEXT;
                     return false;
                 }

@@ -2,9 +2,7 @@ package com.turlygazhy.command.impl;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
-import com.turlygazhy.entity.Family;
-import com.turlygazhy.entity.User;
-import com.turlygazhy.entity.WaitingType;
+import com.turlygazhy.entity.*;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.objects.Location;
 import org.telegram.telegrambots.api.objects.Update;
@@ -20,25 +18,21 @@ import java.util.List;
 public class ManualStockCommand extends Command {
     List<Family> families;
     List<User> users;
-    int groupId;
     Family family;
-    enum Change{
-        NAME,
-        PHONE_NUMBER,
-        ADDRESS,
-        LOCATION
-    }
+
+    int stockId;
+    int groupId;
+
     Change change;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
-            int stockId = Integer.parseInt(updateMessageText.substring(8, updateMessageText.indexOf(" ")));
+            stockId = Integer.parseInt(updateMessageText.substring(8, updateMessageText.indexOf(" ")));
             groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId());
             users = familiesDao.getUsersByGroupId(groupId);
             families = familiesDao.getFamilyListByGroupId(groupId, stockId);
-            sendFamiliesList();
-            return false;
+            return sendFamiliesList();
         }
 
         switch (waitingType) {
@@ -63,12 +57,10 @@ public class ManualStockCommand extends Command {
                     family.setFinished(true);
                     familiesDao.updateFamily(family);
                     families.remove(family);
-                    sendFamiliesList();
-                    return false;
+                    return sendFamiliesList();
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(74))) {    // Выбрать семью
-                    sendFamiliesList();
-                    return false;
+                    return sendFamiliesList();
                 }
                 return false;
 
@@ -104,11 +96,11 @@ public class ManualStockCommand extends Command {
                 return false;
 
             case TEXT:
-                if (updateMessageText != null && updateMessageText.equals(buttonDao.getButtonText(10))){
+                if (updateMessageText != null && updateMessageText.equals(buttonDao.getButtonText(10))) {
                     sendFamilyInfo();
                     return false;
                 }
-                switch (change){
+                switch (change) {
                     case NAME:
                         family.setName(updateMessageText);
                         break;
@@ -142,16 +134,21 @@ public class ManualStockCommand extends Command {
         waitingType = WaitingType.COMMAND;
     }
 
-    private void sendFamiliesList() throws SQLException, TelegramApiException {
+    private boolean sendFamiliesList() throws SQLException, TelegramApiException {
         int count = families.size();
+        if (count == 0) {
+            sendMessage(113, chatId, bot);  // Семей больше нет
+            sendInfoForAdmin();
+            return true;
+        }
         Iterator iterator = families.listIterator();
         for (int i = 0; i < count; i++) {
             StringBuilder sb = new StringBuilder();
-            if (!iterator.hasNext()){
+            if (!iterator.hasNext()) {
                 break;
             }
             for (int j = 0; j < 50; j++) {
-                if (iterator.hasNext()){
+                if (iterator.hasNext()) {
                     sb.append(iterator.next().toString()).append("\n");
                 } else {
                     break;
@@ -160,5 +157,26 @@ public class ManualStockCommand extends Command {
             sendMessage(sb.toString(), chatId, bot);
         }
         waitingType = WaitingType.CHOOSE_FAMILY;
+        return false;
+    }
+
+    private void sendInfoForAdmin() throws SQLException, TelegramApiException {
+        Stock stock = stockDao.getStock(stockId);
+        families = familiesDao.getFamilyListByGroupId(groupId, stockId);
+        StringBuilder sb = new StringBuilder();
+        sb.append("<b>").append(messageDao.getMessageText(114)).append("</b>\n"); // Волонтеры
+        for (int i = 0; i < users.size(); i++) {
+            sb.append(i+1).append(") ").append(users.get(i).getName()).append("\n")
+                    .append("\t").append(users.get(i).getPhoneNumber()).append("\n");
+        }
+        sb.append("<b>").append(messageDao.getMessageText(115)).append("</b>\n"); // Семьи
+        for (int i = 0; i < families.size(); i++) {
+            Family family = families.get(i);
+            sb.append(i+1).append(") ").append(family.getName()).append("\n")
+                    .append("\t").append(family.getAddress()).append("\n")
+                    .append("\t").append(family.getPhoneNumber()).append("\n");
+        }
+
+        sendMessage(sb.toString(), stock.getAddedBy().getChatId(), bot);
     }
 }

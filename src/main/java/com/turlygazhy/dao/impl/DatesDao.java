@@ -19,8 +19,18 @@ public class DatesDao {
         this.connection = connection;
     }
 
+    public Dates getDateById(int id) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM DATES WHERE ID = ?");
+        ps.setInt(1, id);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        if (rs.next()){
+            return parseDates(rs);
+        }
+        return null;
+    }
 
-    public List<Dates> getDates(int id) throws SQLException {
+    public List<Dates> getDatesbyTaskId(int id) throws SQLException {
         List<Dates> dates = new ArrayList<>();
         PreparedStatement ps = connection.prepareStatement("SELECT * FROM DATES WHERE TYPE_OF_WORK_ID = ?");
         ps.setInt(1, id);

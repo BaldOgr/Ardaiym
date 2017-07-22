@@ -193,10 +193,14 @@ public class ShowStockCommand extends Command {
         StringBuilder sb = new StringBuilder();
         sb.append(stock.getTitle()).append("\n").append(messageDao.getMessageText(80));
         for (User user : userDao.getUsers()) {
-            bot.sendMessage(new SendMessage()
-                    .setChatId(user.getChatId())
-                    .setText(sb.toString())
-                    .setReplyMarkup(getKeyboard()));
+            try {
+                bot.sendMessage(new SendMessage()
+                        .setChatId(user.getChatId())
+                        .setText(sb.toString())
+                        .setReplyMarkup(getKeyboard()));
+            }catch (TelegramApiException ex){
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -205,8 +209,8 @@ public class ShowStockCommand extends Command {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText(buttonDao.getButtonText(80));
-        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(80));
+        button.setText(buttonDao.getButtonText(80));    // Пройти опрос
+        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(80));  // Пройти опрос
         row.add(button);
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);

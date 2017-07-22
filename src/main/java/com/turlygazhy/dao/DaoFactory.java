@@ -2,6 +2,7 @@ package com.turlygazhy.dao;
 
 import com.turlygazhy.connection_pool.ConnectionPool;
 import com.turlygazhy.dao.impl.*;
+import com.turlygazhy.entity.FamilyRate;
 import com.turlygazhy.entity.VolunteersGroup;
 
 import java.sql.Connection;
@@ -132,5 +133,9 @@ public class DaoFactory {
 
     public SurveyDao getSurveyDao() {
         return new SurveyDao(connection);
+    }
+
+    public FamilyRateDao getFamilyRateDao() {
+        return new FamilyRateDao(connection);
     }
 }

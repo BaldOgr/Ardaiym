@@ -55,6 +55,7 @@ public abstract class Command {
     protected StatusDao statusDao = factory.getStatusDao();
     protected FamiliesDao familiesDao = factory.getFamiliesDao();
     protected SurveyDao surveyDao = factory.getSurveyDao();
+    protected FamilyRateDao familyRateDao = factory.getFamilyRateDao();
 
     protected WaitingType waitingType;
     protected org.telegram.telegrambots.api.objects.Message updateMessage;

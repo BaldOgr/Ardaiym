@@ -3,6 +3,7 @@ package com.turlygazhy.command.impl.admin;
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,15 @@ public class NewDistributionCommand extends Command {
                     waitingType = WaitingType.CHOOSE;
                     return false;
                 }
+                if (updateMessageText.equals(buttonDao.getButtonText(113))) {   // Создать список
+                    sendMessage(111, chatId, bot);  // Введите название
+                    waitingType = WaitingType.NAME;
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(114))) {   // Списки
+
+                    return false;
+                }
                 return false;
             case CHOOSE:
                 int stockId = Integer.parseInt(updateMessageText);
@@ -104,6 +115,15 @@ public class NewDistributionCommand extends Command {
                 }
                 sendMessage(44, chatId, bot);   //  Введите сообщение
                 waitingType = WaitingType.MESSAGE;
+                return false;
+
+            case NAME:
+
+                return false;
+
+
+            case CHOOSE_USERS:
+
                 return false;
 
             ///////// Сама рассылка сообщений /////////

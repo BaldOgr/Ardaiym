@@ -23,17 +23,15 @@ public class FamiliesDao extends AbstractDao {
         this.connection = connection;
     }
 
-    private Family parseFamily(ResultSet rs) throws SQLException {
-        Family family = new Family();
-        family.setId(rs.getInt("ID"));
-        family.setName(rs.getString("NAME"));
-        family.setAddress(rs.getString("ADDRESS"));
-        family.setLatitude(rs.getDouble("LATITUDE"));
-        family.setLongitude(rs.getDouble("LONGITUDE"));
-        family.setPhoneNumber(rs.getString("PHONE_NUMBER"));
-        family.setGroup(rs.getInt("GROUP_ID"));
-        family.setStockId(rs.getInt("STOCK_ID"));
-        return family;
+    public Family getFamily(int familyId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("select * from families where id = ?");
+        ps.setInt(1, familyId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        if (rs.next()) {
+            return parseFamily(rs);
+        }
+        return null;
     }
 
     public void loadFamiliesFromGoogleSheets(int id) throws SQLException {
@@ -180,7 +178,7 @@ public class FamiliesDao extends AbstractDao {
         ps.execute();
         ResultSet rs = ps.getResultSet();
         List<List<Object>> writeData = new ArrayList<>();
-        while (rs.next()){
+        while (rs.next()) {
             List<Object> dataRow = new ArrayList<>();
             for (int i = 2; i < 7; i++) {
                 dataRow.add(rs.getString(i));
@@ -190,15 +188,6 @@ public class FamiliesDao extends AbstractDao {
         }
         try {
             SheetsAdapter.writeData(writeData);
-            ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?; DELETE FROM FAMILY_GROUPS; DELETE FROM GROUPS_OF_VOLUNTEERS;");
-            ps.setInt(1, id);
-            ps.execute();
-            ps = connection.prepareStatement("DELETE FROM VOLUNTEERS_GROUP WHERE STOCK_ID = ?; ");
-            ps.setInt(1, id);
-            ps.execute();
-            ps = connection.prepareStatement("DELETE FROM CARS WHERE STOCK_ID = ?;");
-            ps.setInt(1, id);
-            ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -213,5 +202,18 @@ public class FamiliesDao extends AbstractDao {
             families.add(parseFamily(rs));
         }
         return families;
+    }
+
+    private Family parseFamily(ResultSet rs) throws SQLException {
+        Family family = new Family();
+        family.setId(rs.getInt("ID"));
+        family.setName(rs.getString("NAME"));
+        family.setAddress(rs.getString("ADDRESS"));
+        family.setLatitude(rs.getDouble("LATITUDE"));
+        family.setLongitude(rs.getDouble("LONGITUDE"));
+        family.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+        family.setGroup(rs.getInt("GROUP_ID"));
+        family.setStockId(rs.getInt("STOCK_ID"));
+        return family;
     }
 }

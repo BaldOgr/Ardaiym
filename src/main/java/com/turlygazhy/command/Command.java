@@ -52,10 +52,13 @@ public abstract class Command {
     protected StockDao stockDao = factory.getStockDao();
     protected CarDao carDao = factory.getCarDao();
     protected VolunteersGroupDao volunteersGroupDao = factory.getVolunteersGroupDao();
-    protected StatusDao statusDao = factory.getStatusDao();
     protected FamiliesDao familiesDao = factory.getFamiliesDao();
     protected SurveyDao surveyDao = factory.getSurveyDao();
     protected FamilyRateDao familyRateDao = factory.getFamilyRateDao();
+    protected StockTemplateDao stockTemplateDao = factory.getStockTemplateDao();
+    protected TaskTemplateDao taskTemplateDao = factory.getTaskTemplateDao();
+    protected DatesTemplateDao datesTemplateDao = factory.getDatesTemplateDao();
+    protected UserOfListDao userOfListDao = factory.getUserOfListDao();
 
     protected WaitingType waitingType;
     protected org.telegram.telegrambots.api.objects.Message updateMessage;

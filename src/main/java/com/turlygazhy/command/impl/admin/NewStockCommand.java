@@ -115,7 +115,7 @@ public class NewStockCommand extends Command {
                     sendMessage(36, chatId, bot);
                     stock.setAddedBy(userDao.getUserByChatId(chatId));
                     stock.setCTA(true);
-                    stockDao.insertStock(stock);
+                    stockTemplateDao.insertStock(stock);
                     sendMessage(39, chatId, bot);   // Готово!
                     sendMessage(stock.parseStockForMessage());
                     return true;
@@ -124,19 +124,6 @@ public class NewStockCommand extends Command {
         }
 
         return false;
-    }
-
-    private InlineKeyboardMarkup getKeyboard() throws SQLException {
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        List<InlineKeyboardButton> row = new ArrayList<>();
-        InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText(buttonDao.getButtonText(43));
-        button.setCallbackData("id=" + stock.getId() + " cmd=" + buttonDao.getButtonText(43));
-        row.add(button);
-        rows.add(row);
-        keyboardMarkup.setKeyboard(rows);
-        return keyboardMarkup;
     }
 
     private InlineKeyboardMarkup getDeadlineKeyboard(int shownDates) throws SQLException {

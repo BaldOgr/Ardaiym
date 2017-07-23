@@ -12,15 +12,15 @@ import java.util.List;
 /**
  * Created by daniyar on 28.06.17.
  */
-public class DatesDao {
+public class DatesTemplateDao {
     private Connection connection;
 
-    public DatesDao(Connection connection) {
+    public DatesTemplateDao(Connection connection) {
         this.connection = connection;
     }
 
     public Dates getDateById(int id) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM DATES WHERE ID = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM DATES_TEMPLATE WHERE ID = ?");
         ps.setInt(1, id);
         ps.execute();
         ResultSet rs = ps.getResultSet();
@@ -32,7 +32,7 @@ public class DatesDao {
 
     public List<Dates> getDatesbyTaskId(int id) throws SQLException {
         List<Dates> dates = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM DATES WHERE TYPE_OF_WORK_ID = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM DATES_TEMPLATE WHERE TYPE_OF_WORK_ID = ?");
         ps.setInt(1, id);
         ps.execute();
         ResultSet rs = ps.getResultSet();
@@ -49,7 +49,7 @@ public class DatesDao {
     }
 
     public void insertDates(Dates dates) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO DATES (TYPE_OF_WORK_ID, DATE) VALUES (?, ?)");
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO DATES_TEMPLATE (TYPE_OF_WORK_ID, DATE) VALUES (?, ?)");
         ps.setInt(1, dates.getTypeOfWorkId());
         ps.setString(2, dates.getDate());
         ps.executeUpdate();

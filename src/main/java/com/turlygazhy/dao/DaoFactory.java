@@ -123,10 +123,6 @@ public class DaoFactory {
         return new VolunteersGroupDao(connection);
     }
 
-    public StatusDao getStatusDao() {
-        return new StatusDao(connection);
-    }
-
     public FamiliesDao getFamiliesDao() {
         return new FamiliesDao(connection);
     }
@@ -137,5 +133,21 @@ public class DaoFactory {
 
     public FamilyRateDao getFamilyRateDao() {
         return new FamilyRateDao(connection);
+    }
+
+    public StockTemplateDao getStockTemplateDao(){
+        return new StockTemplateDao(connection);
+    }
+
+    public TaskTemplateDao getTaskTemplateDao(){
+        return new TaskTemplateDao(connection);
+    }
+
+    public DatesTemplateDao getDatesTemplateDao() {
+        return new DatesTemplateDao(connection);
+    }
+
+    public UserOfListDao getUserOfListDao() {
+        return new UserOfListDao(connection);
     }
 }

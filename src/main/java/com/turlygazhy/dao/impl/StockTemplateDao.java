@@ -12,18 +12,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by lol on 05.06.2017.
- */
-public class StockDao extends AbstractDao {
+public class StockTemplateDao extends AbstractDao {
     private Connection connection;
 
-    public StockDao(Connection connection) {
+    public StockTemplateDao(Connection connection) {
         this.connection = connection;
     }
 
     public Stock getStock(int id) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE ID = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK_TEMPLATE WHERE ID = ?");
         ps.setInt(1, id);
         ps.execute();
         ResultSet rs = ps.getResultSet();
@@ -34,7 +31,7 @@ public class StockDao extends AbstractDao {
     }
 
     public void insertStock(Stock stock) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO STOCK (TITLE, TITLE_FOR_ADMIN, DESCRIPTION, REPORT, CTA, ADDED_BY) VALUES (?, ?, ?, ?, ?, ?)");
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO STOCK_TEMPLATE (TITLE, TITLE_FOR_ADMIN, DESCRIPTION, REPORT, CTA, ADDED_BY) VALUES (?, ?, ?, ?, ?, ?)");
         ps.setString(1, stock.getTitle());
         ps.setString(2, stock.getTitleForAdmin());
         ps.setString(3, stock.getDescription());
@@ -49,11 +46,11 @@ public class StockDao extends AbstractDao {
         for (Task task : stock.getTaskList()) {
             task.setStockId(stock.getId());
         }
-        DaoFactory.getFactory().getTypeOfWorkDao().insertTypeOfWorkList(stock.getTaskList());
+        DaoFactory.getFactory().getTaskTemplateDao().insertTypeOfWorkList(stock.getTaskList());
     }
 
     public void updateStock(Stock stock) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK SET STATUS = ?, REPORT = ?, ADDED_BY = ? WHERE ID = ?");
+        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK_TEMPLATE SET STATUS = ?, REPORT = ?, ADDED_BY = ? WHERE ID = ?");
         ps.setInt(1, stock.getStatus());
         ps.setString(2, stock.getReport());
         if (stock.getAddedBy() != null) {
@@ -63,28 +60,6 @@ public class StockDao extends AbstractDao {
         }
         ps.setInt(4, stock.getId());
         ps.execute();
-    }
-
-    public List<Stock> getUndoneStockList() throws SQLException {
-        List<Stock> stockList = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE STATUS != 4");
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        while (rs.next()) {
-            stockList.add(parseStock(rs));
-        }
-        return stockList;
-    }
-
-    public List<Stock> getDoneStockList() throws SQLException {
-        List<Stock> stockList = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK WHERE STATUS = 4");
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        while (rs.next()) {
-            stockList.add(parseStock(rs));
-        }
-        return stockList;
     }
 
     private Stock parseStock(ResultSet rs) throws SQLException {
@@ -98,8 +73,20 @@ public class StockDao extends AbstractDao {
         stock.setAddedBy(factory.getUserDao().getUserByChatId(rs.getLong("ADDED_BY")));
         stock.setCTA(rs.getBoolean("CTA"));
         if (stock.isCTA()) {
-            stock.setTaskList(DaoFactory.getFactory().getTypeOfWorkDao().getTypeOfWorkList(stock.getId()));
+            stock.setTaskList(DaoFactory.getFactory().getTaskTemplateDao().getTypeOfWorkList(stock.getId()));
         }
         return stock;
+    }
+
+    public List<Stock> getStocks(boolean cta) throws SQLException {
+        List<Stock> stocks = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK_TEMPLATE WHERE CTA = ?");
+        ps.setBoolean(1, cta);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            stocks.add(parseStock(rs));
+        }
+        return stocks;
     }
 }

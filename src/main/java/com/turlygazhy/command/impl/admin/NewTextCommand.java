@@ -15,9 +15,10 @@ import java.util.Date;
  */
 public class NewTextCommand extends Command {
     Stock stock = new Stock();
+
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        if (waitingType == null){
+        if (waitingType == null) {
             sendMessage(102, chatId, bot);  // Выберите тип
             waitingType = WaitingType.CHOOSE;
             return false;
@@ -25,7 +26,11 @@ public class NewTextCommand extends Command {
 
         switch (waitingType) {
             case CHOOSE:
-                if (updateMessageText.equals(buttonDao.getButtonText(36))){ // NONE
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(7, chatId, bot);
+                    return true;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(36))) { // NONE
                     sendMessage(103, chatId, bot);  // Введите название
                     waitingType = WaitingType.NAME;
                     return false;
@@ -41,11 +46,11 @@ public class NewTextCommand extends Command {
                 Date date = new Date();
                 StringBuilder sb = new StringBuilder();
                 sb.append(updateMessageText).append(" ");
-                if (date.getDate() < 10){
+                if (date.getDate() < 10) {
                     sb.append("0");
                 }
-                        sb.append(date.getDate()).append(".");
-                if (date.getMonth() < 11){
+                sb.append(date.getDate()).append(".");
+                if (date.getMonth() < 11) {
                     sb.append("0");
                 }
                 sb.append(date.getMonth() + 1).append(".")
@@ -62,8 +67,10 @@ public class NewTextCommand extends Command {
                     waitingType = WaitingType.NAME;
                     return false;
                 }
+                stock.setTitleForAdmin(stock.getTitle());
                 stock.setDescription(updateMessageText);
-                stockDao.insertStock(stock);
+                stock.setAddedBy(userDao.getUserByChatId(chatId));
+                stockTemplateDao.insertStock(stock);
                 sendMessage(39, chatId, bot);   // Готово
                 sendMessage(stock.toString());
                 return true;

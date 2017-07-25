@@ -89,7 +89,7 @@ public class NewDistributionCommand extends Command {
                 return false;
             case CHOOSE:
                 int stockId = Integer.parseInt(updateMessageText);
-                stock = stockDao.getStock(stockId);
+                stock = stockTemplateDao.getStock(stockId);
                 sb.append(messageDao.getMessageText(47)).append("\n<b>").append(stock.getTitle()).append("</b>\n");
                 bot.editMessageText(new EditMessageText()
                         .setMessageId(updateMessage.getMessageId())
@@ -581,7 +581,7 @@ public class NewDistributionCommand extends Command {
                         taskTemplateDao.update(task);
                         break;
                 }
-                stockDao.updateStock(stock);
+                stockTemplateDao.updateStock(stock);
                 bot.sendMessage(new SendMessage()
                         .setChatId(chatId)
                         .setText(stock.parseStockForMessage())

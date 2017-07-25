@@ -90,5 +90,6 @@ public class TaskTemplateDao extends AbstractDao {
     public void remove(Task task) throws SQLException {
         PreparedStatement ps =connection.prepareStatement("DELETE FROM TYPE_OF_WORK_TEMPLATE WHERE ID = ?");
         ps.setInt(1, task.getId());
+        ps.execute();
     }
 }

@@ -71,7 +71,10 @@ public class TaskTemplateDao extends AbstractDao {
     }
 
     public void update(Task task) throws SQLException {
-
+        PreparedStatement ps = connection.prepareStatement("UPDATE TYPE_OF_WORK_TEMPLATE SET NAME = ? WHERE ID = ?");
+        ps.setString(1, task.getName());
+        ps.setInt(2, task.getId());
+        ps.execute();
     }
 
     private Task parseTypeOfWork(ResultSet rs) throws SQLException {
@@ -82,5 +85,10 @@ public class TaskTemplateDao extends AbstractDao {
         task.setDates(DaoFactory.getFactory().getDatesTemplateDao().getDatesbyTaskId(task.getId()));
         task.setFinished(rs.getBoolean("FINISHED"));
         return task;
+    }
+
+    public void remove(Task task) throws SQLException {
+        PreparedStatement ps =connection.prepareStatement("DELETE FROM TYPE_OF_WORK_TEMPLATE WHERE ID = ?");
+        ps.setInt(1, task.getId());
     }
 }

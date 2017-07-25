@@ -21,8 +21,10 @@ import java.util.List;
  * Created by daniyar on 29.06.17.
  */
 public class SignUpCommand extends Command {
-    User user;
-    StringBuilder birthday = new StringBuilder();
+    private User user;
+    private String year;
+    private String month;
+    private String date;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -64,7 +66,7 @@ public class SignUpCommand extends Command {
                     waitingType = WaitingType.NAME;
                     return false;
                 }
-                birthday.append(updateMessageText);
+                year = updateMessageText;
                 bot.editMessageText(new EditMessageText()
                         .setMessageId(updateMessage.getMessageId())
                         .setChatId(chatId)
@@ -79,7 +81,7 @@ public class SignUpCommand extends Command {
                     waitingType = WaitingType.NAME;
                     return false;
                 }
-                birthday.append(".").append(updateMessageText);
+                month = updateMessageText;
                 bot.editMessageText(new EditMessageText()
                         .setMessageId(updateMessage.getMessageId())
                         .setChatId(chatId)
@@ -98,8 +100,8 @@ public class SignUpCommand extends Command {
                         .setChatId(chatId)
                         .setText("Ok")
                         .setMessageId(updateMessage.getMessageId()));
-                birthday.append(".").append(updateMessageText);
-                user.setBirthday(birthday.toString());
+                date = updateMessageText;
+                user.setBirthday(date + "." + month + "." + year);
                 sendMessage(10, chatId, bot);   // Ваш пол
                 waitingType = WaitingType.SEX;
                 return false;

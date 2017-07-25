@@ -102,4 +102,27 @@ public class StockDao extends AbstractDao {
         }
         return stock;
     }
+
+    public List<Stock> getStocks() throws SQLException {
+        List<Stock> stocks = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK");
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            stocks.add(parseStock(rs));
+        }
+        return stocks;
+    }
+
+    public List<Stock> getStocks(int i) throws SQLException {
+        List<Stock> stocks = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM STOCK where status = ?");
+        ps.setInt(1, i);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            stocks.add(parseStock(rs));
+        }
+        return stocks;
+    }
 }

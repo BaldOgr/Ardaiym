@@ -48,9 +48,9 @@ public class SheetsAdapter {
                 .build();
     }
 
-    public static void writeData(String spreadsheetId,
-                                 String sheetName,
-                                 char colStart, int rowId, String data)
+    public static void writeDataFromFamilySheet(String spreadsheetId,
+                                                String sheetName,
+                                                char colStart, int rowId, String data)
             throws Exception {
         authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
 
@@ -77,11 +77,19 @@ public class SheetsAdapter {
 //                .execute();
     }
 
-    public static void writeData(List<List<Object>> writeData) throws Exception {
+    public static void writeDataFromFamilySheet(List<List<Object>> writeData) throws Exception {
         String writeRange = "Лист1!B2:G";
         authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
         ValueRange vr = new ValueRange().setValues(writeData).setMajorDimension("ROWS");
         service.spreadsheets().values().update(SPREAD_SHEET_ID, writeRange, vr).setValueInputOption("RAW").execute();
+    }
+
+    public static void writeDataToUsersSheet(List<List<Object>> writeData) throws Exception {
+        String writeRange = "Лист2!A2:H";
+        authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
+        ValueRange vr = new ValueRange().setValues(writeData).setMajorDimension("ROWS");
+        service.spreadsheets().values().update(SPREAD_SHEET_ID, writeRange, vr).setValueInputOption("RAW").execute();
+
     }
 
     public static List<Family> getFamiles() throws Exception {
@@ -163,7 +171,7 @@ public class SheetsAdapter {
         int puttedRow = lastRow + 1;
         try {
             sheets.authorize(KEY);
-            sheets.writeData(SPREAD_SHEET_ID, "list", 'A', puttedRow, list);
+            sheets.writeDataFromFamilySheet(SPREAD_SHEET_ID, "list", 'A', puttedRow, list);
             constDao.update(LAST_ROW_DATA_ID, String.valueOf(puttedRow));
             memberDao.setAddedToGroup(userId);
         } catch (Exception e) {

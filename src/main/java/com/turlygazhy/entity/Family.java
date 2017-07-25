@@ -14,11 +14,13 @@ public class Family {
     String address;
     Double longitude;
     Double latitude;
-    boolean finished;
+    int status;
     int carId;
     private String phoneNumber;
     private int group;
     private int stockId;
+    private String report;
+    private int volunteersGroupId;
 
     public int getId() {
         return id;
@@ -60,12 +62,30 @@ public class Family {
         this.latitude = latitude;
     }
 
-    public boolean isFinished() {
-        return finished;
+    public int getStatus() {
+        return status;
     }
 
-    public void setFinished(boolean finished) {
-        this.finished = finished;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getStatusString() throws SQLException {
+
+        MessageDao messageDao = DaoFactory.getFactory().getMessageDao();
+        switch (status){
+            case 0:
+                return messageDao.getMessageText(125);
+            case 1:
+                return messageDao.getMessageText(126);
+            case 2:
+                return messageDao.getMessageText(127);
+            case 3:
+                return messageDao.getMessageText(128);
+            case 4:
+                return messageDao.getMessageText(129);
+        }
+        return null;
     }
 
     public int getCarId() {
@@ -104,6 +124,7 @@ public class Family {
     public String toString() {
         try {
             MessageDao messageDao = DaoFactory.getFactory().getMessageDao();
+
             return "/id" + id + " - " + name + "\n" +
                     messageDao.getMessageText(96) + address + "\n" +
                     messageDao.getMessageText(97) + phoneNumber;
@@ -111,5 +132,21 @@ public class Family {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setReport(String report) {
+        this.report = report;
+    }
+
+    public String getReport() {
+        return report;
+    }
+
+    public void setVolunteersGroupId(int volunteersGroupId) {
+        this.volunteersGroupId = volunteersGroupId;
+    }
+
+    public int getVolunteersGroupId() {
+        return volunteersGroupId;
     }
 }

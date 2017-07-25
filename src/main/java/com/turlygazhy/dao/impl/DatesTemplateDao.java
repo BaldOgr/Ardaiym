@@ -66,4 +66,17 @@ public class DatesTemplateDao {
         date.setTypeOfWorkId(rs.getInt("TYPE_OF_WORK_ID"));
         return date;
     }
+
+    public void remove(Dates dates) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM DATES_TEMPLATE WHERE ID = ?");
+        ps.setInt(1, dates.getId());
+        ps.execute();
+    }
+
+    public void update(Dates dates) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("update dates_template set date = ? WHERE ID = ?");
+        ps.setString(1, dates.getDate());
+        ps.setInt(2, dates.getId());
+        ps.execute();
+    }
 }

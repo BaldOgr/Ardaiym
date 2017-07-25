@@ -57,6 +57,10 @@ public class CommandFactory {
                 return new NewTextCommand();
             case SEND_STATISTIC_TO_USERS:
                 return new SendStatisticToUsersCommand();
+            case SEND_REJECTED_FAMILIES:
+                return new SendRejectedFamiliesCommand();
+            case SEND_STATISTIC_TO_SHEET:
+                return new SendUserStatisticToSheetsCommand();
             default:
                 throw new NotRealizedMethodException("Not realized for type: " + type);
         }

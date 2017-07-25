@@ -69,7 +69,7 @@ public abstract class Command {
     public void initMessage(Update update, Bot bot) throws TelegramApiException, SQLException {
         this.bot = bot;
 //        try {
-//            SheetsAdapter.writeData("14s83d9z4xwEmyOWwWSWPrA3QvDVE0NKl0JMGmf8dXjU", "Лист1",
+//            SheetsAdapter.writeDataFromFamilySheet("14s83d9z4xwEmyOWwWSWPrA3QvDVE0NKl0JMGmf8dXjU", "Лист1",
 //                    'A', 2, updateMessageText);
 //        } catch (Exception e) {
 //            e.printStackTrace();

@@ -16,10 +16,10 @@ import java.util.List;
  * Created by daniyar on 03.07.17.
  */
 public class ChooseFamiliesCommand extends Command {
-    int stockId;
-    VolunteersGroup group;
-    List<Family> families;
-    Family family;
+    private int stockId;
+    private VolunteersGroup group;
+    private List<Family> families;
+    private Family family;
     private Change change;
 
     @Override
@@ -81,7 +81,7 @@ public class ChooseFamiliesCommand extends Command {
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(75))) {    // Готово
-                    family.setFinished(true);
+                    family.setStatus(1);
                     familiesDao.updateFamily(family);
                     families.remove(family);
                     if (families.size() == 0){

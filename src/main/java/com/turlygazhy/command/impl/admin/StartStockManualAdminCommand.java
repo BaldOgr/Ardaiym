@@ -97,7 +97,7 @@ public class StartStockManualAdminCommand extends Command {
                         sendFamiliesList();
                         return false;
                     }
-                    familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId());
+                    familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     usersOnStock.add(userVolunteers);
                     userVolunteers = new ArrayList<>();
@@ -108,7 +108,7 @@ public class StartStockManualAdminCommand extends Command {
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(68))) {    // Закончить и начать акцию
-                    familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId());
+                    familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     usersOnStock.add(userVolunteers);
                     distributeAll();

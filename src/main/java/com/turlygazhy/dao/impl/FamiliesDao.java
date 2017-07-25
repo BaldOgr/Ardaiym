@@ -34,74 +34,21 @@ public class FamiliesDao extends AbstractDao {
         return null;
     }
 
-    public void loadFamiliesFromGoogleSheets(int id) throws SQLException {
-        List<Family> families = null;
-        try {
-            families = SheetsAdapter.getFamiles();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public List<Family> getFamilyList() throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families");
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
         }
-        for (Family family : families) {
-            family.setStockId(id);
-            insertFamily(family);
-        }
+        return families;
     }
 
     public List<Family> getFamilyList(int count) throws SQLException {
         List<Family> families = new ArrayList<>();
         PreparedStatement ps = connection.prepareStatement("select * from families where car_id = 0 limit ?");
         ps.setInt(1, count);
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        while (rs.next()) {
-            families.add(parseFamily(rs));
-        }
-        return families;
-    }
-
-    public List<Family> getFamilyListByCar(Car car) throws SQLException {
-        List<Family> families = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("select * from families where car_id = ?");
-        ps.setInt(1, car.getId());
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        while (rs.next()) {
-            families.add(parseFamily(rs));
-        }
-        return families;
-    }
-
-    public void updateFamily(Family family) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("update families set finished = ?, car_id = ?, name = ?, phone_number = ?, address = ?, longitude = ?, latitude = ? where id = ?");
-        ps.setBoolean(1, family.isFinished());
-        ps.setInt(2, family.getCarId());
-        ps.setString(3, family.getName());
-        ps.setString(4, family.getPhoneNumber());
-        ps.setString(5, family.getAddress());
-        ps.setDouble(6, family.getLongitude());
-        ps.setDouble(7, family.getLatitude());
-        ps.setInt(8, family.getId());
-        ps.execute();
-    }
-
-    public void insertFamily(Family family) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO FAMILIES (NAME, PHONE_NUMBER, ADDRESS, LONGITUDE, LATITUDE, GROUP_ID, STOCK_ID) VALUES(?, ?, ?, ?, ?, ?, ?)");
-        ps.setString(1, family.getName());
-        ps.setString(2, family.getPhoneNumber());
-        ps.setString(3, family.getAddress());
-        ps.setDouble(4, family.getLongitude());
-        ps.setDouble(5, family.getLatitude());
-        ps.setInt(6, family.getGroup());
-        ps.setInt(7, family.getStockId());
-        ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        rs.next();
-        family.setId(rs.getInt(1));
-    }
-
-    public List<Family> getFamilyList() throws SQLException {
-        List<Family> families = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("select * from families");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
@@ -130,11 +77,51 @@ public class FamiliesDao extends AbstractDao {
         return families;
     }
 
-    public void insertVolunteerGroups(List<User> userVolunteers, int groupId) throws SQLException {
+    public List<Family> getFamilyListByStatus(int status) throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families where status = ?");
+        ps.setInt(1, status);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
+        }
+        return families;
+    }
+
+    public List<Family> getFamilyListByCar(Car car) throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families where car_id = ?");
+        ps.setInt(1, car.getId());
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
+        }
+        return families;
+    }
+
+    public void insertFamily(Family family) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO FAMILIES (NAME, PHONE_NUMBER, ADDRESS, LONGITUDE, LATITUDE, GROUP_ID, STOCK_ID) VALUES(?, ?, ?, ?, ?, ?, ?)");
+        ps.setString(1, family.getName());
+        ps.setString(2, family.getPhoneNumber());
+        ps.setString(3, family.getAddress());
+        ps.setDouble(4, family.getLongitude());
+        ps.setDouble(5, family.getLatitude());
+        ps.setInt(6, family.getGroup());
+        ps.setInt(7, family.getStockId());
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        rs.next();
+        family.setId(rs.getInt(1));
+    }
+
+    public void insertVolunteerGroups(List<User> userVolunteers, int groupId, int stockId) throws SQLException {
         for (User user : userVolunteers) {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO GROUPS_OF_VOLUNTEERS (USER_ID, GROUP_ID) values(?, ?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO GROUPS_OF_VOLUNTEERS (USER_ID, GROUP_ID, STOCK_ID) values(?, ?, ?)");
             ps.setInt(1, user.getId());
             ps.setInt(2, groupId);
+            ps.setInt(3, stockId);
             ps.execute();
         }
     }
@@ -149,10 +136,49 @@ public class FamiliesDao extends AbstractDao {
         }
     }
 
-    public List<User> getUsersByGroupId(int group_id) throws SQLException {
+    public void updateFamily(Family family) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("update families set status = ?, car_id = ?, name = ?, phone_number = ?, address = ?, longitude = ?, latitude = ?, report = ?, volunteers_group_id = ? where id = ?");
+        ps.setInt(1, family.getStatus());
+        ps.setInt(2, family.getCarId());
+        ps.setString(3, family.getName());
+        ps.setString(4, family.getPhoneNumber());
+        ps.setString(5, family.getAddress());
+        ps.setDouble(6, family.getLongitude());
+        ps.setDouble(7, family.getLatitude());
+        ps.setString(8, family.getReport());
+        ps.setInt(9, family.getVolunteersGroupId());
+        ps.setInt(10, family.getId());
+        ps.execute();
+    }
+
+    public List getUnchoosedFamilies() throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families where car_id = 0");
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
+        }
+        return families;
+    }
+
+    public int getGroupId(int userId, int stockId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ? and STOCK_ID = ?");
+        ps.setInt(1, userId);
+        ps.setInt(2, stockId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        if (rs.next()) {
+            return rs.getInt("GROUP_ID");
+        }
+        return 0;
+    }
+
+    public List<User> getUsersByGroupId(int group_id, int stockId) throws SQLException {
         List<User> users = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE GROUP_ID = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE GROUP_ID = ? and STOCK_ID = ?");
         ps.setInt(1, group_id);
+        ps.setInt(2, stockId);
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
@@ -161,15 +187,28 @@ public class FamiliesDao extends AbstractDao {
         return users;
     }
 
-    public int getGroupId(int userId) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ?");
-        ps.setInt(1, userId);
+    public List<Integer> getGroupsByStockId(int stockId) throws SQLException {
+        List<Integer> groups = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE STOCK_ID = ?");
+        ps.setInt(1, stockId);
         ps.execute();
         ResultSet rs = ps.getResultSet();
-        if (rs.next()) {
-            return rs.getInt("GROUP_ID");
+        while (rs.next()){
+            int groupId = rs.getInt("GROUP_ID");
+            if (!hasGroup(groups, groupId)){
+                groups.add(groupId);
+            }
         }
-        return 0;
+        return groups;
+    }
+
+    private boolean hasGroup(List<Integer> groups, int groupId) {
+        for (Integer group : groups){
+            if (group.equals(groupId)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void downloadFamiliesToGoogle(int id) throws SQLException {
@@ -187,21 +226,23 @@ public class FamiliesDao extends AbstractDao {
             writeData.add(dataRow);
         }
         try {
-            SheetsAdapter.writeData(writeData);
+            SheetsAdapter.writeDataFromFamilySheet(writeData);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public List getUnchoosedFamilies() throws SQLException {
-        List<Family> families = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("select * from families where car_id = 0");
-        ps.execute();
-        ResultSet rs = ps.getResultSet();
-        while (rs.next()) {
-            families.add(parseFamily(rs));
+    public void loadFamiliesFromGoogleSheets(int id) throws SQLException {
+        List<Family> families = null;
+        try {
+            families = SheetsAdapter.getFamiles();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return families;
+        for (Family family : families) {
+            family.setStockId(id);
+            insertFamily(family);
+        }
     }
 
     private Family parseFamily(ResultSet rs) throws SQLException {
@@ -214,6 +255,21 @@ public class FamiliesDao extends AbstractDao {
         family.setPhoneNumber(rs.getString("PHONE_NUMBER"));
         family.setGroup(rs.getInt("GROUP_ID"));
         family.setStockId(rs.getInt("STOCK_ID"));
+        family.setStatus(rs.getInt("STATUS"));
+        family.setReport(rs.getString("REPORT"));
         return family;
+    }
+
+    public List<Family> getRejectedFamiliesByGroup(int groupId, int stockId) throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families where volunteers_group_id = ? and stock_id = ?");
+        ps.setInt(1, groupId);
+        ps.setInt(2, stockId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
+        }
+        return families;
     }
 }

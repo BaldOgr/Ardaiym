@@ -126,7 +126,7 @@ public class SurveyCommand extends Command {
 
     private void sendFamilyList() throws SQLException, TelegramApiException {
         if (families == null) {
-            int groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId());
+            int groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId);
             tempFamilies = familiesDao.getFamilyListByGroupId(groupId, stockId);
             families = new ArrayList<>(tempFamilies);
         }

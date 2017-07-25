@@ -27,7 +27,9 @@ public enum CommandType {
     MANUAL_STOCK_COMMAND(19),
     SURVEY(20),
     NEW_TEXT(21),
-    SEND_STATISTIC_TO_USERS(22);
+    SEND_STATISTIC_TO_USERS(22),
+    SEND_REJECTED_FAMILIES(23),
+    SEND_STATISTIC_TO_SHEET(24);
 
 
     private final int id;

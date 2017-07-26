@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="GoogleSheetsToolkit">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/GoogleSheetsToolkit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/GoogleSheetsToolkit.jar!/" />
+    </SOURCES>
+  </library>
+</component>

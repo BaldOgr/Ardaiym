@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="chtoolkit">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/chtoolkit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

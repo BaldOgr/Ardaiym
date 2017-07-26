@@ -1,0 +1,27 @@
+﻿Instruction for use GoogleSheetsToolkit for java.
+
+Author and programmer - Valentin "Vanderkast" Mazurov
+
+Classes' short info:
+
+1. Authorization  - uses to save data for connecting your app with GoogleSheetsApi
+2. GoogleSheet - class, which give you control on google sheet by Authorization's info
+3. GoogleSheetsClearing - clear data in sheet
+4. GoogleSheetsReading - read data from sheet
+5. GoogleSheetsWriting - write data into sheet
+
+How to use:
+1. Create object of Authorisation class
+2. Fill data into auth's object (path to yoyr_secrets.json, scope (like readonly))
+3. Create object of googleSheet and fill data (auth object, app name, spreadsheetid(check into link))
+4. Use GoogleSheets -Clearing;-Reading;-Writing 
+5. Profit!
+
+Support information:
+1. Set new DATA_STORE_DIR, if you need Reading and the Writing, cause it has  different permissions
+2. Download your secrets from https://console.developers.google.com/apis
+3. Scopes are constants of class SheetsScopes from package com.google.api.services.sheets.v4
+4. You can check example of using this toolkit test.java.Main.java <- this is test class
+5. More about GoogleSheetsAPI you can read at https://developers.google.com/sheets/api/
+
+

@@ -1,4 +1,4 @@
-package com.turlygazhy.command.impl.admin_commands;
+package com.turlygazhy.command.impl;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
@@ -8,11 +8,12 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import java.sql.SQLException;
 
 /**
- * Created by daniyar on 14.07.17.
+ * Created by daniyar on 04.07.17.
  */
-public class AddTaskFromFeedback extends Command {
+public class ContactsCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        return false;
+        sendMessage(4, chatId, bot);
+        return true;
     }
 }

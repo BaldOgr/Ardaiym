@@ -183,23 +183,4 @@ public class DateUtil {
         }
         return date;
     }
-
-    public static Date parseDate(String dateStr) {
-        Date date = new Date();
-        String[] dateString = dateStr.split(" ");
-        String[] HourMin = dateString[0].split(":");
-        String str = dateString[1];
-        int hour = Integer.parseInt(HourMin[0]);
-        int minute = Integer.parseInt(HourMin[1]);
-        int day = Integer.parseInt(str.substring(0, 2));
-        int month = Integer.parseInt(str.substring(3, 5));
-        int year = Integer.parseInt(str.substring(6));
-        date.setDate(day);
-        date.setMonth(month-1);
-        date.setYear(year-1900);
-        date.setHours(hour);
-        date.setMinutes(minute);
-        System.out.println(date);
-        return date;
-    }
 }

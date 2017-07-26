@@ -1,4 +1,4 @@
-package com.turlygazhy.command.impl.admin_commands;
+package com.turlygazhy.command.impl;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
@@ -8,16 +8,12 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import java.sql.SQLException;
 
 /**
- * Created by daniyar on 12.07.17.
+ * Created by daniyar on 30.06.17.
  */
-public class AdminMenuCommands extends Command {
+public class ShowNewsCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        if (userDao.isAdmin(chatId)){
-            sendMessage(3, chatId, bot);    // Админ меню
-        } else {
-            sendMessage("Nothing to show");
-        }
+        sendMessage(3, chatId, bot);    //  Следите за нашими новостями
         return true;
     }
 }

@@ -20,7 +20,7 @@ public class ConnectionPool {
 
     //data for settings of connection
     private static final int CONNECTION_NUMBER = 10;
-    private static final String JDBC_URL = "jdbc:h2:~/templates;AUTO_SERVER=TRUE";
+    private static final String JDBC_URL = "jdbc:h2:~/Ardaiym;AUTO_SERVER=TRUE";
     private static final String DB_LOGIN = "sa";
     private static final String DB_PASSWORD = "";
 

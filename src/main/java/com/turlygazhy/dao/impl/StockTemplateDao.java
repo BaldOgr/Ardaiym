@@ -50,7 +50,7 @@ public class StockTemplateDao extends AbstractDao {
     }
 
     public void updateStock(Stock stock) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK_TEMPLATE SET STATUS = ?, REPORT = ?, ADDED_BY = ? WHERE ID = ?");
+        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK_TEMPLATE SET STATUS = ?, REPORT = ?, ADDED_BY = ?, TITLE = ?, DESCRIPTION = ?, TITLE_FOR_ADMIN = ? WHERE ID = ?");
         ps.setInt(1, stock.getStatus());
         ps.setString(2, stock.getReport());
         if (stock.getAddedBy() != null) {
@@ -58,7 +58,10 @@ public class StockTemplateDao extends AbstractDao {
         } else {
             ps.setLong(3, 0);
         }
-        ps.setInt(4, stock.getId());
+        ps.setString(4, stock.getTitle());
+        ps.setString(5, stock.getDescription());
+        ps.setString(6, stock.getTitleForAdmin());
+        ps.setInt(7, stock.getId());
         ps.execute();
     }
 

@@ -88,6 +88,16 @@ public class NewDistributionCommand extends Command {
                 }
                 return false;
             case CHOOSE:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    Message message = messageDao.getMessage(42);
+                    bot.editMessageText(new EditMessageText()
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setText(message.getSendMessage().getText())
+                            .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(message.getKeyboardMarkUpId())));
+                    waitingType = WaitingType.FOR_WHOM;
+                    return false;
+                }
                 int stockId = Integer.parseInt(updateMessageText);
                 stock = stockTemplateDao.getStock(stockId);
                 sb.append(messageDao.getMessageText(47)).append("\n<b>").append(stock.getTitle()).append("</b>\n");
@@ -760,7 +770,7 @@ public class NewDistributionCommand extends Command {
         return keyboard;
     }
 
-    private InlineKeyboardMarkup getChooseStockKeyboard(List<Stock> undoneStocks) {
+    private InlineKeyboardMarkup getChooseStockKeyboard(List<Stock> undoneStocks) throws SQLException {
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> row = new ArrayList<>();
         for (Stock stock : undoneStocks) {
@@ -771,6 +781,12 @@ public class NewDistributionCommand extends Command {
             buttons.add(button);
             row.add(buttons);
         }
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(10));
+        button.setCallbackData(buttonDao.getButtonText(10));
+        List<InlineKeyboardButton> buttons = new ArrayList<>();
+        buttons.add(button);
+        row.add(buttons);
         keyboard.setKeyboard(row);
         return keyboard;
     }

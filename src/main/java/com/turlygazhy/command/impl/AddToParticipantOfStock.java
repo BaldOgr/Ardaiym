@@ -27,8 +27,7 @@ public class AddToParticipantOfStock extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
-            sendFirstMessage(update);
-            return false;
+            return sendFirstMessage(update);
         }
         switch (waitingType) {
             case CHOOSE_STOCK:
@@ -37,8 +36,7 @@ public class AddToParticipantOfStock extends Command {
                     return true;
                 }
                 int stockId = Integer.parseInt(updateMessageText);
-                sendTypeOfWorkList(stockId);
-                return false;
+                return sendTypeOfWorkList(stockId);
 
             case CHOOSE_TYPE_OF_WORK:
                 if (updateMessageText.equals(buttonDao.getButtonText(10))) {
@@ -97,8 +95,7 @@ public class AddToParticipantOfStock extends Command {
                     }
                     task = null;
                     dates = null;
-                    sendFirstMessage(update);
-                    return false;
+                    return sendFirstMessage(update);
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(112))) {   // Мне достаточно
                     sendMessage(2, chatId, bot);    // Главное меню
@@ -110,7 +107,7 @@ public class AddToParticipantOfStock extends Command {
         return false;
     }
 
-    private void sendFirstMessage(Update update) throws SQLException, TelegramApiException {
+    private boolean sendFirstMessage(Update update) throws SQLException, TelegramApiException {
         if (update.getCallbackQuery() == null || stock != null) {
             bot.sendMessage(new SendMessage()
                     .setText(messageDao.getMessageText(37))
@@ -121,8 +118,9 @@ public class AddToParticipantOfStock extends Command {
             String data = update.getCallbackQuery().getData();
             String stockIdString = data.substring(data.indexOf("id=") + 3, data.indexOf(" "));
             int stockId = Integer.valueOf(stockIdString);
-            sendTypeOfWorkList(stockId);
+            return sendTypeOfWorkList(stockId);
         }
+        return false;
     }
 
     private void sendTaskInfo() throws SQLException, TelegramApiException {
@@ -140,8 +138,10 @@ public class AddToParticipantOfStock extends Command {
         sendStockInfoToAdmin();
     }
 
-    private void sendTypeOfWorkList(int stockId) throws SQLException, TelegramApiException {
-        stock = stockDao.getStock(stockId);
+    private boolean sendTypeOfWorkList(int stockId) throws SQLException, TelegramApiException {
+        if (stock == null) {
+            stock = stockDao.getStock(stockId);
+        }
         Iterator taskIterator = stock.getTaskList().iterator();
         while (taskIterator.hasNext()) {
             Task task = (Task) taskIterator.next();
@@ -160,11 +160,16 @@ public class AddToParticipantOfStock extends Command {
                 taskIterator.remove();
             }
         }
+        if (stock.getTaskList().size() == 0){
+            sendMessage(133, chatId, bot);
+            return true;
+        }
         bot.sendMessage(new SendMessage()
                 .setText(messageDao.getMessageText(41))
                 .setChatId(chatId)
                 .setReplyMarkup(getTypeOfWorkKeyboard()));
         waitingType = WaitingType.CHOOSE_TYPE_OF_WORK;
+        return false;
     }
 
 

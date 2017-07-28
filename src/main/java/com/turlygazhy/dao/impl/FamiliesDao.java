@@ -65,7 +65,7 @@ public class FamiliesDao extends AbstractDao {
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
-            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ? and STOCK_ID = ?");
+            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ? and STOCK_ID = ? and status = 0");
             ps.setInt(1, rs.getInt("FAMILY_GROUP_ID"));
             ps.setInt(2, stockId);
             ps.execute();

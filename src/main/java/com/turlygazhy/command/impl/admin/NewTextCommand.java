@@ -26,7 +26,7 @@ public class NewTextCommand extends Command {
 
         switch (waitingType) {
             case CHOOSE:
-                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {    // Назад
                     sendMessage(7, chatId, bot);
                     return true;
                 }

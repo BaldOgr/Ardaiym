@@ -2,6 +2,7 @@ package com.turlygazhy.command.impl;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
+import com.turlygazhy.dao.impl.MessageDao;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 public class ContactsCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        sendMessage(4, chatId, bot);
+        sendMessage(MessageDao.CONTACTS, chatId, bot);
         return true;
     }
 }

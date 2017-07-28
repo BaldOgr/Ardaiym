@@ -21,13 +21,16 @@ public class SendUserStatisticToSheetsCommand extends Command {
         List<User> users = userDao.getUsers();
         List<Stock> stocks = stockDao.getStocks();
         List<List<Object>> writeData = new ArrayList<>();
-        for (User user : users){
+        for (User user : users) {
+            if (user == null){
+                continue;
+            }
             List<Object> userData = new ArrayList<>();
             userData.add(user.getId());
             userData.add(user.getName());
             userData.add(user.getPhoneNumber());
             userData.add(user.getCity());
-            if (user.isSex()){
+            if (user.isSex()) {
                 userData.add(buttonDao.getButtonText(11));  // Мужчина
             } else {
                 userData.add(buttonDao.getButtonText(12));  // Женщина
@@ -35,17 +38,17 @@ public class SendUserStatisticToSheetsCommand extends Command {
             userData.add(user.getBirthday());
             StringBuilder regInStock = new StringBuilder();
             StringBuilder participated = new StringBuilder();
-            for (Stock stock : stocks){                                 /////
-                for (Task task: stock.getTaskList()){                   //Добавляем акции,
-                    if (addParticipant(task, user)) {                   //в которых участвовал
-                        regInStock.append(stock.getTitle()).append("\n");       //
-                        break;                                          //волонтер
-                    }                                                   //////
+            for (Stock stock : stocks) {                                    /////
+                for (Task task : stock.getTaskList()) {                     //Добавляем акции,
+                    if (addParticipant(task, user)) {                       //в которых участвовал
+                        regInStock.append(stock.getTitle()).append("\n");   //волонтер
+                        break;                                              //////
+                    }
                 }
                 List<Integer> groups = familiesDao.getGroupsByStockId(stock.getId());
-                for (Integer groupId : groups){
+                for (Integer groupId : groups) {
                     List<User> groupUsers = familiesDao.getUsersByGroupId(groupId, stock.getId());
-                    if (participated(groupUsers, user)){
+                    if (participated(groupUsers, user)) {
                         participated.append(stock.getTitle()).append("\n");
                         break;
                     }
@@ -65,8 +68,11 @@ public class SendUserStatisticToSheetsCommand extends Command {
     }
 
     private boolean participated(List<User> groupUsers, User user) {
-        for (User user1 : groupUsers){
-            if (user1.getChatId().equals(user.getChatId())){
+        for (User user1 : groupUsers) {
+            if (user1 == null){
+                continue;
+            }
+            if (user1.getChatId().equals(user.getChatId())) {
                 return true;
             }
         }
@@ -74,8 +80,8 @@ public class SendUserStatisticToSheetsCommand extends Command {
     }
 
     private boolean addParticipant(Task task, User user) {
-        for (Participant participant : task.getParticipants()){
-            if (participant.getUser().getChatId().equals(user.getChatId())){
+        for (Participant participant : task.getParticipants()) {
+            if (participant.getUser().getChatId().equals(user.getChatId())) {
                 return true;
             }
         }

@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Location;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -34,7 +35,7 @@ public class ManualStockCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
-            if (updateMessageText.startsWith("stockId=")) {
+            if (updateMessageText.contains("stockid=")) {
                 stockId = Integer.parseInt(updateMessageText.substring(8, updateMessageText.indexOf(" ")));
                 sendMessage(120, chatId, bot);  // Хотите принять участие в акции?
                 waitingType = WaitingType.CHOOSE;
@@ -61,6 +62,10 @@ public class ManualStockCommand extends Command {
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(122))) {   // Принять
                     groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId);
+                    if(groupId == 0){
+                        sendMessage(132, chatId, bot);  // Вы не участвуете в данной акции
+                        return true;
+                    }
                     users = familiesDao.getUsersByGroupId(groupId, stockId);
                     adminChatId = stockDao.getStock(stockId).getAddedBy().getChatId();
                     families = familiesDao.getFamilyListByGroupId(groupId, stockId);
@@ -77,14 +82,10 @@ public class ManualStockCommand extends Command {
                 if (tempFamilies.size() != 0) {
                     families.addAll(tempFamilies);
                     sendMessage(130, chatId, bot);
-                    tempFamilies.forEach(obj -> {
-                        obj.setVolunteersGroupId(0);
-                        try {
-                            familiesDao.updateFamily(family);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                    for (Family family : tempFamilies){
+                        family.setVolunteersGroupId(0);
+                        familiesDao.updateFamily(family);
+                    }
                     tempFamilies = null;
                 }
                 int familyId = Integer.parseInt(updateMessageText.substring(3));
@@ -149,6 +150,10 @@ public class ManualStockCommand extends Command {
                 return sendFamiliesList();
 
             case CHOOSE_DECILINE_ANSWER:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendFamilyInfo();
+                    return false;
+                }
                 if (updateMessageText.equals(buttonDao.getButtonText(124))) {   // Их нет дома
                     family.setStatus(2);
                 }

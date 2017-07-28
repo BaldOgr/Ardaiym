@@ -44,24 +44,43 @@ public class NewStockCommand extends Command {
 
         switch (waitingType) {
             case NAME:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {    // Назад
+                    sendMessage(7, chatId, bot);    // Сеню админа
+                    return true;
+                }
                 stock.setTitle(updateMessageText);
                 sendMessage(31, chatId, bot);
                 waitingType = WaitingType.NAME_FOR_ADMIN;
                 return false;
 
             case NAME_FOR_ADMIN:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(30, chatId, bot);           // Введите название акции
+                    waitingType = WaitingType.NAME;
+                    return false;
+                }
                 stock.setTitleForAdmin(updateMessageText);
                 sendMessage(32, chatId, bot);
                 waitingType = WaitingType.DESCRIPTION;
                 return false;
 
             case DESCRIPTION:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(31, chatId, bot);
+                    waitingType = WaitingType.NAME_FOR_ADMIN;
+                    return false;
+                }
                 stock.setDescription(updateMessageText);
                 sendMessage(33, chatId, bot);
                 waitingType = WaitingType.TYPE_OF_WORK;
                 return false;
 
             case TYPE_OF_WORK:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(32, chatId, bot);
+                    waitingType = WaitingType.DESCRIPTION;
+                    return false;
+                }
                 typeOfWork = new Task();
                 typeOfWork.setName(updateMessageText);
                 bot.sendMessage(new SendMessage()
@@ -73,6 +92,11 @@ public class NewStockCommand extends Command {
                 return false;
 
             case DATE:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(33, chatId, bot);
+                    waitingType = WaitingType.TYPE_OF_WORK;
+                    return false;
+                }
                 if (updateMessageText.equals("next")) {
                     shownDates++;
                     bot.editMessageText(new EditMessageText()

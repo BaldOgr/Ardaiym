@@ -14,7 +14,7 @@ import java.util.Objects;
  * Created by user on 12/18/16.
  */
 public class UserDao {
-    private static final String SELECT_ADMIN_CHAT_ID = "SELECT * FROM PUBLIC.USER WHERE ID=?";
+    private static final String SELECT_ADMIN_CHAT_ID = "SELECT * FROM PUBLIC.USER WHERE rules = 3";
     private static final int PARAMETER_USER_ID = 1;
     private static final int CHAT_ID_COLUMN_INDEX = 2;
     public static final int ADMIN_ID = 1;
@@ -38,11 +38,10 @@ public class UserDao {
     public Long getAdminChatId() {
         try {
             PreparedStatement ps = connection.prepareStatement(SELECT_ADMIN_CHAT_ID);
-            ps.setLong(PARAMETER_USER_ID, ADMIN_ID);
             ps.execute();
             ResultSet rs = ps.getResultSet();
             rs.next();
-            return rs.getLong(CHAT_ID_COLUMN_INDEX);
+            return rs.getLong("CHAT_ID");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +75,11 @@ public class UserDao {
         ps.setString(4, user.getCity());
         ps.setBoolean(5, user.isSex());
         ps.setString(6, user.getBirthday());
-        ps.execute();
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()){
+            user.setId(rs.getInt(1));
+        }
     }
 
     public List<User> getUsers() throws SQLException {
@@ -117,5 +120,11 @@ public class UserDao {
             users.add(parseUser(rs));
         }
         return users;
+    }
+
+    public void delete(User user) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM USER WHERE ID = ?");
+        ps.setInt(1, user.getId());
+        ps.execute();
     }
 }

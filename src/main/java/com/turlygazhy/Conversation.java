@@ -1,6 +1,7 @@
 package com.turlygazhy;
 
 import com.turlygazhy.command.Command;
+import com.turlygazhy.command.impl.ShowInfoCommand;
 import com.turlygazhy.dao.DaoFactory;
 import com.turlygazhy.dao.impl.KeyboardMarkUpDao;
 import com.turlygazhy.dao.impl.MessageDao;
@@ -63,10 +64,8 @@ public class Conversation {
     }
 
     private void showMain(Update update, Bot bot) throws SQLException, TelegramApiException {
-        Message message = messageDao.getMessage(2);
-        SendMessage sendMessage = message.getSendMessage();
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setReplyMarkup(keyboardMarkUpDao.select(message.getKeyboardMarkUpId()));
-        bot.sendMessage(sendMessage);
+        ShowInfoCommand command = new ShowInfoCommand();
+        command.initMessage(update, bot);
+        command.execute(update, bot);
     }
 }

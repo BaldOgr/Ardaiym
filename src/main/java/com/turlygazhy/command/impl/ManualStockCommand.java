@@ -3,6 +3,7 @@ package com.turlygazhy.command.impl;
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Location;
@@ -34,6 +35,7 @@ public class ManualStockCommand extends Command {
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
+
         if (waitingType == null) {
             if (updateMessageText.contains("stockid=")) {
                 stockId = Integer.parseInt(updateMessageText.substring(8, updateMessageText.indexOf(" ")));
@@ -43,6 +45,7 @@ public class ManualStockCommand extends Command {
                 sendMessage(131, chatId, bot);
                 List<Stock> stocks = stockDao.getStocks(3);
                 StringBuilder sb = new StringBuilder();
+
                 stocks.forEach(stock -> {
                     sb.append(stock.toString()).append("\n");
                 });
@@ -54,6 +57,10 @@ public class ManualStockCommand extends Command {
 
         switch (waitingType) {
             case CHOOSE_STOCK:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(2, chatId, bot);
+                    return true;
+                }
                 stockId = Integer.parseInt(updateMessageText.substring(3));
                 sendMessage(120, chatId, bot);
                 waitingType = WaitingType.CHOOSE;
@@ -62,17 +69,19 @@ public class ManualStockCommand extends Command {
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(122))) {   // Принять
                     groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId);
-                    if(groupId == 0){
+                    if (groupId == 0) {
                         sendMessage(132, chatId, bot);  // Вы не участвуете в данной акции
                         return true;
                     }
                     users = familiesDao.getUsersByGroupId(groupId, stockId);
                     adminChatId = stockDao.getStock(stockId).getAddedBy().getChatId();
-                    families = familiesDao.getFamilyListByGroupId(groupId, stockId);
+                    families = familiesDao.getFamilyListByGroupId(groupId, stockId, 0);
                     return sendFamiliesList();
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(123))) {   // Отказаться
                     sendMessage(121, chatId, bot);  // Ждем Вас в следующих акциях
+                    groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId);
+                    familiesDao.deleteUserFromGroup(chatId, groupId, stockId);
                     return true;
                 }
                 return false;
@@ -82,7 +91,7 @@ public class ManualStockCommand extends Command {
                 if (tempFamilies.size() != 0) {
                     families.addAll(tempFamilies);
                     sendMessage(130, chatId, bot);
-                    for (Family family : tempFamilies){
+                    for (Family family : tempFamilies) {
                         family.setVolunteersGroupId(0);
                         familiesDao.updateFamily(family);
                     }
@@ -163,10 +172,11 @@ public class ManualStockCommand extends Command {
                 if (updateMessageText.equals(buttonDao.getButtonText(126))) {   // Нет времени
                     family.setStatus(4);
                 }
-                String msg = family.getStatusString() + "\n" + family;
+                String msg = "<b>" + family.getStatusString() + "</b>\n" + family;
                 bot.sendMessage(new SendMessage()
                         .setChatId(adminChatId)
                         .setText(msg)
+                        .setParseMode(ParseMode.HTML)
                         .setReplyMarkup(getKeyboard()));   // Отправляем отказников админу
                 familiesDao.updateFamily(family);
                 families.remove(family);
@@ -260,6 +270,13 @@ public class ManualStockCommand extends Command {
         if (count == 0) {
             sendMessage(113, chatId, bot);  // Семей больше нет
             sendInfoForAdmin();
+            StringBuilder sb = new StringBuilder();
+            Stock stock = stockDao.getStock(stockId);
+            sb.append(stock.getTitle()).append("\n").append(messageDao.getMessageText(80));
+            bot.sendMessage(new SendMessage()
+                    .setChatId(chatId)
+                    .setText(sb.toString())
+                    .setReplyMarkup(getSurveyKeyboard()));
             return true;
         }
         Iterator iterator = families.listIterator();
@@ -281,9 +298,26 @@ public class ManualStockCommand extends Command {
         return false;
     }
 
+    private ReplyKeyboard getSurveyKeyboard() throws SQLException {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setCallbackData("id=" + stockId + " cmd=" + buttonDao.getButtonText(80));
+        button.setText(buttonDao.getButtonText(80));
+        row.add(button);
+        rows.add(row);
+        markup.setKeyboard(rows);
+        return markup;
+    }
+
     private void sendInfoForAdmin() throws SQLException, TelegramApiException {
         Stock stock = stockDao.getStock(stockId);
         families = familiesDao.getFamilyListByGroupId(groupId, stockId);
+        int helpedCount = 0;
+        int notHomeCount = 0;
+        int wrongAddresCount = 0;
+        int noTimeCount = 0;
         StringBuilder sb = new StringBuilder();
         sb.append("<b>").append(messageDao.getMessageText(114)).append("</b>\n"); // Волонтеры
         for (int i = 0; i < users.size(); i++) {
@@ -293,11 +327,29 @@ public class ManualStockCommand extends Command {
         sb.append("<b>").append(messageDao.getMessageText(115)).append("</b>\n"); // Семьи
         for (int i = 0; i < families.size(); i++) {
             Family family = families.get(i);
+            switch (family.getStatus()) {
+                case 2:
+                    notHomeCount++;
+                    break;
+                case 3:
+                    wrongAddresCount++;
+                    break;
+                case 4:
+                    noTimeCount++;
+                    break;
+                case 1:
+                    helpedCount++;
+            }
             sb.append(i + 1).append(") ").append(family.getName()).append("\n")
                     .append("\t").append(family.getAddress()).append("\n")
                     .append("\t").append(family.getPhoneNumber()).append("\n");
         }
+        sb.append("<b>").append(buttonDao.getButtonText(137)).append("</b> - ").append(helpedCount).append("\n");
+        sb.append("<b>").append(buttonDao.getButtonText(124)).append("</b> - ").append(notHomeCount).append("\n");
+        sb.append("<b>").append(buttonDao.getButtonText(125)).append("</b> - ").append(wrongAddresCount).append("\n");
+        sb.append("<b>").append(buttonDao.getButtonText(126)).append("</b> - ").append(noTimeCount).append("\n");
 
+        sendMessage(sb.toString());
         sendMessage(sb.toString(), stock.getAddedBy().getChatId(), bot);
     }
 }

@@ -146,7 +146,7 @@ public class ShowStockCommand extends Command {
                 stockDao.updateStock(stock);
                 familiesDao.downloadFamiliesToGoogle(stock.getId());
                 sendMessage(40, chatId, bot);   // Готово
-                sendSurvey();   // Опрос для пользователей
+//                sendSurvey();   // Опрос для пользователей
                 sendMessage(53, chatId, bot);   // Меню акции
                 waitingType = WaitingType.CHOOSE_STOCK_TYPE;
                 return false;

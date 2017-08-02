@@ -1,5 +1,10 @@
 package com.turlygazhy.entity;
 
+import com.turlygazhy.dao.DaoFactory;
+import com.turlygazhy.dao.impl.MessageDao;
+
+import java.sql.SQLException;
+
 public class FamilyRate {
     int id;
     Family family;
@@ -45,5 +50,30 @@ public class FamilyRate {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ratedUser.getName()).append(" - ");
+        MessageDao messageDao = DaoFactory.getFactory().getMessageDao();
+        try {
+            switch (type) {
+                case 0:
+                    sb.append(messageDao.getMessageText(148));
+                    break;
+                case 1:
+                    sb.append(messageDao.getMessageText(149));
+                    break;
+                case 2:
+                    sb.append(messageDao.getMessageText(150));
+                    break;
+                case 3:
+                    sb.append(messageDao.getMessageText(151)).append(comment);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return sb.toString();
     }
 }

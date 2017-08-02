@@ -38,27 +38,19 @@ public class StartStockManualAdminCommand extends Command {
         }
 
         if (waitingType == null) {
-            if (stock.getStatus() == 3){
+            if (stock.getStatus() == 3) {
                 sendMessage(98, chatId, bot);   //Акция уже началась, чтобы закончить, нажмите кнопку "Закончить акцию"
                 return true;
             }
+            familiesDao.deleteFamilies(stock.getId());
             familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
-            List<Family> families = familiesDao.getFamilyList();
+            List<Family> families = familiesDao.getFamilyListByStock(stock.getId());
             for (Family family : families) {
                 if (!hasFamily(family, familyGroups)) {
                     familyGroups.add(family.getGroup());
                 }
             }
-            if (users == null) {
-                users = new ArrayList<>();
-                for (Task task : stock.getTaskList()) {
-                    for (Participant participant : task.getParticipants()) {
-                        if (!hasUser(participant.getUser().getChatId(), users)) {
-                            users.add(participant.getUser());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
-                        }
-                    }
-                }
-            }
+            addUsers();
             sendMessage(70, chatId, bot);   // Выберите волонтеров
             sendUserList();
             userVolunteers = new ArrayList<>();
@@ -69,7 +61,7 @@ public class StartStockManualAdminCommand extends Command {
         switch (waitingType) {
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(64))) {    // Выбрать семьи
-                    if (userVolunteers.size() == 0){
+                    if (userVolunteers.size() == 0) {
                         sendMessage(86, chatId, bot);   // Выберите минимум 1 волонтера
                         sendUserList();
                         return false;
@@ -92,7 +84,7 @@ public class StartStockManualAdminCommand extends Command {
                 return false;
             case CHOOSE_FAMILY:
                 if (updateMessageText.equals(buttonDao.getButtonText(67))) {    // Добавить новую группу
-                    if (familiesForVolunteers.size() == 0){
+                    if (familiesForVolunteers.size() == 0) {
                         sendMessage(87, chatId, bot);   // Выберите минимум 1 семью
                         sendFamiliesList();
                         return false;
@@ -118,8 +110,8 @@ public class StartStockManualAdminCommand extends Command {
                     return false;
                 }
                 int familyGroupId = Integer.parseInt(updateMessageText.substring(3));
-                for (Integer familyGroup : familyGroups){
-                    if (familyGroup == familyGroupId){
+                for (Integer familyGroup : familyGroups) {
+                    if (familyGroup == familyGroupId) {
                         familyGroups.remove(familyGroup);
                         break;
                     }
@@ -156,7 +148,7 @@ public class StartStockManualAdminCommand extends Command {
             }
         }
         sendMessage(40, chatId, bot);   // Готово
-        sendMessage(7,chatId, bot);     // Меню админов
+        sendMessage(7, chatId, bot);     // Меню админов
     }
 
     private ReplyKeyboard getKeyboard() throws SQLException {
@@ -195,6 +187,27 @@ public class StartStockManualAdminCommand extends Command {
                     .setText(sb.toString())
                     .setChatId(chatId));
         }
+    }
+
+    private void addUsers() {
+        users = new ArrayList<>();
+        for (Task task : stock.getTaskList()) {
+            for (Participant participant : task.getParticipants()) {
+                if (usersOnStock.size() == 0) {
+                    if (!hasUser(participant.getUser().getChatId(), users)) {
+                        users.add(participant.getUser());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
+                    }
+                } else {
+                    for (List<User> userList : usersOnStock) {
+                        if (!hasUser(participant.getUser().getChatId(), users)
+                                && !hasUser(participant.getUser().getChatId(), userList)) {
+                            users.add(participant.getUser());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     private boolean hasUser(Long chatId, List<User> users) {

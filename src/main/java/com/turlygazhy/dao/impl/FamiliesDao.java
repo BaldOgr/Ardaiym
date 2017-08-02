@@ -3,6 +3,7 @@ package com.turlygazhy.dao.impl;
 import com.turlygazhy.dao.AbstractDao;
 import com.turlygazhy.entity.Car;
 import com.turlygazhy.entity.Family;
+import com.turlygazhy.entity.FamilyRate;
 import com.turlygazhy.entity.User;
 import com.turlygazhy.tool.SheetsAdapter;
 
@@ -57,6 +58,27 @@ public class FamiliesDao extends AbstractDao {
         return families;
     }
 
+    public List<Family> getFamilyListByGroupId(int familyGroupId, int stockId, int status) throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from FAMILY_GROUPS where group_id = ? and STOCK_ID = ?");
+        ps.setInt(1, familyGroupId);
+        ps.setInt(2, stockId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ? and STOCK_ID = ? and status = ?");
+            ps.setInt(1, rs.getInt("FAMILY_GROUP_ID"));
+            ps.setInt(2, stockId);
+            ps.setInt(3, status);
+            ps.execute();
+            ResultSet resultSet = ps.getResultSet();
+            while (resultSet.next()) {
+                families.add(parseFamily(resultSet));
+            }
+        }
+        return families;
+    }
+
     public List<Family> getFamilyListByGroupId(int familyGroupId, int stockId) throws SQLException {
         List<Family> families = new ArrayList<>();
         PreparedStatement ps = connection.prepareStatement("select * from FAMILY_GROUPS where group_id = ? and STOCK_ID = ?");
@@ -65,7 +87,7 @@ public class FamiliesDao extends AbstractDao {
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
-            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ? and STOCK_ID = ? and status = 0");
+            ps = connection.prepareStatement("SELECT * FROM FAMILIES WHERE GROUP_ID = ? and STOCK_ID = ?");
             ps.setInt(1, rs.getInt("FAMILY_GROUP_ID"));
             ps.setInt(2, stockId);
             ps.execute();
@@ -77,10 +99,10 @@ public class FamiliesDao extends AbstractDao {
         return families;
     }
 
-    public List<Family> getFamilyListByStatus(int status) throws SQLException {
+    public List<Family> getRejectedFamilyList(int stockId) throws SQLException {
         List<Family> families = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("select * from families where status = ?");
-        ps.setInt(1, status);
+        PreparedStatement ps = connection.prepareStatement("select * from families where stock_id = ? and (status = 2 OR status = 4)");
+        ps.setInt(1, stockId);
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
@@ -219,10 +241,17 @@ public class FamiliesDao extends AbstractDao {
         List<List<Object>> writeData = new ArrayList<>();
         while (rs.next()) {
             List<Object> dataRow = new ArrayList<>();
-            for (int i = 2; i < 7; i++) {
-                dataRow.add(rs.getString(i));
+            Family family = parseFamily(rs);
+            dataRow.add(family.getName());
+            dataRow.add(family.getPhoneNumber());
+            dataRow.add(family.getAddress());
+            dataRow.add(family.getLongitude().toString());
+            dataRow.add(family.getLatitude().toString());
+            dataRow.add(family.getGroup());
+            dataRow.add(family.getReport());
+            for (FamilyRate familyRate : factory.getFamilyRateDao().getDamilyRate(family.getId())){
+                dataRow.add(familyRate.toString());
             }
-            dataRow.add(rs.getString(9));
             writeData.add(dataRow);
         }
         try {
@@ -271,5 +300,31 @@ public class FamiliesDao extends AbstractDao {
             families.add(parseFamily(rs));
         }
         return families;
+    }
+
+    public List<Family> getFamilyListByStock(int stockId) throws SQLException {
+        List<Family> families = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("select * from families where stock_id = ?");
+        ps.setInt(1, stockId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            families.add(parseFamily(rs));
+        }
+        return families;
+    }
+
+    public void deleteUserFromGroup(Long chatId, int groupId, int stockId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ? AND GROUP_ID = ? AND STOCK_ID = ?");
+        ps.setInt(1, factory.getUserDao().getUserByChatId(chatId).getId());
+        ps.setInt(1, groupId);
+        ps.setInt(3, stockId);
+        ps.execute();
+    }
+
+    public void deleteFamilies(int stockId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?");
+        ps.setInt(1, stockId);
+        ps.execute();
     }
 }

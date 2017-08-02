@@ -2,6 +2,7 @@ package com.turlygazhy.command.impl;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
+import com.turlygazhy.entity.Message;
 import com.turlygazhy.entity.User;
 import com.turlygazhy.entity.WaitingType;
 import com.turlygazhy.tool.ButtonsLeaf;
@@ -29,7 +30,7 @@ public class SignUpCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
-            sendMessage(11, chatId, bot);   // Введите ваше ФИО
+            sendMessage(11, chatId, bot);   // Введите вашу Фамилию
             user = new User();
             user.setChatId(chatId);
             waitingType = WaitingType.NAME;
@@ -41,8 +42,16 @@ public class SignUpCommand extends Command {
                 user.setName(updateMessageText);
                 bot.sendMessage(new SendMessage()
                         .setChatId(chatId)
-                        .setText(messageDao.getMessageText(12))   // Введите вашу дату рождения
-                        .setReplyMarkup(getDecades()));
+                        .setText(messageDao.getMessageText(16)));   // Введите ваше Имя
+                waitingType = WaitingType.SECOND_NAME;
+                return false;
+
+            case SECOND_NAME:
+                user.setName(user.getName() + " " + updateMessageText);
+                bot.sendMessage(new SendMessage()
+                        .setChatId(chatId)
+                        .setText(messageDao.getMessageText(12))
+                        .setReplyMarkup(getDecades()));   // Введите вашу дату рождения
                 waitingType = WaitingType.BIRTHDAY;
                 return false;
 
@@ -152,7 +161,11 @@ public class SignUpCommand extends Command {
                 }
                 user.setCity(updateMessageText);
                 userDao.insertUser(user);
-                sendMessage(15, chatId, bot);       // Готово! Чтобы войти в главное меню, напишите /start
+                bot.sendMessage(new SendMessage()
+                        .setChatId(getAdminChatId())
+                        .setText(messageDao.getMessageText(137) + "\n" + user.getName())   // Подтвердите регистрацию)
+                        .setReplyMarkup(getAcceptSignUpKeyboard()));
+                sendMessage(143, chatId, bot);  // Ваша кандидатура подана на рассмотрение
                 return true;
         }
 
@@ -216,7 +229,7 @@ public class SignUpCommand extends Command {
         return keyboardMarkup;
     }
 
-    public InlineKeyboardMarkup getDays(int month) {
+    private InlineKeyboardMarkup getDays(int month) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         int days;
@@ -241,6 +254,19 @@ public class SignUpCommand extends Command {
             }
             rows.add(row);
         }
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
+    private InlineKeyboardMarkup getAcceptSignUpKeyboard() throws SQLException {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(138));
+        button.setCallbackData("id=" + user.getId() + " cmd=" + buttonDao.getButtonText(138));
+        row.add(button);
+        rows.add(row);
         keyboardMarkup.setKeyboard(rows);
         return keyboardMarkup;
     }

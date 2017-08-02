@@ -2,6 +2,7 @@ package com.turlygazhy.command;
 
 import com.turlygazhy.command.impl.*;
 import com.turlygazhy.command.impl.admin.*;
+import com.turlygazhy.command.impl.admin.AcceptSignUpCommand;
 import com.turlygazhy.command.impl.auto_mode.ChooseCarCommand;
 import com.turlygazhy.command.impl.auto_mode.ChooseFamiliesCommand;
 import com.turlygazhy.command.impl.ManualStockCommand;
@@ -61,6 +62,10 @@ public class CommandFactory {
                 return new SendRejectedFamiliesCommand();
             case SEND_STATISTIC_TO_SHEET:
                 return new SendUserStatisticToSheetsCommand();
+            case ACCEPT_SIGN_UP:
+                return new AcceptSignUpCommand();
+            case ACCEPT_USER_INVITE_BY_VOLUNTEERS:
+                return new com.turlygazhy.command.impl.AcceptSignUpCommand();
             default:
                 throw new NotRealizedMethodException("Not realized for type: " + type);
         }

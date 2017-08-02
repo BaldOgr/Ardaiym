@@ -133,14 +133,14 @@ public class SurveyCommand extends Command {
         if (families.size() == tempFamilies.size() || type == Type.COMMENT) {
             bot.sendMessage(new SendMessage()
                     .setChatId(chatId)
-                    .setText("Choose families")
+                    .setText(messageDao.getMessageText(71))
                     .setReplyMarkup(getKeyboard()));
         } else {
             bot.editMessageText(new EditMessageText()
                     .setMessageId(updateMessage.getMessageId())
                     .setChatId(chatId)
-                    .setText("Choose families")
-                    .setReplyMarkup(getKeyboard())); // Готово
+                    .setText(messageDao.getMessageText(71))
+                    .setReplyMarkup(getKeyboard()));
         }
         waitingType = WaitingType.CHOOSE_FAMILY;
     }

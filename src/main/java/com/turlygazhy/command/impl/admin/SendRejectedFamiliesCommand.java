@@ -32,7 +32,7 @@ public class SendRejectedFamiliesCommand extends Command {
         if (waitingType == null) {
             stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
             groups = familiesDao.getGroupsByStockId(stockId);
-            families = familiesDao.getFamilyListByStatus(4);
+            families = familiesDao.getRejectedFamilyList(stockId);
             familiesCount = families.size();
             sendGroups();
             return false;
@@ -74,7 +74,7 @@ public class SendRejectedFamiliesCommand extends Command {
 
     private void sendGroups() throws TelegramApiException, SQLException {
         bot.sendMessage(new SendMessage()
-                .setText("Text")
+                .setText(messageDao.getMessageText(146))
                 .setChatId(chatId)
                 .setReplyMarkup(getChooseGroupKeyboard()));
         waitingType = WaitingType.CHOOSE_GROUP;
@@ -99,13 +99,13 @@ public class SendRejectedFamiliesCommand extends Command {
     private void sendFamilies() throws TelegramApiException, SQLException {
         if (families.size() == familiesCount) {
             bot.sendMessage(new SendMessage()
-                    .setText("Text")
+                    .setText(messageDao.getMessageText(71))
                     .setChatId(chatId)
                     .setReplyMarkup(getChooseFamiliesKeyboard()));
         } else {
             bot.editMessageText(new EditMessageText()
                     .setMessageId(updateMessage.getMessageId())
-                    .setText("Text")
+                    .setText(messageDao.getMessageText(71))
                     .setChatId(chatId)
                     .setReplyMarkup(getChooseFamiliesKeyboard()));
 

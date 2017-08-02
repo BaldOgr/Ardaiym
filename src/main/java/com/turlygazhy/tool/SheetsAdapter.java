@@ -78,14 +78,14 @@ public class SheetsAdapter {
     }
 
     public static void writeDataFromFamilySheet(List<List<Object>> writeData) throws Exception {
-        String writeRange = "Лист1!B2:G";
+        String writeRange = "Лист1!B2";
         authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
         ValueRange vr = new ValueRange().setValues(writeData).setMajorDimension("ROWS");
         service.spreadsheets().values().update(SPREAD_SHEET_ID, writeRange, vr).setValueInputOption("RAW").execute();
     }
 
     public static void writeDataToUsersSheet(List<List<Object>> writeData) throws Exception {
-        String writeRange = "Лист2!A2:H";
+        String writeRange = "Лист2!A2";
         authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
         ValueRange vr = new ValueRange().setValues(writeData).setMajorDimension("ROWS");
         service.spreadsheets().values().update(SPREAD_SHEET_ID, writeRange, vr).setValueInputOption("RAW").execute();

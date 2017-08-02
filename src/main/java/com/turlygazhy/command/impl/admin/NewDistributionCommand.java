@@ -99,7 +99,7 @@ public class NewDistributionCommand extends Command {
                     return false;
                 }
                 int stockId = Integer.parseInt(updateMessageText);
-                stock = stockTemplateDao.getStock(stockId);
+                stock = stockDao.getStock(stockId);
                 sb.append(messageDao.getMessageText(47)).append("\n<b>").append(stock.getTitle()).append("</b>\n");
                 bot.editMessageText(new EditMessageText()
                         .setMessageId(updateMessage.getMessageId())
@@ -131,7 +131,11 @@ public class NewDistributionCommand extends Command {
                 } else {
                     List<Participant> participants = taskDao.getTypeOfWork(Integer.parseInt(updateMessageText)).getParticipants();
                     if (participants.size() == 0) {
-                        sendMessage(49, chatId, bot);   // Нет волонтеров, участвующих в данном задании
+                        bot.editMessageText(new EditMessageText()
+                                .setMessageId(updateMessage.getMessageId())
+                                .setChatId(chatId)
+                                .setReplyMarkup(getChooseTaskKeyboard())
+                                .setText(messageDao.getMessageText(49)));   // Нет волонтеров, участвующих в данном задании
                         return false;
                     }
                     users = new ArrayList<>();
@@ -291,6 +295,9 @@ public class NewDistributionCommand extends Command {
                     }
                     for (User user : users) {
                         try {
+                            if (user == null) {
+                                continue;
+                            }
                             bot.sendMessage(sendMessage.setChatId(user.getChatId()));
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -300,11 +307,20 @@ public class NewDistributionCommand extends Command {
                     sendMessage(51, chatId, bot);   // Рассылка закончена!
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(121))) {   // Редактировать
-                    bot.editMessageText(new EditMessageText()
-                            .setMessageId(updateMessage.getMessageId())
-                            .setText(messageDao.getMessageText(117)) // Выберие действие
-                            .setChatId(chatId)
-                            .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(50)));
+                    if (stock.isCTA()) {
+                        bot.editMessageText(new EditMessageText()
+                                .setMessageId(updateMessage.getMessageId())
+                                .setText(messageDao.getMessageText(117)) // Выберие действие
+                                .setChatId(chatId)
+                                .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(50)));
+                    } else {
+
+                        bot.editMessageText(new EditMessageText()
+                                .setMessageId(updateMessage.getMessageId())
+                                .setText(messageDao.getMessageText(117)) // Выберие действие
+                                .setChatId(chatId)
+                                .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(56)));
+                    }
                     waitingType = WaitingType.CHOOSE_EDIT_STOCK;
                     return false;
                 }
@@ -592,11 +608,17 @@ public class NewDistributionCommand extends Command {
                         break;
                 }
                 stockTemplateDao.updateStock(stock);
-                bot.sendMessage(new SendMessage()
-                        .setChatId(chatId)
-                        .setText(stock.parseStockForMessage())
-                        .setParseMode(ParseMode.HTML)
-                        .setReplyMarkup(keyboardMarkUpDao.select(50)));
+                if (stock.isCTA()) {
+                    bot.sendMessage(new SendMessage()
+                            .setText(messageDao.getMessageText(117)) // Выберие действие
+                            .setChatId(chatId)
+                            .setReplyMarkup(keyboardMarkUpDao.select(50)));
+                } else {
+                    bot.sendMessage(new SendMessage()
+                            .setText(messageDao.getMessageText(117)) // Выберие действие
+                            .setChatId(chatId)
+                            .setReplyMarkup(keyboardMarkUpDao.select(56)));
+                }
                 waitingType = WaitingType.CHOOSE_EDIT_STOCK;
                 return false;
 

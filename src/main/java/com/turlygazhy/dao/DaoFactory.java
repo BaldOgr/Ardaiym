@@ -150,4 +150,8 @@ public class DaoFactory {
     public UserOfListDao getUserOfListDao() {
         return new UserOfListDao(connection);
     }
+
+    public FriendsDao getFriendsDao() {
+        return new FriendsDao(connection);
+    }
 }

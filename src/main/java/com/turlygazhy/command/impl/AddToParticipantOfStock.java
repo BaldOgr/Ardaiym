@@ -108,17 +108,29 @@ public class AddToParticipantOfStock extends Command {
     }
 
     private boolean sendFirstMessage(Update update) throws SQLException, TelegramApiException {
-        if (update.getCallbackQuery() == null || stock != null) {
+        if (update.getCallbackQuery() != null) {
+            if (!update.getCallbackQuery().getData().contains("id=")) {
+                if (stock == null) {
+                    bot.sendMessage(new SendMessage()
+                            .setText(messageDao.getMessageText(37))
+                            .setChatId(chatId)
+                            .setReplyMarkup(getStocksKeyboard()));
+                    waitingType = WaitingType.CHOOSE_STOCK;
+                } else {
+                    return sendTypeOfWorkList(stock.getId());
+                }
+            } else {
+                String data = update.getCallbackQuery().getData();
+                String stockIdString = data.substring(data.indexOf("id=") + 3, data.indexOf(" "));
+                int stockId = Integer.valueOf(stockIdString);
+                return sendTypeOfWorkList(stockId);
+            }
+        } else {
             bot.sendMessage(new SendMessage()
                     .setText(messageDao.getMessageText(37))
                     .setChatId(chatId)
                     .setReplyMarkup(getStocksKeyboard()));
             waitingType = WaitingType.CHOOSE_STOCK;
-        } else {
-            String data = update.getCallbackQuery().getData();
-            String stockIdString = data.substring(data.indexOf("id=") + 3, data.indexOf(" "));
-            int stockId = Integer.valueOf(stockIdString);
-            return sendTypeOfWorkList(stockId);
         }
         return false;
     }
@@ -160,7 +172,7 @@ public class AddToParticipantOfStock extends Command {
                 taskIterator.remove();
             }
         }
-        if (stock.getTaskList().size() == 0){
+        if (stock.getTaskList().size() == 0) {
             sendMessage(133, chatId, bot);
             return true;
         }

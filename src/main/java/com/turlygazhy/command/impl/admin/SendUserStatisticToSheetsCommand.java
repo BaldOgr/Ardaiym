@@ -22,10 +22,15 @@ public class SendUserStatisticToSheetsCommand extends Command {
         List<Stock> stocks = stockDao.getStocks();
         List<List<Object>> writeData = new ArrayList<>();
         for (User user : users) {
-            if (user == null){
+            if (user == null) {
                 continue;
             }
+            int registeredInStockCount = 0;
+            int participatedCount = 0;
             List<Object> userData = new ArrayList<>();
+            List<String> registered = new ArrayList<>();
+            List<String> participated = new ArrayList<>();
+
             userData.add(user.getId());
             userData.add(user.getName());
             userData.add(user.getPhoneNumber());
@@ -36,26 +41,41 @@ public class SendUserStatisticToSheetsCommand extends Command {
                 userData.add(buttonDao.getButtonText(12));  // Женщина
             }
             userData.add(user.getBirthday());
-            StringBuilder regInStock = new StringBuilder();
-            StringBuilder participated = new StringBuilder();
-            for (Stock stock : stocks) {                                    /////
-                for (Task task : stock.getTaskList()) {                     //Добавляем акции,
-                    if (addParticipant(task, user)) {                       //в которых участвовал
-                        regInStock.append(stock.getTitle()).append("\n");   //волонтер
-                        break;                                              //////
+            List<User> userFriends = friendsDao.getFriends(user.getChatId());
+            userData.add(messageDao.getMessageText(145));   // Одобрили
+            for (User user1 : userFriends) {
+                userData.add(user1.getName());
+            }
+            for (Stock stock : stocks) {
+                for (Task task : stock.getTaskList()) {                     //Добавляем акции, в которых участвовал волонтер
+                    if (addParticipant(task, user)) {
+                        registered.add(stock.getTitleForAdmin());
+                        registeredInStockCount++;
+                        break;
                     }
                 }
                 List<Integer> groups = familiesDao.getGroupsByStockId(stock.getId());
                 for (Integer groupId : groups) {
                     List<User> groupUsers = familiesDao.getUsersByGroupId(groupId, stock.getId());
                     if (participated(groupUsers, user)) {
-                        participated.append(stock.getTitle()).append("\n");
+                        participated.add(stock.getTitleForAdmin());
+                        participatedCount++;
                         break;
                     }
                 }
             }
-            userData.add(regInStock.toString());
-            userData.add(participated.toString());
+
+            userData.add(registeredInStockCount + "/" + participatedCount);
+            for (String str : registered) {
+                userData.add(str);
+                userData.add(messageDao.getMessageText(134));
+                userData.add(str);
+                if (wasParticipated(str, participated)) {
+                    userData.add(messageDao.getMessageText(135));
+                } else {
+                    userData.add(messageDao.getMessageText(136));
+                }
+            }
             writeData.add(userData);
         }
         try {
@@ -67,9 +87,18 @@ public class SendUserStatisticToSheetsCommand extends Command {
         return true;
     }
 
+    private boolean wasParticipated(String str, List<String> participated) {
+        for (String part : participated) {
+            if (part.equals(str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean participated(List<User> groupUsers, User user) {
         for (User user1 : groupUsers) {
-            if (user1 == null){
+            if (user1 == null) {
                 continue;
             }
             if (user1.getChatId().equals(user.getChatId())) {

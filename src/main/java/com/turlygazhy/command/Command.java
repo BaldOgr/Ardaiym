@@ -59,6 +59,7 @@ public abstract class Command {
     protected TaskTemplateDao taskTemplateDao = factory.getTaskTemplateDao();
     protected DatesTemplateDao datesTemplateDao = factory.getDatesTemplateDao();
     protected UserOfListDao userOfListDao = factory.getUserOfListDao();
+    protected FriendsDao friendsDao = factory.getFriendsDao();
 
     protected WaitingType waitingType;
     protected org.telegram.telegrambots.api.objects.Message updateMessage;

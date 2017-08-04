@@ -273,10 +273,12 @@ public class ManualStockCommand extends Command {
             StringBuilder sb = new StringBuilder();
             Stock stock = stockDao.getStock(stockId);
             sb.append(stock.getTitle()).append("\n").append(messageDao.getMessageText(80));
-            bot.sendMessage(new SendMessage()
-                    .setChatId(chatId)
-                    .setText(sb.toString())
-                    .setReplyMarkup(getSurveyKeyboard()));
+            for (User user : users) {
+                bot.sendMessage(new SendMessage()
+                        .setChatId(user.getChatId())
+                        .setText(sb.toString())
+                        .setReplyMarkup(getSurveyKeyboard()));
+            }
             return true;
         }
         Iterator iterator = families.listIterator();

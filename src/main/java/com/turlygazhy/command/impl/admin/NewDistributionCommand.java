@@ -3,17 +3,14 @@ package com.turlygazhy.command.impl.admin;
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -31,6 +28,10 @@ public class NewDistributionCommand extends Command {
     private Dates dates;
     private Change change;
     private int shownDates = 0;
+    private int stockPage = 0;
+    private int templateStockPage = 0;
+    private int listPage = 0;
+    private List<Stock> stocks;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -68,11 +69,12 @@ public class NewDistributionCommand extends Command {
                                 .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(13)));
                         return false;
                     }
+                    stockPage = 0;
                     bot.editMessageText(new EditMessageText()
                             .setMessageId(updateMessage.getMessageId())
                             .setChatId(chatId)
                             .setText(messageDao.getMessageText(46))
-                            .setReplyMarkup((InlineKeyboardMarkup) getChooseStockKeyboard(stockDao.getUndoneStockList())));
+                            .setReplyMarkup(getChooseStockKeyboard(stockDao.getUndoneStockList())));
                     waitingType = WaitingType.CHOOSE;
                     return false;
                 }
@@ -88,6 +90,25 @@ public class NewDistributionCommand extends Command {
                 }
                 return false;
             case CHOOSE:
+                if (updateMessageText.equals("prev")) {
+                    stockPage--;
+                    bot.editMessageText(new EditMessageText()
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(46))
+                            .setReplyMarkup(getChooseStockKeyboard(stockDao.getUndoneStockList())));
+                    return false;
+                }
+                if (updateMessageText.equals("next")) {
+                    stockPage++;
+                    bot.editMessageText(new EditMessageText()
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(46))
+                            .setReplyMarkup(getChooseStockKeyboard(stockDao.getUndoneStockList())));
+                    return false;
+                }
+
                 if (updateMessageText.equals(buttonDao.getButtonText(10))) {
                     Message message = messageDao.getMessage(42);
                     bot.editMessageText(new EditMessageText()
@@ -162,6 +183,11 @@ public class NewDistributionCommand extends Command {
 
 
             case CHOOSE_USERS:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(42, chatId, bot);   // Для кого рассылка
+                    waitingType = WaitingType.FOR_WHOM;
+                    return false;
+                }
                 if (updateMessageText.equals(buttonDao.getButtonText(42))) {    // Готово
                     userOfListDao.insert(userOfList);
                     sendMessage(40, chatId, bot);   // Готово
@@ -193,6 +219,16 @@ public class NewDistributionCommand extends Command {
                             .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(13)));
 
                     waitingType = WaitingType.FOR_WHOM;
+                    return false;
+                }
+                if (updateMessageText.equals("next")) {
+                    listPage++;
+                    sendListKeyboard();
+                    return false;
+                }
+                if (updateMessageText.equals("prev")) {
+                    listPage--;
+                    sendListKeyboard();
                     return false;
                 }
                 int userOfListId = Integer.parseInt(updateMessageText);
@@ -244,6 +280,7 @@ public class NewDistributionCommand extends Command {
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(118))) {    // CTA script
+                    templateStockPage = 0;
                     sendTemplateStocks(true);
                     return false;
                 }
@@ -261,6 +298,24 @@ public class NewDistributionCommand extends Command {
                             .setText(messageDao.getMessageText(118))
                             .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(43)));
                     waitingType = WaitingType.CHOOSE_STOCK_TEMPLATE_TYPE;
+                    return false;
+                }
+                if (updateMessageText.equals("prev")) {
+                    templateStockPage--;
+                    bot.editMessageText(new EditMessageText()
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(119))
+                            .setReplyMarkup(getChooseTemplateStock(stocks)));
+                    return false;
+                }
+                if (updateMessageText.equals("next")) {
+                    templateStockPage++;
+                    bot.editMessageText(new EditMessageText()
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(119))
+                            .setReplyMarkup(getChooseTemplateStock(stocks)));
                     return false;
                 }
                 int templateStockId = Integer.parseInt(updateMessageText);
@@ -536,7 +591,6 @@ public class NewDistributionCommand extends Command {
                             .setText("Choose Date")
                             .setReplyMarkup(getDeadlineKeyboard(++shownDates)));
                     return false;
-
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(10))) {
                     bot.editMessageText(new EditMessageText()
@@ -675,7 +729,7 @@ public class NewDistributionCommand extends Command {
     }
 
     private void sendTemplateStocks(boolean cta) throws SQLException, TelegramApiException {
-        List<Stock> stocks = stockTemplateDao.getStocks(cta);
+        stocks = stockTemplateDao.getStocks(cta);
         bot.editMessageText(new EditMessageText()
                 .setMessageId(updateMessage.getMessageId())
                 .setText(messageDao.getMessageText(119))
@@ -710,11 +764,29 @@ public class NewDistributionCommand extends Command {
     private InlineKeyboardMarkup getChooseTemplateStock(List<Stock> stocks) throws SQLException {
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> row = new ArrayList<>();
-        for (Stock stock : stocks) {
+        for (int i = templateStockPage * 10; i < (templateStockPage + 1) * 10 && stocks.size() > i; i++) {
+            Stock stock = stocks.get(i);
             List<InlineKeyboardButton> buttons = new ArrayList<>();
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(stock.getTitleForAdmin());
             button.setCallbackData(String.valueOf(stock.getId()));
+            buttons.add(button);
+            row.add(buttons);
+        }
+
+        if (templateStockPage != 0) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("prev");
+            button.setCallbackData("prev");
+            buttons.add(button);
+            row.add(buttons);
+        }
+        if (templateStockPage * 10 + 10 < stocks.size()) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("next");
+            button.setCallbackData("next");
             buttons.add(button);
             row.add(buttons);
         }
@@ -745,6 +817,12 @@ public class NewDistributionCommand extends Command {
         List<InlineKeyboardButton> buttons = new ArrayList<>();
         buttons.add(forAll);
         row.add(buttons);
+        InlineKeyboardButton back = new InlineKeyboardButton();
+        buttons = new ArrayList<>();
+        back.setText(buttonDao.getButtonText(10));
+        back.setCallbackData(buttonDao.getButtonText(10));
+        buttons.add(back);
+        row.add(buttons);
         keyboard.setKeyboard(row);
         return keyboard;
     }
@@ -753,11 +831,29 @@ public class NewDistributionCommand extends Command {
         List<UserOfList> userOfLists = userOfListDao.getUserOfList();
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> row = new ArrayList<>();
-        for (UserOfList userOfList : userOfLists) {
+        for (int i = listPage * 10; i < (listPage + 1) * 10 && userOfLists.size() > i; i++) {
+            userOfList = userOfLists.get(i);
             List<InlineKeyboardButton> buttons = new ArrayList<>();
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(userOfList.getName());
             button.setCallbackData(String.valueOf(userOfList.getId()));
+            buttons.add(button);
+            row.add(buttons);
+        }
+
+        if (listPage != 0) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("prev");
+            button.setCallbackData("prev");
+            buttons.add(button);
+            row.add(buttons);
+        }
+        if (listPage * 10 + 10 < userOfLists.size()) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("next");
+            button.setCallbackData("next");
             buttons.add(button);
             row.add(buttons);
         }
@@ -795,11 +891,28 @@ public class NewDistributionCommand extends Command {
     private InlineKeyboardMarkup getChooseStockKeyboard(List<Stock> undoneStocks) throws SQLException {
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> row = new ArrayList<>();
-        for (Stock stock : undoneStocks) {
+        for (int i = templateStockPage * 10; i < (templateStockPage + 1) * 10 && i < undoneStocks.size()-1; i++) {
+            Stock stock = undoneStocks.get(i);
             List<InlineKeyboardButton> buttons = new ArrayList<>();
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(stock.getTitle());
             button.setCallbackData(String.valueOf(stock.getId()));
+            buttons.add(button);
+            row.add(buttons);
+        }
+        if (stockPage != 0) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("prev");
+            button.setCallbackData("prev");
+            buttons.add(button);
+            row.add(buttons);
+        }
+        if (stockPage * 10 + 9 < undoneStocks.size()) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("next");
+            button.setCallbackData("next");
             buttons.add(button);
             row.add(buttons);
         }

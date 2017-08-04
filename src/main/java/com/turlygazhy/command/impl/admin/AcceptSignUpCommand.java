@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AcceptSignUpCommand extends Command {
-    User user;
-    List<User> users;
-    List<User> distributeFor;
-
-    int page = 0;
+    private User user;
+    private List<User> users;
+    private List<User> distributeFor;
+    
+    private int page = 0;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -199,7 +199,7 @@ public class AcceptSignUpCommand extends Command {
             row.add(button);
             rows.add(row);
         }
-        if (page * 10 + 10 < users.size()) {
+        if (page * 10 + 9 < users.size()) {
             List<InlineKeyboardButton> row = new ArrayList<>();
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText("next");

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,7 +65,7 @@ public class UserDao {
         return getUserByChatId(chatId).getRules() > 1;
     }
     public boolean isSuperAdmin(Long chatId) throws SQLException {
-        return Objects.equals(3, getUserByChatId(chatId).getRules());
+        return getUserByChatId(chatId).getRules() == 3;
     }
 
     public void insertUser(User user) throws SQLException {
@@ -84,7 +85,7 @@ public class UserDao {
 
     public List<User> getUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER ORDER BY NAME");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){
@@ -113,7 +114,7 @@ public class UserDao {
 
     public List<User> getAdmins() throws SQLException {
         List<User> users = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES = 2");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES = 2 ORDER BY NAME");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){
@@ -126,5 +127,41 @@ public class UserDao {
         PreparedStatement ps = connection.prepareStatement("DELETE FROM USER WHERE ID = ?");
         ps.setInt(1, user.getId());
         ps.execute();
+    }
+
+    public List<User> getUsersBySex(boolean sex) throws SQLException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE SEX = ? ORDER BY NAME");
+        ps.setBoolean(1, sex);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()){
+            users.add(parseUser(rs));
+        }
+        return users;
+    }
+
+    public List<User> getUsersByCity(String city) throws SQLException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE CITY = ? ORDER BY NAME");
+        ps.setString(1, city);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()){
+            users.add(parseUser(rs));
+        }
+        return users;
+    }
+
+    public List<User> getUsersByRules(int i) throws SQLException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES = ? ORDER BY NAME");
+        ps.setInt(1, i);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()){
+            users.add(parseUser(rs));
+        }
+        return users;
     }
 }

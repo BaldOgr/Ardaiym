@@ -2,12 +2,15 @@ package com.turlygazhy.command.impl.admin;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
-import com.turlygazhy.entity.Participant;
-import com.turlygazhy.entity.Stock;
-import com.turlygazhy.entity.Task;
-import com.turlygazhy.entity.User;
+import com.turlygazhy.entity.*;
 import com.turlygazhy.tool.SheetsAdapter;
+import org.telegram.telegrambots.api.methods.ParseMode;
+import org.telegram.telegrambots.api.methods.send.SendContact;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
@@ -15,9 +18,254 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SendUserStatisticToSheetsCommand extends Command {
+    private List<User> users;
+    private int userListPage = 0;
+    private boolean newMessage = true;
+
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        sendMessage("Doing...");
+        if (waitingType == null) {
+            bot.sendMessage(new SendMessage()
+                    .setText(getStatistic())
+                    .setChatId(chatId)
+                    .setParseMode(ParseMode.HTML)
+                    .setReplyMarkup(keyboardMarkUpDao.select(57)));
+            waitingType = WaitingType.COMMAND;
+            return false;
+        }
+
+        switch (waitingType) {
+            case COMMAND:
+                userListPage = 0;
+                newMessage = true;
+                if (updateMessageText.equals(buttonDao.getButtonText(143))) {   // Волонтеры
+                    users = userDao.getUsers();
+                    sendUserList();
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(144))) {   // Мужчины
+                    users = userDao.getUsersBySex(true);
+                    sendUserList();
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(145))) {   // Женщины
+                    users = userDao.getUsersBySex(false);
+                    sendUserList();
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(146))) {   // Из Караганды
+                    users = new ArrayList<>();
+                    for (int i = 103; i < 111; i++) {
+                        users.addAll(userDao.getUsersByCity(buttonDao.getButtonText(i)));
+                    }
+                    sendUserList();
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(147))) {   // Не из Караганды
+                    users = new ArrayList<>();
+                    for (int i = 87; i < 103; i++) {
+                        users.addAll(userDao.getUsersByCity(buttonDao.getButtonText(i)));
+                    }
+                    sendUserList();
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(148))) {   // Акции
+                    List<Stock> stocks = stockDao.getDoneStockList();
+                    sendStockList(stocks);
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(149))) {   // Загрузить статистику в облако
+                    sendStatisticToGoogleSheets();
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    sendMessage(7, chatId, bot);
+                    return false;
+                }
+                return false;
+
+            case CHOOSE_STOCK:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    bot.sendMessage(new SendMessage()
+                            .setText(getStatistic())
+                            .setChatId(chatId)
+                            .setParseMode(ParseMode.HTML)
+                            .setReplyMarkup(keyboardMarkUpDao.select(57)));
+                    waitingType = WaitingType.COMMAND;
+                    return false;
+                }
+                int stockId = Integer.parseInt(updateMessageText.substring(3));
+                sendStatisticByStock(stockDao.getStock(stockId));
+                return false;
+
+            case CHOOSE_USERS:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    bot.sendMessage(new SendMessage()
+                            .setText(getStatistic())
+                            .setChatId(chatId)
+                            .setParseMode(ParseMode.HTML)
+                            .setReplyMarkup(keyboardMarkUpDao.select(57)));
+                    waitingType = WaitingType.COMMAND;
+                    return false;
+                }
+                if (updateMessageText.equals("prev")){
+                    userListPage--;
+                    sendUserList();
+                    return false;
+                }
+                if (updateMessageText.equals("next")){
+                    userListPage++;
+                    sendUserList();
+                    return false;
+                }
+                int userId = Integer.parseInt(updateMessageText.substring(3));
+                User user = userDao.getUserById(userId);
+                bot.sendContact(new SendContact()
+                        .setChatId(chatId)
+                        .setPhoneNumber(user.getPhoneNumber())
+                        .setFirstName(user.getName()));
+                return false;
+        }
+        return false;
+    }
+
+    private void sendStatisticByStock(Stock stock) throws SQLException, TelegramApiException {
+        StringBuilder sb = new StringBuilder();
+        List<Integer> groupsId = familiesDao.getGroupsByStockId(stock.getId());
+        List<List<User>> groups = new ArrayList<>();
+        for (Integer groupId : groupsId) {
+            List<User> groupUsers = familiesDao.getUsersByGroupId(groupId, stock.getId());
+            groups.add(groupUsers);
+        }
+        sb.append("<b>").append(messageDao.getMessageText(47)).append(": </b>").append(stock.getTitle()).append("\n");
+
+        for (Task task : stock.getTaskList()) {
+            sb.append("\t<b>").append(task.getName()).append(":</b>\n");
+
+            for (Dates dates : task.getDates()) {
+                sb.append("\t\t<b>").append(dates.getDate()).append(":</b>\n");
+
+                for (Participant user : task.getParticipants()) {
+                    if (dates.getDate().equals(user.getDate().getDate())) {
+                        sb.append("\t\t\t").append(user.getUser().getName()).append(" - <b>");
+                        for (List<User> users : groups) {
+                            if (participated(users, user.getUser())) {
+                                sb.append(messageDao.getMessageText(155));
+                            } else {
+                                sb.append(messageDao.getMessageText(156));
+                            }
+                        }
+                        sb.append("</b>\n");
+                    }
+                }
+            }
+        }
+
+
+        bot.sendMessage(new SendMessage()
+                .setChatId(stock.getAddedBy().getChatId())
+                .setText(sb.toString())
+                .setParseMode(ParseMode.HTML)
+                .setReplyMarkup(keyboardMarkUpDao.select(10)));
+    }
+
+    private void sendStockList(List<Stock> stocks) throws SQLException, TelegramApiException {
+        StringBuilder sb = new StringBuilder();
+        for (Stock stock : stocks) {
+            sb.append("/id").append(stock.getId()).append(" - ").append(stock.getTitleForAdmin()).append("\n");
+        }
+        sendMessage(sb.toString());
+        waitingType = WaitingType.CHOOSE_STOCK;
+    }
+
+    private void sendUserList() throws SQLException, TelegramApiException {
+        if (newMessage) {
+            bot.sendMessage(new SendMessage()
+                    .setChatId(chatId)
+                    .setText("Choose Volunteer")
+                    .setReplyMarkup(getUserList(users)));
+            newMessage = false;
+        } else {
+            bot.editMessageText(new EditMessageText()
+                    .setMessageId(updateMessage.getMessageId())
+                    .setChatId(chatId)
+                    .setText("Choose Volunteer")
+                    .setReplyMarkup(getUserList(users)));
+        }
+        waitingType = WaitingType.CHOOSE_USERS;
+    }
+
+    private InlineKeyboardMarkup getUserList(List<User> users) throws SQLException {
+        InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> row = new ArrayList<>();
+        for (int i = userListPage * 5; i < (userListPage + 1) * 5 && users.size() > i; i++) {
+            User user = users.get(i);
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(user.getName());
+            button.setCallbackData(String.valueOf(user.getId()));
+            buttons.add(button);
+            row.add(buttons);
+        }
+
+        if (userListPage != 0) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("prev");
+            button.setCallbackData("prev");
+            buttons.add(button);
+            row.add(buttons);
+        }
+        if (userListPage * 5 + 5 < users.size()) {
+            List<InlineKeyboardButton> buttons = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText("next");
+            button.setCallbackData("next");
+            buttons.add(button);
+            row.add(buttons);
+        }
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(10));
+        button.setCallbackData(buttonDao.getButtonText(10));
+        List<InlineKeyboardButton> buttons = new ArrayList<>();
+        buttons.add(button);
+        row.add(buttons);
+        keyboard.setKeyboard(row);
+        return keyboard;
+    }
+
+    private String getStatistic() throws SQLException {
+        List<User> users = userDao.getUsers();
+        StringBuilder sb = new StringBuilder();
+        int manCount = 0;
+        int womanCount = 0;
+        int[] oblCount = new int[24];
+        for (User user : users) {
+            if (user.isSex()) {
+                manCount++;
+            } else {
+                womanCount++;
+            }
+            for (int i = 87; i < 111; i++) {
+                if (user.getCity().equals(buttonDao.getButtonText(i))) {
+                    oblCount[i - 87]++;
+                    break;
+                }
+            }
+        }
+        sb.append("<b>").append(messageDao.getMessageText(152)).append("</b>").append(users.size()).append("\n");
+        sb.append("<b>").append(messageDao.getMessageText(153)).append("</b>").append(manCount).append("\n");
+        sb.append("<b>").append(messageDao.getMessageText(154)).append("</b>").append(womanCount).append("\n");
+        for (int i = 87; i < 111; i++) {
+            if (oblCount[i - 87] != 0) {
+                sb.append("<b>").append(buttonDao.getButtonText(i)).append(": </b>").append(oblCount[i - 87]).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private void sendStatisticToGoogleSheets() throws SQLException, TelegramApiException {
+        sendMessage("Doing..");
         List<User> users = userDao.getUsers();
         List<Stock> stocks = stockDao.getStocks();
         List<List<Object>> writeData = new ArrayList<>();
@@ -84,7 +332,6 @@ public class SendUserStatisticToSheetsCommand extends Command {
             e.printStackTrace();
         }
         sendMessage(40, chatId, bot);   // Готово
-        return true;
     }
 
     private boolean wasParticipated(String str, List<String> participated) {

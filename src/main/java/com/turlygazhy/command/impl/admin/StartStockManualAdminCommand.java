@@ -82,6 +82,7 @@ public class StartStockManualAdminCommand extends Command {
                 }
                 sendUserList();
                 return false;
+
             case CHOOSE_FAMILY:
                 if (updateMessageText.equals(buttonDao.getButtonText(67))) {    // Добавить новую группу
                     if (familiesForVolunteers.size() == 0) {
@@ -94,6 +95,15 @@ public class StartStockManualAdminCommand extends Command {
                     usersOnStock.add(userVolunteers);
                     userVolunteers = new ArrayList<>();
                     familiesForVolunteers = new ArrayList<>();
+                    addUsers();
+                    if (users.size() == 0) {
+                        sendMessage(157, chatId, bot);  // Волонтеров больше нет
+                        return false;
+                    }
+                    if (familyGroups.size() == 0) {
+                        sendMessage(158, chatId, bot);  // Семей больше нет
+                        return false;
+                    }
                     sendMessage(70, chatId, bot);   // Выберите волонтеров
                     sendUserList();
                     waitingType = WaitingType.CHOOSE;
@@ -189,8 +199,9 @@ public class StartStockManualAdminCommand extends Command {
         }
     }
 
-    private void addUsers() {
+    private void addUsers() throws SQLException {
         users = new ArrayList<>();
+        stock = stockDao.getStock(stock.getId());
         for (Task task : stock.getTaskList()) {
             for (Participant participant : task.getParticipants()) {
                 if (usersOnStock.size() == 0) {

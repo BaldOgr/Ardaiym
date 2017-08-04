@@ -8,6 +8,7 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by daniyar on 07.07.17.
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 public class AdminControlCommand extends Command {
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        if (!userDao.isSuperAdmin(chatId)){
+        if (!userDao.isSuperAdmin(chatId)) {
             sendMessage(6, chatId, bot);
             return true;
         }
@@ -33,33 +34,24 @@ public class AdminControlCommand extends Command {
                     return true;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(69))) {    // Добавить админа
-                    sendMessage(74, chatId, bot);   // Выберите пользователя
-                    StringBuilder sb = new StringBuilder();
-                    for (User user : userDao.getUsers()) {
-                        sb.append(user);
+                    List<User> users = userDao.getUsersByRules(1);
+                    if (sendUserList(users)) {
+                        waitingType = WaitingType.CHOOSE;
                     }
-                    sendMessage(sb.toString());
-                    waitingType = WaitingType.CHOOSE;
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(70))) {    // Удалить админа
-                    sendMessage(74, chatId, bot);   // Выберите пользователя
-                    StringBuilder sb = new StringBuilder();
-                    for (User user : userDao.getUsers()) {
-                        sb.append(user);
+                    List<User> users = userDao.getUsersByRules(2);
+                    if (sendUserList(users)) {
+                        waitingType = WaitingType.CHOOSE_ADMIN;
                     }
-                    sendMessage(sb.toString());
-                    waitingType = WaitingType.CHOOSE_ADMIN;
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(71))) {    // Отдать права суперадмина
-                    sendMessage(74, chatId, bot);   // Выберите пользователя
-                    StringBuilder sb = new StringBuilder();
-                    for (User user : userDao.getUsers()) {
-                        sb.append(user);
+                    List<User> users = userDao.getUsersByRules(2);
+                    if (sendUserList(users)) {
+                        waitingType = WaitingType.CHOOSE_SUPER_ADMIN;
                     }
-                    sendMessage(sb.toString());
-                    waitingType = WaitingType.CHOOSE_SUPER_ADMIN;
                     return false;
                 }
 
@@ -101,7 +93,7 @@ public class AdminControlCommand extends Command {
                 user.setRules(3);
                 userDao.updateUser(user);
                 user = userDao.getUserByChatId(chatId);
-                user.setRules(1);
+                user.setRules(2);
                 userDao.updateUser(user);
                 sendMessage("Done");
                 return false;
@@ -109,5 +101,19 @@ public class AdminControlCommand extends Command {
 
         }
         return false;
+    }
+
+    private boolean sendUserList(List<User> users) throws SQLException, TelegramApiException {
+        if (users.size() == 0) {
+            sendMessage("No volunteers");
+            return false;
+        }
+        sendMessage(74, chatId, bot);   // Выберите пользователя
+        StringBuilder sb = new StringBuilder();
+        for (User user : users) {
+            sb.append(user);
+        }
+        sendMessage(sb.toString());
+        return true;
     }
 }

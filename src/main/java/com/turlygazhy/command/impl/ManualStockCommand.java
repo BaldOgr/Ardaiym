@@ -76,6 +76,16 @@ public class ManualStockCommand extends Command {
                     users = familiesDao.getUsersByGroupId(groupId, stockId);
                     adminChatId = stockDao.getStock(stockId).getAddedBy().getChatId();
                     families = familiesDao.getFamilyListByGroupId(groupId, stockId, 0);
+                    tempFamilies = familiesDao.getRejectedFamiliesByGroup(groupId, stockId);
+                    if (tempFamilies.size() != 0) {
+                        families.addAll(tempFamilies);
+                        sendMessage(130, chatId, bot);
+                        for (Family family : tempFamilies) {
+                            family.setVolunteersGroupId(0);
+                            familiesDao.updateFamily(family);
+                        }
+                        tempFamilies = null;
+                    }
                     return sendFamiliesList();
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(123))) {   // Отказаться
@@ -269,6 +279,7 @@ public class ManualStockCommand extends Command {
         int count = families.size();
         if (count == 0) {
             sendMessage(113, chatId, bot);  // Семей больше нет
+            familiesDao.setFinishedForGroup(stockId, groupId);
             sendInfoForAdmin();
             StringBuilder sb = new StringBuilder();
             Stock stock = stockDao.getStock(stockId);

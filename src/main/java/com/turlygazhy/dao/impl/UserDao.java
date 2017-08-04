@@ -85,7 +85,7 @@ public class UserDao {
 
     public List<User> getUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER ORDER BY NAME");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES != 0 ORDER BY NAME");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){
@@ -114,7 +114,7 @@ public class UserDao {
 
     public List<User> getAdmins() throws SQLException {
         List<User> users = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES = 2 ORDER BY NAME");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM USER WHERE RULES > 1 ORDER BY NAME");
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()){

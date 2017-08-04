@@ -185,7 +185,7 @@ public class FamiliesDao extends AbstractDao {
     }
 
     public int getGroupId(int userId, int stockId) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ? and STOCK_ID = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ? and STOCK_ID = ? and FINISHED = false");
         ps.setInt(1, userId);
         ps.setInt(2, stockId);
         ps.execute();
@@ -196,17 +196,34 @@ public class FamiliesDao extends AbstractDao {
         return 0;
     }
 
-    public List<User> getUsersByGroupId(int group_id, int stockId) throws SQLException {
+    public List<User> getUsersByGroupId(int group_id, int stockId, boolean finished) throws SQLException {
         List<User> users = new ArrayList<>();
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE GROUP_ID = ? and STOCK_ID = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE GROUP_ID = ? and STOCK_ID = ? and FINISHED = ?");
         ps.setInt(1, group_id);
         ps.setInt(2, stockId);
+        ps.setBoolean(3, finished);
         ps.execute();
         ResultSet rs = ps.getResultSet();
         while (rs.next()) {
             users.add(factory.getUserDao().getUserById(rs.getInt("USER_ID")));
         }
         return users;
+    }
+
+    public List<Integer> getGroupsByStockId(int stockId, boolean finished) throws SQLException {
+        List<Integer> groups = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE STOCK_ID = ? and FINISHED = ?");
+        ps.setInt(1, stockId);
+        ps.setBoolean(2, finished);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()){
+            int groupId = rs.getInt("GROUP_ID");
+            if (!hasGroup(groups, groupId)){
+                groups.add(groupId);
+            }
+        }
+        return groups;
     }
 
     public List<Integer> getGroupsByStockId(int stockId) throws SQLException {
@@ -325,6 +342,41 @@ public class FamiliesDao extends AbstractDao {
     public void deleteFamilies(int stockId) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("DELETE FROM FAMILIES WHERE STOCK_ID = ?");
         ps.setInt(1, stockId);
+        ps.execute();
+    }
+
+    public List<Integer> getFamilyGroups(int id) throws SQLException {
+        List<Integer> groups = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM FAMILY_GROUPS WHERE STOCK_ID = ?");
+        ps.setInt(1, id);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()){
+            int group = rs.getInt("FAMILY_GROUP_ID");
+            if (!hasGroup(groups, group)){
+                groups.add(group);
+            }
+        }
+        return groups;
+    }
+
+    public List<User> getUsersByGroupId(Integer groupId, int stockId) throws SQLException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE GROUP_ID = ? and STOCK_ID = ? and FINISHED = false");
+        ps.setInt(1, groupId);
+        ps.setInt(2, stockId);
+        ps.execute();
+        ResultSet rs = ps.getResultSet();
+        while (rs.next()) {
+            users.add(factory.getUserDao().getUserById(rs.getInt("USER_ID")));
+        }
+        return users;
+    }
+
+    public void setFinishedForGroup(int stockId, int groupId) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("UPDATE GROUPS_OF_VOLUNTEERS SET FINISHED = TRUE WHERE GROUP_ID = ? and STOCK_ID = ?");
+        ps.setInt(1, groupId);
+        ps.setInt(2, stockId);
         ps.execute();
     }
 }

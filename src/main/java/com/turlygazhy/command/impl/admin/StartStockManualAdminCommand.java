@@ -22,6 +22,7 @@ public class StartStockManualAdminCommand extends Command {
     private List<User> users;
     private List<User> userVolunteers;
     private List<List<User>> usersOnStock = new ArrayList<>();
+    private List<List<User>> usersOnStock1 = new ArrayList<>();
     private List<Integer> familyGroups = new ArrayList<>();
     private List<Integer> familiesForVolunteers;
 
@@ -38,18 +39,29 @@ public class StartStockManualAdminCommand extends Command {
         }
 
         if (waitingType == null) {
-            if (stock.getStatus() == 3) {
-                sendMessage(98, chatId, bot);   //Акция уже началась, чтобы закончить, нажмите кнопку "Закончить акцию"
-                return true;
+//            if (stock.getStatus() == 3) {
+//                sendMessage(98, chatId, bot);   //Акция уже началась, чтобы закончить, нажмите кнопку "Закончить акцию"
+//                return true;
+//            }
+
+            if (stock.getStatus() != 3) {
+//                familiesDao.deleteFamilies(stock.getId());
+                familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
             }
-            familiesDao.deleteFamilies(stock.getId());
-            familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
+
+            List<Integer> groups = familiesDao.getFamilyGroups(stock.getId());
             List<Family> families = familiesDao.getFamilyListByStock(stock.getId());
+
             for (Family family : families) {
-                if (!hasFamily(family, familyGroups)) {
+                if (!hasFamily(family.getGroup(), familyGroups) && !hasFamily(family.getGroup(), groups)) {
                     familyGroups.add(family.getGroup());
                 }
             }
+
+            for (Integer groupId : familiesDao.getGroupsByStockId(stock.getId())) {
+                usersOnStock.add(familiesDao.getUsersByGroupId(groupId, stock.getId(), false));
+            }
+
             addUsers();
             sendMessage(70, chatId, bot);   // Выберите волонтеров
             sendUserList();
@@ -67,9 +79,9 @@ public class StartStockManualAdminCommand extends Command {
                         return false;
                     }
                     sendMessage(71, chatId, bot);   // Выберите семьи
+                    waitingType = WaitingType.CHOOSE_FAMILY;
                     sendFamiliesList();
                     familiesForVolunteers = new ArrayList<>();
-                    waitingType = WaitingType.CHOOSE_FAMILY;
                     return false;
                 }
                 int userId = Integer.parseInt(updateMessageText.substring(3));
@@ -92,7 +104,7 @@ public class StartStockManualAdminCommand extends Command {
                     }
                     familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId(), stock.getId());
-                    usersOnStock.add(userVolunteers);
+                    usersOnStock1.add(userVolunteers);
                     userVolunteers = new ArrayList<>();
                     familiesForVolunteers = new ArrayList<>();
                     addUsers();
@@ -112,7 +124,7 @@ public class StartStockManualAdminCommand extends Command {
                 if (updateMessageText.equals(buttonDao.getButtonText(68))) {    // Закончить и начать акцию
                     familiesDao.insertVolunteerGroups(userVolunteers, userVolunteers.get(0).getId(), stock.getId());
                     familiesDao.insertFamilyGroups(familiesForVolunteers, userVolunteers.get(0).getId(), stock.getId());
-                    usersOnStock.add(userVolunteers);
+                    usersOnStock1.add(userVolunteers);
                     distributeAll();
                     stock.setStatus(3);
                     stock.setAddedBy(userDao.getUserByChatId(chatId));
@@ -133,9 +145,9 @@ public class StartStockManualAdminCommand extends Command {
         return false;
     }
 
-    private boolean hasFamily(Family family, List<Integer> familyGroups) {
+    private boolean hasFamily(int group, List<Integer> familyGroups) {
         for (Integer groupId : familyGroups) {
-            if (family.getGroup() == groupId) {
+            if (group == groupId) {
                 return true;
             }
         }
@@ -144,7 +156,7 @@ public class StartStockManualAdminCommand extends Command {
 
     private void distributeAll() throws SQLException, TelegramApiException {
         sendMessage(50, chatId, bot);   // Начинаю рассылку
-        for (List<User> users : usersOnStock) {
+        for (List<User> users : usersOnStock1) {
             for (User user : users) {
                 try {
                     bot.sendMessage(new SendMessage()
@@ -209,16 +221,32 @@ public class StartStockManualAdminCommand extends Command {
                         users.add(participant.getUser());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
                     }
                 } else {
-                    for (List<User> userList : usersOnStock) {
-                        if (!hasUser(participant.getUser().getChatId(), users)
-                                && !hasUser(participant.getUser().getChatId(), userList)) {
-                            users.add(participant.getUser());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
-                        }
+                    if (!hasUser(participant.getUser().getChatId())) {
+                        users.add(participant.getUser());           // Добавляем пользователей только 1 раз, чтобы не отправлять одно сообщение 2 раза
                     }
                 }
             }
         }
 
+    }
+
+    private boolean hasUser(Long chatId) {
+        for (List<User> userList : usersOnStock) {
+            if (hasUser(chatId, userList)){
+                return true;
+            }
+        }
+        for (List<User> userList : usersOnStock1) {
+            if (hasUser(chatId, userList)){
+                return true;
+            }
+        }
+        for (User user : users) {
+            if (user.getChatId().equals(chatId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean hasUser(Long chatId, List<User> users) {

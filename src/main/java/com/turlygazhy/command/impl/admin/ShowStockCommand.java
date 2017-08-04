@@ -85,6 +85,14 @@ public class ShowStockCommand extends Command {
                     endStock();
                     return false;
                 }
+                if (updateMessageText.equals(buttonDao.getButtonText(150))) {   // Список отказников
+                    command = new SendRejectedFamiliesCommand(stock.getId());
+                    if (command.execute(update, bot)) {
+                        command = null;
+                        sendStockInfo();
+                    }
+                    return false;
+                }
                 if (updateMessageText.equals(buttonDao.getButtonText(84))) {
                     List<List> objects = surveyDao.getSurveis(stock.getId());
                     List<String> reports = objects.get(0);

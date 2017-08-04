@@ -161,10 +161,12 @@ public class SignUpCommand extends Command {
                 }
                 user.setCity(updateMessageText);
                 userDao.insertUser(user);
-                bot.sendMessage(new SendMessage()
-                        .setChatId(getAdminChatId())
-                        .setText(messageDao.getMessageText(137) + "\n" + user.getName())   // Подтвердите регистрацию)
-                        .setReplyMarkup(getAcceptSignUpKeyboard()));
+                for (User user : userDao.getAdmins()) {
+                    bot.sendMessage(new SendMessage()
+                            .setChatId(user.getChatId())
+                            .setText(messageDao.getMessageText(137) + "\n" + user.getName())   // Подтвердите регистрацию)
+                            .setReplyMarkup(getAcceptSignUpKeyboard()));
+                }
                 sendMessage(143, chatId, bot);  // Ваша кандидатура подана на рассмотрение
                 return true;
         }

@@ -27,11 +27,22 @@ public class SendRejectedFamiliesCommand extends Command {
     private int familiesCount;
 //    private int usersCount;
 
+    public SendRejectedFamiliesCommand(){
+
+    }
+
+    public SendRejectedFamiliesCommand(int stockId) {
+        this.stockId = stockId;
+    }
+
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
+        initMessage(update, bot);
         if (waitingType == null) {
-            stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
-            groups = familiesDao.getGroupsByStockId(stockId);
+            if (stockId == 0) {
+                stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
+            }
+            groups = familiesDao.getGroupsByStockId(stockId, false);
             families = familiesDao.getRejectedFamilyList(stockId);
             familiesCount = families.size();
             sendGroups();

@@ -487,6 +487,7 @@ public class NewDistributionCommand extends Command {
                             .setChatId(chatId)
                             .setText("Send new Info"));
                     change = Change.TASK_NAME;
+                    waitingType = WaitingType.TEXT;
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(133))) {   // Дата

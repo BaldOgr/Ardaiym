@@ -118,7 +118,7 @@ public class SendUserStatisticToSheetsCommand extends Command {
                     sendUserList();
                     return false;
                 }
-                int userId = Integer.parseInt(updateMessageText.substring(3));
+                int userId = Integer.parseInt(updateMessageText);
                 User user = userDao.getUserById(userId);
                 bot.sendContact(new SendContact()
                         .setChatId(chatId)

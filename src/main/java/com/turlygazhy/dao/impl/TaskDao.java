@@ -73,6 +73,10 @@ public class TaskDao extends AbstractDao {
     }
 
     public void update(Task task) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("UPDATE TYPE_OF_WORK SET NAME = ? WHERE ID = ?");
+        ps.setString(1, task.getName());
+        ps.setInt(2, task.getId());
+        ps.execute();
         factory.getParticipantOfStackDao().update(task.getParticipants());
     }
 

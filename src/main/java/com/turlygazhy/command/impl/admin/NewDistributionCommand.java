@@ -32,6 +32,7 @@ public class NewDistributionCommand extends Command {
     private int templateStockPage = 0;
     private int listPage = 0;
     private List<Stock> stocks;
+    private boolean isTemplateStock;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -89,6 +90,7 @@ public class NewDistributionCommand extends Command {
                     return false;
                 }
                 return false;
+
             case CHOOSE:
                 if (updateMessageText.equals("prev")) {
                     stockPage--;
@@ -264,8 +266,18 @@ public class NewDistributionCommand extends Command {
                             .setMessageId(updateMessage.getMessageId())
                             .setChatId(chatId)
                             .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(43)));
+                    isTemplateStock = true;
                     waitingType = WaitingType.CHOOSE_STOCK_TEMPLATE_TYPE;
                     return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(148))) {   // Акции
+                    bot.editMessageText(new EditMessageText()
+                            .setText(messageDao.getMessageText(118)) // Выберите акцию
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setReplyMarkup(getChooseStockKeyboard(stockDao.getUndoneStockList())));
+                    isTemplateStock = false;
+                    waitingType = WaitingType.CHOOSE_STOCK_TEMPLATE;
                 }
                 return false;
 
@@ -318,8 +330,13 @@ public class NewDistributionCommand extends Command {
                             .setReplyMarkup(getChooseTemplateStock(stocks)));
                     return false;
                 }
-                int templateStockId = Integer.parseInt(updateMessageText);
-                stock = stockTemplateDao.getStock(templateStockId);
+                if (isTemplateStock) {
+                    int templateStockId = Integer.parseInt(updateMessageText);
+                    stock = stockTemplateDao.getStock(templateStockId);
+                } else {
+                    stockId = Integer.parseInt(updateMessageText);
+                    stock = stockDao.getStock(stockId);
+                }
                 bot.editMessageText(new EditMessageText()
                         .setMessageId(updateMessage.getMessageId())
                         .setChatId(chatId)
@@ -369,7 +386,6 @@ public class NewDistributionCommand extends Command {
                                 .setChatId(chatId)
                                 .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(50)));
                     } else {
-
                         bot.editMessageText(new EditMessageText()
                                 .setMessageId(updateMessage.getMessageId())
                                 .setText(messageDao.getMessageText(117)) // Выберие действие
@@ -659,10 +675,18 @@ public class NewDistributionCommand extends Command {
                         break;
                     case TASK_NAME:
                         task.setName(updateMessageText);
-                        taskTemplateDao.update(task);
+                        if (isTemplateStock) {
+                            taskTemplateDao.update(task);
+                        } else {
+                            taskDao.update(task);
+                        }
                         break;
                 }
-                stockTemplateDao.updateStock(stock);
+                if (isTemplateStock) {
+                    stockTemplateDao.updateStock(stock);
+                } else {
+                    stockDao.updateStock(stock);
+                }
                 if (stock.isCTA()) {
                     bot.sendMessage(new SendMessage()
                             .setText(messageDao.getMessageText(117)) // Выберие действие

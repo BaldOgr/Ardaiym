@@ -34,6 +34,7 @@ public class SendStatisticToUsersCommand extends Command {
                 });
             }
         }
+        sb.append("\n").append(messageDao.getMessageText(160));  // Чтобы принять участие в акции, войдите в личный кабинет
         List<User> users = userDao.getUsers();
         users.forEach(user -> {
             try {

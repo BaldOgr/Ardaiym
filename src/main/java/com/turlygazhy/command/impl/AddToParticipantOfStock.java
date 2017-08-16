@@ -154,6 +154,7 @@ public class AddToParticipantOfStock extends Command {
         if (stock == null) {
             stock = stockDao.getStock(stockId);
         }
+        User user = userDao.getUserByChatId(chatId);
         Iterator taskIterator = stock.getTaskList().iterator();
         while (taskIterator.hasNext()) {
             Task task = (Task) taskIterator.next();
@@ -162,9 +163,11 @@ public class AddToParticipantOfStock extends Command {
             while (datesIterator.hasNext()) {
                 Dates date = (Dates) datesIterator.next();
                 for (Participant participant : task.getParticipants()) {
-                    if (date.getId() == participant.getDate().getId()) {
-                        datesIterator.remove();
-                        break;
+                    if (participant.getUser().getId() == user.getId()) {
+                        if (date.getId() == participant.getDate().getId()) {
+                            datesIterator.remove();
+                            break;
+                        }
                     }
                 }
             }

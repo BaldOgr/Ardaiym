@@ -54,10 +54,10 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "ardaiym_bot";
+        return "OF_AsarBot";
     }
 
     public String getBotToken() {
-        return "393784510:AAGQXrQp1nHcIXlSwyEmjPeTZOK2r9zgjz4";
+        return "440330385:AAErsyHuQerNQu9fd6mXbrHBGFU_dmZDKDQ";
     }
 }

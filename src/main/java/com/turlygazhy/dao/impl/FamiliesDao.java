@@ -184,10 +184,11 @@ public class FamiliesDao extends AbstractDao {
         return families;
     }
 
-    public int getGroupId(int userId, int stockId) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ? and STOCK_ID = ? and FINISHED = false");
+    public int getGroupId(int userId, int stockId, boolean finished) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM GROUPS_OF_VOLUNTEERS WHERE USER_ID = ? and STOCK_ID = ? and FINISHED = ?");
         ps.setInt(1, userId);
         ps.setInt(2, stockId);
+        ps.setBoolean(3, finished);
         ps.execute();
         ResultSet rs = ps.getResultSet();
         if (rs.next()) {

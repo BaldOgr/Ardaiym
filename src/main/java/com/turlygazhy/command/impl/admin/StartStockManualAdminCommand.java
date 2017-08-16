@@ -45,7 +45,7 @@ public class StartStockManualAdminCommand extends Command {
 //            }
 
             if (stock.getStatus() != 3) {
-//                familiesDao.deleteFamilies(stock.getId());
+                familiesDao.deleteFamilies(stock.getId());
                 familiesDao.loadFamiliesFromGoogleSheets(stock.getId());
             }
 

@@ -106,9 +106,13 @@ public class UserDao {
     }
 
     public void updateUser(User user) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("UPDATE USER SET RULES = ? WHERE ID = ?");
+        PreparedStatement ps = connection.prepareStatement("UPDATE USER SET RULES = ?, NAME = ?, PHONE_NUMBER = ?, CITY = ?, BIRTHDAY = ? WHERE ID = ?");
         ps.setInt(1, user.getRules());
-        ps.setInt(2, user.getId());
+        ps.setString(2, user.getName());
+        ps.setString(3, user.getPhoneNumber());
+        ps.setString(4, user.getCity());
+        ps.setString(5, user.getBirthday());
+        ps.setInt(6, user.getId());
         ps.execute();
     }
 

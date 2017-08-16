@@ -5,14 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f52d78da-66f9-4589-adc4-802d74492cc1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/ManualStockCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/ManualStockCommand$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/SignUpCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/SignUpCommand.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/SendRejectedFamiliesCommand$1.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/SendRejectedFamiliesCommand$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/ShowStockCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/ShowStockCommand.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/UserDao.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/dao/impl/UserDao.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/Bot.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/Bot.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.class" afterPath="$PROJECT_DIR$/target/classes/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sql/asar.sql" afterPath="$PROJECT_DIR$/sql/asar.sql" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,66 +38,21 @@
       <file leaf-file-name="Bot.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="56" column="26" lean-forward="false" selection-start-line="56" selection-start-column="26" selection-end-line="56" selection-end-column="26" />
-              <folding>
-                <element signature="e#1929#1930#0" expanded="true" />
-                <element signature="e#1964#1965#0" expanded="true" />
-                <element signature="e#1999#2000#0" expanded="true" />
-                <element signature="e#2069#2070#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StartStockManualAdminCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="61" column="16" lean-forward="false" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
+            <state relative-caret-position="-131">
+              <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ShowStockCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ManualStockCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java">
+      <file leaf-file-name="NewDistributionCommand.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="asar.sql" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sql/asar.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="653" column="43" lean-forward="false" selection-start-line="653" selection-start-column="43" selection-end-line="653" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SendRejectedFamiliesCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/SendRejectedFamiliesCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="44" column="66" lean-forward="false" selection-start-line="44" selection-start-column="66" selection-end-line="44" selection-end-column="66" />
+              <caret line="210" column="35" lean-forward="false" selection-start-line="210" selection-start-column="35" selection-end-line="210" selection-end-column="35" />
               <folding>
-                <element signature="e#1229#1230#0" expanded="true" />
-                <element signature="e#1267#1268#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="method#getDeadlineKeyboard#0;class#NewDistributionCommand#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -103,8 +61,8 @@
       <file leaf-file-name="SignUpCommand.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SignUpCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2235">
-              <caret line="165" column="55" lean-forward="false" selection-start-line="165" selection-start-column="55" selection-end-line="165" selection-end-column="55" />
+            <state relative-caret-position="-1140">
+              <caret line="66" column="61" lean-forward="false" selection-start-line="66" selection-start-column="61" selection-end-line="66" selection-end-column="61" />
               <folding>
                 <element signature="method#getDecades#0;class#SignUpCommand#0" expanded="false" />
                 <element signature="method#getYears#0;class#SignUpCommand#0" expanded="false" />
@@ -115,34 +73,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AcceptSignUpCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AcceptSignUpCommand.java">
+      <file leaf-file-name="SurveyCommand.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="52" column="40" lean-forward="false" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
+            <state relative-caret-position="201">
+              <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserDao.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1575">
-              <caret line="116" column="60" lean-forward="false" selection-start-line="116" selection-start-column="60" selection-end-line="116" selection-end-column="94" />
-              <folding>
-                <marker date="1501853052491" expanded="true" signature="416:457" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="860:896" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="2316:2332" ph=" INSERT statement" />
-                <marker date="1501853052491" expanded="true" signature="2996:3045" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="3339:3370" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="3686:3724" ph=" UPDATE statement" />
-                <marker date="1501853052491" expanded="true" signature="3994:4042" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="4330:4359" ph=" DELETE statement" />
-                <marker date="1501853052491" expanded="true" signature="4605:4651" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="5032:5079" ph=" SELECT statement" />
-                <marker date="1501853052491" expanded="true" signature="5455:5503" ph=" SELECT statement" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -150,41 +86,56 @@
       <file leaf-file-name="FamiliesDao.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="60" column="24" lean-forward="false" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+            <state relative-caret-position="98">
+              <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding>
-                <marker date="1501852873183" expanded="true" signature="770:805" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="1177:1199" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="1562:1601" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="2043:2106" ph=" SELECT statement (FAMILY_GROUPS)" />
-                <marker date="1501852873183" expanded="true" signature="2316:2389" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="2958:3021" ph=" SELECT statement (FAMILY_GROUPS)" />
-                <marker date="1501852873183" expanded="true" signature="3231:3289" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="3804:3876" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="4273:4312" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="4654:4773" ph=" INSERT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="5451:5529" ph=" INSERT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="5928:6007" ph=" INSERT statement (FAMILY_GROUPS)" />
-                <marker date="1501852873183" expanded="true" signature="6287:6449" ph=" UPDATE statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="7108:7147" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="7461:7530" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="7461:7551" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="7995:8065" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="7995:8081" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="7995:8082" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="8602:8655" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="8602:8672" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="9208:9261" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="9929:9970" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="12193:12262" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="12696:12737" ph=" SELECT statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="13106:13190" ph=" DELETE statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="13487:13526" ph=" DELETE statement (FAMILIES)" />
-                <marker date="1501852873183" expanded="true" signature="13771:13817" ph=" SELECT statement (FAMILY_GROUPS)" />
-                <marker date="1501852873183" expanded="true" signature="14322:14408" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="14322:14413" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-                <marker date="1501852873183" expanded="true" signature="14833:14916" ph=" UPDATE statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="770:805" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="1177:1199" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="1562:1601" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="2043:2106" ph=" SELECT statement (FAMILY_GROUPS)" />
+                <marker date="1502906928767" expanded="true" signature="2316:2389" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="2958:3021" ph=" SELECT statement (FAMILY_GROUPS)" />
+                <marker date="1502906928767" expanded="true" signature="3231:3289" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="3804:3876" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="4273:4312" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="4654:4773" ph=" INSERT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="5451:5529" ph=" INSERT statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="5928:6007" ph=" INSERT statement (FAMILY_GROUPS)" />
+                <marker date="1502906928767" expanded="true" signature="6287:6449" ph=" UPDATE statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="7108:7147" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="7479:7565" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="8045:8132" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="8652:8722" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="9258:9311" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="9979:10020" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="12243:12312" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="12746:12787" ph=" SELECT statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="13156:13240" ph=" DELETE statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="13537:13576" ph=" DELETE statement (FAMILIES)" />
+                <marker date="1502906928767" expanded="true" signature="13821:13867" ph=" SELECT statement (FAMILY_GROUPS)" />
+                <marker date="1502906928767" expanded="true" signature="14372:14463" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+                <marker date="1502906928767" expanded="true" signature="14883:14966" ph=" UPDATE statement (GROUPS_OF_VOLUNTEERS)" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="asar.sql" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sql/asar.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="751" column="68" lean-forward="false" selection-start-line="751" selection-start-column="68" selection-end-line="751" selection-end-column="68" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Conversation.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Conversation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="138">
+              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -207,6 +158,7 @@
       <find>task</find>
       <find>taskTemplateDao</find>
       <find>prev</find>
+      <find>sendmessage(6</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -254,7 +206,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/DatesTemplateDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/StockTemplateDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/TaskTemplateDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/AboutUsCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/EditDescriptionCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewTextCommand.java" />
@@ -272,7 +223,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/tool/SheetsAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamilyRateDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/entity/FamilyRate.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AdminControlCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ContactsCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AcceptSignUpCommand.java" />
@@ -280,12 +230,14 @@
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/SendRejectedFamiliesCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SignUpCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java" />
         <option value="$PROJECT_DIR$/sql/asar.sql" />
       </list>
     </option>
@@ -339,7 +291,7 @@
       </PATH>
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="width" value="1366" />
     <option name="height" value="741" />
   </component>
@@ -358,7 +310,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -431,8 +383,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -445,6 +397,7 @@
     <property name="project.structure.side.proportion" value="0.52764976" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="&quot;prev&quot;&#9;null&#9;null&#10;messageDao.getMessageText(127)&#9;null&#9;null&#10;initMessage&#9;PSI&#9;JAVA://com.turlygazhy.command.Command#initMessage" />
+    <property name="ChangesBrowser.SHOW_FLATTEN" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -784,7 +737,14 @@
       <option name="project" value="LOCAL" />
       <updated>1501856407530</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="SQL">
+      <created>1501862968314</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1501862968314</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TodoView">
@@ -797,24 +757,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1366" height="741" extended-state="1" />
+    <frame x="0" y="0" width="1366" height="741" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.504886" sideWeight="0.5121212" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32736155" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5228013" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4039088" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.4939394" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3871212" sideWeight="0.49434572" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33333334" sideWeight="0.49434572" order="0" side_tool="false" content_ui="combo" />
       <window_info id="MaxCompute Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="MaxCompute Job" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="MaxCompute Job Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -825,9 +787,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -918,7 +878,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="144" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java</url>
+          <line>128</line>
+          <properties />
+          <option name="timeStamp" value="149" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="150" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -973,9 +941,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="24" column="8" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="47" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1007,25 +972,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/tool/SheetsAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="71" column="16" lean-forward="false" selection-start-line="71" selection-start-column="16" selection-end-line="71" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ShowInfoCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-165">
-          <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1043,19 +993,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="141" column="59" lean-forward="false" selection-start-line="141" selection-start-column="59" selection-end-line="141" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/EditDescriptionCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1">
           <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1063,7 +1004,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1087,10 +1027,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="83">
           <caret line="38" column="4" lean-forward="false" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="15" />
-          <folding>
-            <element signature="e#816#817#0" expanded="false" />
-            <element signature="e#844#845#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1133,7 +1069,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="199" column="8" lean-forward="true" selection-start-line="199" selection-start-column="8" selection-end-line="215" selection-end-column="67" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1155,7 +1090,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="23" column="54" lean-forward="false" selection-start-line="23" selection-start-column="54" selection-end-line="23" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1214,57 +1148,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Conversation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="63" column="0" lean-forward="false" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///opt/java/64/jdk1.8.0_101/src.zip!/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
           <caret line="163" column="11" lean-forward="false" selection-start-line="163" selection-start-column="11" selection-end-line="163" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-          <folding>
-            <element signature="method#getDeadlineKeyboard#0;class#NewDistributionCommand#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="56" column="26" lean-forward="false" selection-start-line="56" selection-start-column="26" selection-end-line="56" selection-end-column="26" />
-          <folding>
-            <element signature="e#1929#1930#0" expanded="true" />
-            <element signature="e#1964#1965#0" expanded="true" />
-            <element signature="e#1999#2000#0" expanded="true" />
-            <element signature="e#2069#2070#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="61" column="16" lean-forward="false" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1273,16 +1160,94 @@
         <state relative-caret-position="420">
           <caret line="44" column="66" lean-forward="false" selection-start-line="44" selection-start-column="66" selection-end-line="44" selection-end-column="66" />
           <folding>
-            <element signature="e#1229#1230#0" expanded="true" />
-            <element signature="e#1267#1268#0" expanded="true" />
+            <element signature="e#1229#1230#0" expanded="false" />
+            <element signature="e#1267#1268#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AcceptSignUpCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="52" column="40" lean-forward="false" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/tool/SheetsAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/ShowStockCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="140" column="0" lean-forward="false" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/StartStockManualAdminCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/NewDistributionCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="210" column="35" lean-forward="false" selection-start-line="210" selection-start-column="35" selection-end-line="210" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getDeadlineKeyboard#0;class#NewDistributionCommand#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Bot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-131">
+          <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="524">
+          <caret line="114" column="19" lean-forward="false" selection-start-line="114" selection-start-column="19" selection-end-line="114" selection-end-column="19" />
+          <folding>
+            <marker date="1502906176983" expanded="true" signature="416:457" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="860:896" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="2316:2332" ph=" INSERT statement" />
+            <marker date="1502906176983" expanded="true" signature="2996:3045" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="3339:3370" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="3686:3776" ph=" UPDATE statement" />
+            <marker date="1502906176983" expanded="true" signature="4221:4269" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="4557:4586" ph=" DELETE statement" />
+            <marker date="1502906176983" expanded="true" signature="4832:4878" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="5259:5306" ph=" SELECT statement" />
+            <marker date="1502906176983" expanded="true" signature="5682:5730" ph=" SELECT statement" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/PersonalAreaCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="119" column="28" lean-forward="true" selection-start-line="119" selection-start-column="28" selection-end-line="119" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SignUpCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2235">
-          <caret line="165" column="55" lean-forward="false" selection-start-line="165" selection-start-column="55" selection-end-line="165" selection-end-column="55" />
+        <state relative-caret-position="-1140">
+          <caret line="66" column="61" lean-forward="false" selection-start-line="66" selection-start-column="61" selection-end-line="66" selection-end-column="61" />
           <folding>
             <element signature="method#getDecades#0;class#SignUpCommand#0" expanded="false" />
             <element signature="method#getYears#0;class#SignUpCommand#0" expanded="false" />
@@ -1292,86 +1257,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/admin/AcceptSignUpCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/Conversation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="52" column="40" lean-forward="false" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
+        <state relative-caret-position="138">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/UserDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1575">
-          <caret line="116" column="60" lean-forward="false" selection-start-line="116" selection-start-column="60" selection-end-line="116" selection-end-column="94" />
-          <folding>
-            <marker date="1501853052491" expanded="true" signature="416:457" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="860:896" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="2316:2332" ph=" INSERT statement" />
-            <marker date="1501853052491" expanded="true" signature="2996:3045" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="3339:3370" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="3686:3724" ph=" UPDATE statement" />
-            <marker date="1501853052491" expanded="true" signature="3994:4042" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="4330:4359" ph=" DELETE statement" />
-            <marker date="1501853052491" expanded="true" signature="4605:4651" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="5032:5079" ph=" SELECT statement" />
-            <marker date="1501853052491" expanded="true" signature="5455:5503" ph=" SELECT statement" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="60" column="24" lean-forward="false" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
-          <folding>
-            <marker date="1501852873183" expanded="true" signature="770:805" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="1177:1199" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="1562:1601" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="2043:2106" ph=" SELECT statement (FAMILY_GROUPS)" />
-            <marker date="1501852873183" expanded="true" signature="2316:2389" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="2958:3021" ph=" SELECT statement (FAMILY_GROUPS)" />
-            <marker date="1501852873183" expanded="true" signature="3231:3289" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="3804:3876" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="4273:4312" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="4654:4773" ph=" INSERT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="5451:5529" ph=" INSERT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="5928:6007" ph=" INSERT statement (FAMILY_GROUPS)" />
-            <marker date="1501852873183" expanded="true" signature="6287:6449" ph=" UPDATE statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="7108:7147" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="7461:7530" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="7461:7551" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="7995:8065" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="7995:8081" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="7995:8082" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="8602:8655" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="8602:8672" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="9208:9261" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="9929:9970" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="12193:12262" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="12696:12737" ph=" SELECT statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="13106:13190" ph=" DELETE statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="13487:13526" ph=" DELETE statement (FAMILIES)" />
-            <marker date="1501852873183" expanded="true" signature="13771:13817" ph=" SELECT statement (FAMILY_GROUPS)" />
-            <marker date="1501852873183" expanded="true" signature="14322:14408" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="14322:14413" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
-            <marker date="1501852873183" expanded="true" signature="14833:14916" ph=" UPDATE statement (GROUPS_OF_VOLUNTEERS)" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/ManualStockCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        <state relative-caret-position="194">
+          <caret line="70" column="42" lean-forward="false" selection-start-line="70" selection-start-column="42" selection-end-line="70" selection-end-column="42" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/command/impl/SurveyCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/turlygazhy/dao/impl/FamiliesDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding>
+            <marker date="1502906928767" expanded="true" signature="770:805" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="1177:1199" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="1562:1601" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="2043:2106" ph=" SELECT statement (FAMILY_GROUPS)" />
+            <marker date="1502906928767" expanded="true" signature="2316:2389" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="2958:3021" ph=" SELECT statement (FAMILY_GROUPS)" />
+            <marker date="1502906928767" expanded="true" signature="3231:3289" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="3804:3876" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="4273:4312" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="4654:4773" ph=" INSERT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="5451:5529" ph=" INSERT statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="5928:6007" ph=" INSERT statement (FAMILY_GROUPS)" />
+            <marker date="1502906928767" expanded="true" signature="6287:6449" ph=" UPDATE statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="7108:7147" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="7479:7565" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="8045:8132" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="8652:8722" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="9258:9311" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="9979:10020" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="12243:12312" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="12746:12787" ph=" SELECT statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="13156:13240" ph=" DELETE statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="13537:13576" ph=" DELETE statement (FAMILIES)" />
+            <marker date="1502906928767" expanded="true" signature="13821:13867" ph=" SELECT statement (FAMILY_GROUPS)" />
+            <marker date="1502906928767" expanded="true" signature="14372:14463" ph=" SELECT statement (GROUPS_OF_VOLUNTEERS)" />
+            <marker date="1502906928767" expanded="true" signature="14883:14966" ph=" UPDATE statement (GROUPS_OF_VOLUNTEERS)" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sql/asar.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
-          <caret line="653" column="43" lean-forward="false" selection-start-line="653" selection-start-column="43" selection-end-line="653" selection-end-column="43" />
+          <caret line="751" column="68" lean-forward="false" selection-start-line="751" selection-start-column="68" selection-end-line="751" selection-end-column="68" />
           <folding />
         </state>
       </provider>

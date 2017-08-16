@@ -68,7 +68,7 @@ public class ManualStockCommand extends Command {
 
             case CHOOSE:
                 if (updateMessageText.equals(buttonDao.getButtonText(122))) {   // Принять
-                    groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId);
+                    groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId, false);
                     if (groupId == 0) {
                         sendMessage(132, chatId, bot);  // Вы не участвуете в данной акции
                         return true;
@@ -90,7 +90,7 @@ public class ManualStockCommand extends Command {
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(123))) {   // Отказаться
                     sendMessage(121, chatId, bot);  // Ждем Вас в следующих акциях
-                    groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId);
+                    groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId, false);
                     familiesDao.deleteUserFromGroup(chatId, groupId, stockId);
                     return true;
                 }

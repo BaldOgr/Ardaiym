@@ -26,7 +26,7 @@ public class EditDescriptionCommand extends Command {
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
-        if (!userDao.isAdmin(chatId)){
+        if (!userDao.isAdmin(chatId)) {
             sendMessage(6, chatId, bot);
             return true;
         }
@@ -53,6 +53,9 @@ public class EditDescriptionCommand extends Command {
                 }
                 if (updateMessageText.equals("19")) {    // О фонде
                     messageId = MessageDao.ABOUT;
+                }
+                if (updateMessageText.equals("165")) {   // Приветствие
+                    messageId = MessageDao.WELCOME;
                 }
                 sendMessage(55, chatId, bot);   // Введите текст
                 waitingType = WaitingType.TEXT;
@@ -93,6 +96,10 @@ public class EditDescriptionCommand extends Command {
         button = new InlineKeyboardButton();
         button.setText(buttonDao.getButtonText(19));
         button.setCallbackData(String.valueOf(19));
+        row.add(button);
+        button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(151));
+        button.setCallbackData(String.valueOf(165));
         row.add(button);
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);

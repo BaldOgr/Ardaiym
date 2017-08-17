@@ -26,6 +26,7 @@ public class MessageDao extends AbstractDao {
     private static final String UPDATE_TEXT = "UPDATE PUBLIC.MESSAGE SET TEXT = ? WHERE ID = ?";
     public static final long CONTACTS = 4;
     public static final long ABOUT = 5;
+    public static final long WELCOME = 165;
 
 
     private Connection connection;

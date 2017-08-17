@@ -329,7 +329,7 @@ public class ManualStockCommand extends Command {
         families = familiesDao.getFamilyListByGroupId(groupId, stockId);
         int helpedCount = 0;
         int notHomeCount = 0;
-        int wrongAddresCount = 0;
+        int wrongAddressCount = 0;
         int noTimeCount = 0;
         StringBuilder sb = new StringBuilder();
         sb.append("<b>").append(messageDao.getMessageText(114)).append("</b>\n"); // Волонтеры
@@ -345,7 +345,7 @@ public class ManualStockCommand extends Command {
                     notHomeCount++;
                     break;
                 case 3:
-                    wrongAddresCount++;
+                    wrongAddressCount++;
                     break;
                 case 4:
                     noTimeCount++;
@@ -359,7 +359,7 @@ public class ManualStockCommand extends Command {
         }
         sb.append("<b>").append(buttonDao.getButtonText(137)).append("</b> - ").append(helpedCount).append("\n");
         sb.append("<b>").append(buttonDao.getButtonText(124)).append("</b> - ").append(notHomeCount).append("\n");
-        sb.append("<b>").append(buttonDao.getButtonText(125)).append("</b> - ").append(wrongAddresCount).append("\n");
+        sb.append("<b>").append(buttonDao.getButtonText(125)).append("</b> - ").append(wrongAddressCount).append("\n");
         sb.append("<b>").append(buttonDao.getButtonText(126)).append("</b> - ").append(noTimeCount).append("\n");
 
         sendMessage(sb.toString());

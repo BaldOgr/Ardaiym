@@ -2,8 +2,12 @@ package com.turlygazhy.command.impl.admin;
 
 import com.turlygazhy.Bot;
 import com.turlygazhy.command.Command;
+import com.turlygazhy.entity.Stock;
 import com.turlygazhy.entity.User;
 import com.turlygazhy.entity.WaitingType;
+import com.turlygazhy.reminder.Reminder;
+import com.turlygazhy.tool.DateUtil;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Update;
@@ -14,13 +18,14 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AcceptSignUpCommand extends Command {
     private User user;
     private List<User> users;
     private List<User> distributeFor;
-    
+
     private int page = 0;
 
     @Override
@@ -40,12 +45,7 @@ public class AcceptSignUpCommand extends Command {
         switch (waitingType) {
             case CHOOSE_ANSWER:
                 if (updateMessageText.equals(buttonDao.getButtonText(139))) {   // Подтверждаю
-                    friendsDao.insert(user.getChatId(), chatId);
-                    user.setRules(1);
-                    userDao.updateUser(user);
-                    distributeFor = new ArrayList<>();
-                    sendMessage("Done!");
-                    sendMessage(15, user.getChatId(), bot);
+                    acceptUser();
                     return true;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(140))) {   // Спросить у волонтеров
@@ -149,16 +149,52 @@ public class AcceptSignUpCommand extends Command {
         return false;
     }
 
+    private void acceptUser() throws SQLException, TelegramApiException {
+        friendsDao.insert(user.getChatId(), chatId);
+        user.setRules(1);
+        userDao.updateUser(user);
+        distributeFor = new ArrayList<>();
+        sendMessage("Done!");
+        sendMessage(165, user.getChatId(), bot);  // Приветственное слово
+        List<SendMessage> messages = new ArrayList<>();
+        for (Stock stock : stockDao.getUndoneStockList()) {
+            messages.add(new SendMessage()
+                    .setText(stock.parseStockForMessage())
+                    .setParseMode(ParseMode.HTML)
+                    .setReplyMarkup(getKeyboard(stock.getId()))
+                    .setChatId(user.getChatId()));
+        }
+        Reminder reminder = new Reminder(bot);
+        Date date = new Date();
+        date.setMinutes(date.getMinutes() + 5);
+        reminder.addReminder(date, messages);
+        sendMessage(15, user.getChatId(), bot);
+    }
+
+    private ReplyKeyboard getKeyboard(int id) throws SQLException {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonDao.getButtonText(43));
+        button.setCallbackData("id=" + id + " cmd=" + buttonDao.getButtonText(43));
+        row.add(button);
+        rows.add(row);
+        keyboardMarkup.setKeyboard(rows);
+        return keyboardMarkup;
+    }
+
     private void distributeRequest() throws SQLException, TelegramApiException {
         bot.editMessageText(new EditMessageText()
                 .setChatId(chatId)
                 .setMessageId(updateMessage.getMessageId())
                 .setText("Doing..."));
+        String text = user.getName() + "\n" + user.getCity() + "\n" + user.getPhoneNumber() + "\n" + messageDao.getMessageText(138) + "\n" + messageDao.getMessageText(164);
         for (User user : distributeFor) {
             try {
                 bot.sendMessage(new SendMessage()
                         .setChatId(user.getChatId())
-                        .setText(user.getName() + "\n" + user.getCity() + "\n" + user.getPhoneNumber() + "\n" + messageDao.getMessageText(138))
+                        .setText(text)
                         .setReplyMarkup(getAcceptKeyboard()));
             } catch (TelegramApiException ex) {
                 sendMessage("BAN FROM: " + user.getName());

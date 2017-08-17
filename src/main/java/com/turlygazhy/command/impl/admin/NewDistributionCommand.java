@@ -365,9 +365,11 @@ public class NewDistributionCommand extends Command {
                     SendMessage sendMessage = new SendMessage()
                             .setText(stock.parseStockForMessage())
                             .setParseMode(ParseMode.HTML);
-                    if (stock.isCTA()) {
-                        stockDao.insertStock(stock);
-                        sendMessage = sendMessage.setReplyMarkup(getKeyboard());
+                    if (isTemplateStock) {
+                        if (stock.isCTA()) {
+                            stockDao.insertStock(stock);
+                            sendMessage = sendMessage.setReplyMarkup(getKeyboard());
+                        }
                     }
                     for (User user : users) {
                         try {

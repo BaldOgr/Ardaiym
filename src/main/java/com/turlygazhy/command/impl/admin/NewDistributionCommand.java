@@ -5,6 +5,7 @@ import com.turlygazhy.command.Command;
 import com.turlygazhy.entity.*;
 import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -33,6 +34,8 @@ public class NewDistributionCommand extends Command {
     private int listPage = 0;
     private List<Stock> stocks;
     private boolean isTemplateStock;
+    private List<String> images;
+    private String distributionText;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
@@ -257,6 +260,7 @@ public class NewDistributionCommand extends Command {
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(116))) {   // Введите текст
                     sendMessage(44, chatId, bot);   //  Введите сообщение
+                    images = new ArrayList<>();
                     waitingType = WaitingType.MESSAGE;
                     return false;
                 }
@@ -705,24 +709,62 @@ public class NewDistributionCommand extends Command {
             ///////// Сама рассылка сообщений /////////
 
             case MESSAGE:
-                sendMessage(50, chatId, bot);   // Начинаю рассылку...
-                sb.append(updateMessageText);
-                for (User user : users) {
-                    try {
-                        bot.sendMessage(new SendMessage()
-                                .setText(sb.toString())
-                                .setChatId(user.getChatId())
-                                .setParseMode(ParseMode.HTML));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        sendMessage("BAN FROM: " + user.getName(), chatId, bot);
-                    }
+                sendMessage(161, chatId, bot);
+                distributionText = updateMessageText;
+                waitingType = WaitingType.CHOOSE_ANSWER;
+                return false;
+
+            case CHOOSE_ANSWER:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {    // Назад
+                    sendMessage(117, chatId, bot);
+                    waitingType = WaitingType.CHOOSE_TYPE;
+                    return false;
                 }
-                sendMessage(51, chatId, bot);   // Рассылка закончена!
-                return true;
+                if (updateMessageText.equals(buttonDao.getButtonText(56))) {    // Да
+                    sendMessage(162, chatId, bot);
+                    waitingType = WaitingType.IMAGE;
+                    return false;
+                }
+                if (updateMessageText.equals(buttonDao.getButtonText(57))) {    // Нет
+                    sendDistribution();
+                    return true;
+                }
+                return false;
+
+            case IMAGE:
+                if (images == null) {
+                    images = new ArrayList<>();
+                }
+                images.add(updateMessage.getPhoto().get(0).getFileId());
+                sendMessage(161, chatId, bot);  // Хотите добавить фото?
+                waitingType = WaitingType.CHOOSE_ANSWER;
+                return false;
         }
 
         return false;
+    }
+
+    private void sendDistribution() throws SQLException, TelegramApiException {
+        sendMessage(50, chatId, bot);   // Начинаю рассылку...
+        for (User user : users) {
+            try {
+                bot.sendMessage(new SendMessage()
+                        .setText(distributionText)
+                        .setChatId(user.getChatId())
+                        .setParseMode(ParseMode.HTML));
+                if (images != null) {
+                    for (String image : images) {
+                        bot.sendPhoto(new SendPhoto()
+                                .setChatId(user.getChatId())
+                                .setPhoto(image));
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                sendMessage("BAN FROM: " + user.getName(), chatId, bot);
+            }
+        }
+        sendMessage(51, chatId, bot);   // Рассылка закончена!
     }
 
     private InlineKeyboardMarkup getChooseDateKeyboard() throws SQLException {
@@ -916,7 +958,7 @@ public class NewDistributionCommand extends Command {
     private InlineKeyboardMarkup getChooseStockKeyboard(List<Stock> undoneStocks) throws SQLException {
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> row = new ArrayList<>();
-        for (int i = templateStockPage * 10; i < (templateStockPage + 1) * 10 && i < undoneStocks.size()-1; i++) {
+        for (int i = templateStockPage * 10; i < (templateStockPage + 1) * 10 && i < undoneStocks.size() - 1; i++) {
             Stock stock = undoneStocks.get(i);
             List<InlineKeyboardButton> buttons = new ArrayList<>();
             InlineKeyboardButton button = new InlineKeyboardButton();

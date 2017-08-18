@@ -26,6 +26,7 @@ public class SheetsAdapter {
     private static final List<String> SPREADSHEET_SCOPES = Arrays.asList(SheetsScopes.SPREADSHEETS);
     private static final String SPREAD_SHEET_ID = "14s83d9z4xwEmyOWwWSWPrA3QvDVE0NKl0JMGmf8dXjU";
     private static SimpleDateFormat format = new SimpleDateFormat("dd.MM.yy hh:mm");
+    public static final String DIR = "C:\\bots-data\\members-36a5849089da.json";
 
 
     private static Sheets service;
@@ -52,7 +53,7 @@ public class SheetsAdapter {
                                                 String sheetName,
                                                 char colStart, int rowId, String data)
             throws Exception {
-        authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
+        authorize(DIR);
 
         String writeRange = sheetName + "!" + colStart + rowId + ":" + (char) (colStart + 7);
 
@@ -79,21 +80,21 @@ public class SheetsAdapter {
 
     public static void writeDataFromFamilySheet(List<List<Object>> writeData) throws Exception {
         String writeRange = "Лист1!B2";
-        authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
+        authorize(DIR);
         ValueRange vr = new ValueRange().setValues(writeData).setMajorDimension("ROWS");
         service.spreadsheets().values().update(SPREAD_SHEET_ID, writeRange, vr).setValueInputOption("RAW").execute();
     }
 
     public static void writeDataToUsersSheet(List<List<Object>> writeData) throws Exception {
         String writeRange = "Лист2!A2";
-        authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
+        authorize(DIR);
         ValueRange vr = new ValueRange().setValues(writeData).setMajorDimension("ROWS");
         service.spreadsheets().values().update(SPREAD_SHEET_ID, writeRange, vr).setValueInputOption("RAW").execute();
 
     }
 
     public static List<Family> getFamiles() throws Exception {
-        authorize("/home/daniyar/IdeaProjects/templates/members-36a5849089da.json");
+        authorize(DIR);
         String range = "Лист1!B2:G";
         ValueRange response = service.spreadsheets().values().get(SPREAD_SHEET_ID, range).execute();
 

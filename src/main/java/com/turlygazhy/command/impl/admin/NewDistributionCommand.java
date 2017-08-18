@@ -964,7 +964,7 @@ public class NewDistributionCommand extends Command {
             Stock stock = undoneStocks.get(i);
             List<InlineKeyboardButton> buttons = new ArrayList<>();
             InlineKeyboardButton button = new InlineKeyboardButton();
-            button.setText(stock.getTitle());
+            button.setText(stock.getTitleForAdmin());
             button.setCallbackData(String.valueOf(stock.getId()));
             buttons.add(button);
             row.add(buttons);

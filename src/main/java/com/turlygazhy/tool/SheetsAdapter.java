@@ -26,7 +26,7 @@ public class SheetsAdapter {
     private static final List<String> SPREADSHEET_SCOPES = Arrays.asList(SheetsScopes.SPREADSHEETS);
     private static final String SPREAD_SHEET_ID = "14s83d9z4xwEmyOWwWSWPrA3QvDVE0NKl0JMGmf8dXjU";
     private static SimpleDateFormat format = new SimpleDateFormat("dd.MM.yy hh:mm");
-    public static final String DIR = "C:\\bots-data\\members-36a5849089da.json";
+    public static final String DIR = "C:\\bots-data\\ardaiym.json";
 
 
     private static Sheets service;

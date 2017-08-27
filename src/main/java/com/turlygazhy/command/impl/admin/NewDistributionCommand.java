@@ -33,7 +33,7 @@ public class NewDistributionCommand extends Command {
     private int templateStockPage = 0;
     private int listPage = 0;
     private List<Stock> stocks;
-    private boolean isTemplateStock;
+    private int isTemplateStock;
     private List<String> images;
     private String distributionText;
 
@@ -270,7 +270,7 @@ public class NewDistributionCommand extends Command {
                             .setMessageId(updateMessage.getMessageId())
                             .setChatId(chatId)
                             .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(43)));
-                    isTemplateStock = true;
+                    isTemplateStock = 1;
                     waitingType = WaitingType.CHOOSE_STOCK_TEMPLATE_TYPE;
                     return false;
                 }
@@ -280,7 +280,7 @@ public class NewDistributionCommand extends Command {
                             .setMessageId(updateMessage.getMessageId())
                             .setChatId(chatId)
                             .setReplyMarkup(getChooseStockKeyboard(stockDao.getUndoneStockList())));
-                    isTemplateStock = false;
+                    isTemplateStock = 2;
                     waitingType = WaitingType.CHOOSE_STOCK_TEMPLATE;
                 }
                 return false;
@@ -288,8 +288,8 @@ public class NewDistributionCommand extends Command {
             case CHOOSE_STOCK_TEMPLATE_TYPE:
                 if (updateMessageText.equals(buttonDao.getButtonText(10))) {
                     bot.editMessageText(new EditMessageText()
-                            .setMessageId(updateMessage.getMessageId())
                             .setText(messageDao.getMessageText(117)) // Выберие действие
+                            .setMessageId(updateMessage.getMessageId())
                             .setChatId(chatId)
                             .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(42)));
                     waitingType = WaitingType.CHOOSE_TYPE;
@@ -309,11 +309,11 @@ public class NewDistributionCommand extends Command {
             case CHOOSE_STOCK_TEMPLATE:
                 if (updateMessageText.equals(buttonDao.getButtonText(10))) {
                     bot.editMessageText(new EditMessageText()
+                            .setText(messageDao.getMessageText(117)) // Выберие действие
                             .setMessageId(updateMessage.getMessageId())
                             .setChatId(chatId)
-                            .setText(messageDao.getMessageText(118))
-                            .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(43)));
-                    waitingType = WaitingType.CHOOSE_STOCK_TEMPLATE_TYPE;
+                            .setReplyMarkup((InlineKeyboardMarkup) keyboardMarkUpDao.select(42)));
+                    waitingType = WaitingType.CHOOSE_TYPE;
                     return false;
                 }
                 if (updateMessageText.equals("prev")) {
@@ -334,10 +334,10 @@ public class NewDistributionCommand extends Command {
                             .setReplyMarkup(getChooseTemplateStock(stocks)));
                     return false;
                 }
-                if (isTemplateStock) {
+                if (isTemplateStock == 1) {
                     int templateStockId = Integer.parseInt(updateMessageText);
                     stock = stockTemplateDao.getStock(templateStockId);
-                } else {
+                } else if (isTemplateStock == 2){
                     stockId = Integer.parseInt(updateMessageText);
                     stock = stockDao.getStock(stockId);
                 }
@@ -361,28 +361,32 @@ public class NewDistributionCommand extends Command {
                     return false;
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(120))) {   // Отправить
-                    sendMessage(50, chatId, bot);   // Начинаю рассылку...
-                    SendMessage sendMessage = new SendMessage()
-                            .setText(stock.parseStockForMessage())
-                            .setParseMode(ParseMode.HTML);
-                    if (isTemplateStock) {
-                        if (stock.isCTA()) {
-                            stockDao.insertStock(stock);
-                            sendMessage = sendMessage.setReplyMarkup(getKeyboard());
-                        }
-                    }
-                    for (User user : users) {
-                        try {
-                            if (user == null) {
-                                continue;
-                            }
-                            bot.sendMessage(sendMessage.setChatId(user.getChatId()));
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            sendMessage("BAN FROM: " + user.getName(), chatId, bot);
-                        }
-                    }
-                    sendMessage(51, chatId, bot);   // Рассылка закончена!
+                    distributionText = stock.parseStockForMessage();
+                    sendMessage(161, chatId, bot);  // Хотите добавить фото?
+                    waitingType = WaitingType.CHOOSE_ANSWER;
+                    return false;
+//                    sendMessage(50, chatId, bot);   // Начинаю рассылку...
+//                    SendMessage sendMessage = new SendMessage()
+//                            .setText(stock.parseStockForMessage())
+//                            .setParseMode(ParseMode.HTML);
+//                    if (isTemplateStock) {
+//                        if (stock.isCTA()) {
+//                            stockDao.insertStock(stock);
+//                            sendMessage = sendMessage.setReplyMarkup(getKeyboard());
+//                        }
+//                    }
+//                    for (User user : users) {
+//                        try {
+//                            if (user == null) {
+//                                continue;
+//                            }
+//                            bot.sendMessage(sendMessage.setChatId(user.getChatId()));
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                            sendMessage("BAN FROM: " + user.getName(), chatId, bot);
+//                        }
+//                    }
+//                    sendMessage(51, chatId, bot);   // Рассылка закончена!
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(121))) {   // Редактировать
                     if (stock.isCTA()) {
@@ -681,14 +685,14 @@ public class NewDistributionCommand extends Command {
                         break;
                     case TASK_NAME:
                         task.setName(updateMessageText);
-                        if (isTemplateStock) {
+                        if (isTemplateStock == 1) {
                             taskTemplateDao.update(task);
                         } else {
                             taskDao.update(task);
                         }
                         break;
                 }
-                if (isTemplateStock) {
+                if (isTemplateStock == 1) {
                     stockTemplateDao.updateStock(stock);
                 } else {
                     stockDao.updateStock(stock);
@@ -748,12 +752,19 @@ public class NewDistributionCommand extends Command {
 
     private void sendDistribution() throws SQLException, TelegramApiException {
         sendMessage(50, chatId, bot);   // Начинаю рассылку...
+        SendMessage sendMessage =new SendMessage()
+                .setText(distributionText)
+                .setParseMode(ParseMode.HTML);
+        if (isTemplateStock == 1){
+            stock.setAddedBy(userDao.getUserByChatId(chatId));
+            stockDao.insertStock(stock);
+        }
+        if (isTemplateStock != 0){
+            sendMessage = sendMessage.setReplyMarkup(getKeyboard());
+        }
         for (User user : users) {
             try {
-                bot.sendMessage(new SendMessage()
-                        .setText(distributionText)
-                        .setChatId(user.getChatId())
-                        .setParseMode(ParseMode.HTML));
+                bot.sendMessage(sendMessage.setChatId(user.getChatId()));
                 if (images != null) {
                     for (String image : images) {
                         bot.sendPhoto(new SendPhoto()

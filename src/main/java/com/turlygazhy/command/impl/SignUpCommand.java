@@ -209,7 +209,7 @@ public class SignUpCommand extends Command {
         return keyboardMarkup;
     }
 
-    private InlineKeyboardMarkup getMonth() {
+    private InlineKeyboardMarkup getMonth() throws SQLException {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         for (int i = 1; i < 13; ) {
@@ -219,7 +219,7 @@ public class SignUpCommand extends Command {
                     break;
                 }
                 InlineKeyboardButton button = new InlineKeyboardButton();
-                button.setText(i < 10 ? "0" + i : i + "");
+                button.setText(buttonDao.getButtonText(151+i));
                 button.setCallbackData(i < 10 ? "0" + i : i + "");
                 row.add(button);
                 i++;

@@ -316,7 +316,7 @@ public class ManualStockCommand extends Command {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setCallbackData("id=" + stockId + " cmd=" + buttonDao.getButtonText(80));
+        button.setCallbackData("id=" + stockId + " gr=" + groupId + " cmd=" + buttonDao.getButtonText(80));
         button.setText(buttonDao.getButtonText(80));
         row.add(button);
         rows.add(row);

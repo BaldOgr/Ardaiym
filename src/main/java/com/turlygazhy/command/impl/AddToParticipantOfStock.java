@@ -163,7 +163,7 @@ public class AddToParticipantOfStock extends Command {
             while (datesIterator.hasNext()) {
                 Dates date = (Dates) datesIterator.next();
                 for (Participant participant : task.getParticipants()) {
-                    if (participant.getUser().getId() == user.getId()) {
+                    if (participant.getUser().getId() == user.getId() && participant.getUser() != null) {
                         if (date.getId() == participant.getDate().getId()) {
                             datesIterator.remove();
                             break;

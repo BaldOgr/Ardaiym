@@ -33,11 +33,14 @@ public class SurveyCommand extends Command {
     private Type type;
     private int stockId;
     FamilyRate rate;
+    private int groupId;
 
     @Override
     public boolean execute(Update update, Bot bot) throws SQLException, TelegramApiException {
         if (waitingType == null) {
             stockId = Integer.parseInt(updateMessageText.substring(3, updateMessageText.indexOf(" ")));
+            updateMessageText = updateMessageText.substring(updateMessageText.indexOf(" ")+1);
+            groupId = Integer.parseInt(updateMessageText.substring(updateMessageText.indexOf("gr=")+3, updateMessageText.indexOf(" ")));
             sendMessage(106, chatId, bot);  // Как вы думаете, есть ли среди тех...
             type = Type.GOOD_FAMILIES;
             waitingType = WaitingType.CHOOSE;
@@ -126,7 +129,6 @@ public class SurveyCommand extends Command {
 
     private void sendFamilyList() throws SQLException, TelegramApiException {
         if (families == null) {
-            int groupId = familiesDao.getGroupId(userDao.getUserByChatId(chatId).getId(), stockId, true);
             tempFamilies = familiesDao.getFamilyListByGroupId(groupId, stockId);
             families = new ArrayList<>(tempFamilies);
         }

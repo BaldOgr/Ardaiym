@@ -52,8 +52,24 @@ public class StockDao extends AbstractDao {
         DaoFactory.getFactory().getTypeOfWorkDao().insertTypeOfWorkList(stock.getTaskList());
     }
 
-    public void updateStock(Stock stock) throws SQLException {
+    public void updateStockTemplate(Stock stock) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("UPDATE STOCK_TEMPLATE SET STATUS = ?, REPORT = ?, ADDED_BY = ?, TITLE = ?, DESCRIPTION = ?, TITLE_FOR_ADMIN = ? WHERE ID = ?");
+        ps.setInt(1, stock.getStatus());
+        ps.setString(2, stock.getReport());
+        if (stock.getAddedBy() != null) {
+            ps.setLong(3, stock.getAddedBy().getChatId());
+        } else {
+            ps.setLong(3, 0);
+        }
+        ps.setString(4, stock.getTitle());
+        ps.setString(5, stock.getDescription());
+        ps.setString(6, stock.getTitleForAdmin());
+        ps.setInt(7, stock.getId());
+        ps.execute();
+    }
+
+    public void updateStock(Stock stock) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("UPDATE STOCK SET STATUS = ?, REPORT = ?, ADDED_BY = ?, TITLE = ?, DESCRIPTION = ?, TITLE_FOR_ADMIN = ? WHERE ID = ?");
         ps.setInt(1, stock.getStatus());
         ps.setString(2, stock.getReport());
         if (stock.getAddedBy() != null) {

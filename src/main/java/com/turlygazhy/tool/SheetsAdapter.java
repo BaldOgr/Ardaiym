@@ -7,13 +7,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.turlygazhy.entity.Family;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +24,7 @@ public class SheetsAdapter {
     private static final List<String> SPREADSHEET_SCOPES = Arrays.asList(SheetsScopes.SPREADSHEETS);
     private static final String SPREAD_SHEET_ID = "14s83d9z4xwEmyOWwWSWPrA3QvDVE0NKl0JMGmf8dXjU";
     private static SimpleDateFormat format = new SimpleDateFormat("dd.MM.yy hh:mm");
-    public static final String DIR = "C:\\bots-data\\ardaiym.json";
+    private static final String DIR = "/home/daniyar/IdeaProjects/Ardaiym1/members-36a5849089da.json";
 
 
     private static Sheets service;

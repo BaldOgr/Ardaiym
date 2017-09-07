@@ -170,6 +170,9 @@ public class SendUserStatisticToSheetsCommand extends Command {
     }
 
     private void sendStockList(List<Stock> stocks) throws SQLException, TelegramApiException {
+        if (stocks.size() == 0){
+            sendMessage("No have done stocks");
+        }
         StringBuilder sb = new StringBuilder();
         for (Stock stock : stocks) {
             sb.append("/id").append(stock.getId()).append(" - ").append(stock.getTitleForAdmin()).append("\n");

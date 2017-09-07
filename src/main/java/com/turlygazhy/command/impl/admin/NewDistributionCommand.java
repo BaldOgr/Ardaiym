@@ -136,6 +136,16 @@ public class NewDistributionCommand extends Command {
                 return false;
 
             case CHOOSE_TYPE_OF_WORK:
+                if (updateMessageText.equals(buttonDao.getButtonText(10))) {
+                    stockPage = 0;
+                    bot.editMessageText(new EditMessageText()
+                            .setMessageId(updateMessage.getMessageId())
+                            .setChatId(chatId)
+                            .setText(messageDao.getMessageText(46))
+                            .setReplyMarkup(getChooseStockKeyboard(stockDao.getUndoneStockList())));
+                    waitingType = WaitingType.CHOOSE;
+                    return false;
+                }
                 if (updateMessageText.equals(buttonDao.getButtonText(47))) {    // Для всех волонтеров
                     users = new ArrayList<>();
                     for (Task task : stock.getTaskList()) {
@@ -260,7 +270,6 @@ public class NewDistributionCommand extends Command {
                 }
                 if (updateMessageText.equals(buttonDao.getButtonText(116))) {   // Введите текст
                     sendMessage(44, chatId, bot);   //  Введите сообщение
-                    images = new ArrayList<>();
                     waitingType = WaitingType.MESSAGE;
                     return false;
                 }
@@ -363,6 +372,7 @@ public class NewDistributionCommand extends Command {
                 if (updateMessageText.equals(buttonDao.getButtonText(120))) {   // Отправить
                     distributionText = stock.parseStockForMessage();
                     sendMessage(161, chatId, bot);  // Хотите добавить фото?
+                    images = new ArrayList<>();
                     waitingType = WaitingType.CHOOSE_ANSWER;
                     return false;
 //                    sendMessage(50, chatId, bot);   // Начинаю рассылку...
@@ -1101,8 +1111,10 @@ public class NewDistributionCommand extends Command {
 
     private boolean userContains(User user) {
         for (User user1 : users) {
-            if (Objects.equals(user.getChatId(), user1.getChatId())) {
-                return true;
+            if (user != null && user1 != null) {
+                if (Objects.equals(user.getChatId(), user1.getChatId())) {
+                    return true;
+                }
             }
         }
         return false;

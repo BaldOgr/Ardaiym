@@ -149,6 +149,7 @@ public class ShowStockCommand extends Command {
                     sendStockList();
                     return false;
                 }
+                stock.setStatus(4); // Акция закончена
                 stock.setReport(updateMessageText);
                 stock.setAddedBy(userDao.getUserByChatId(chatId));
                 stockDao.updateStock(stock);
@@ -226,7 +227,6 @@ public class ShowStockCommand extends Command {
     }
 
     private void endStock() throws SQLException, TelegramApiException {
-        stock.setStatus(4);
         sendMessage(75, chatId, bot);   // Напишите отчет
         waitingType = WaitingType.TEXT;
     }

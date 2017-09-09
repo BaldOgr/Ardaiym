@@ -198,6 +198,11 @@ public class ShowStockCommand extends Command {
         waitingType = WaitingType.CHOOSE_STOCK;
     }
 
+    private void endStock() throws SQLException, TelegramApiException {
+        sendMessage(75, chatId, bot);   // Напишите отчет
+        waitingType = WaitingType.TEXT;
+    }
+
     private void sendSurvey() throws SQLException, TelegramApiException {
         StringBuilder sb = new StringBuilder();
         sb.append(stock.getTitle()).append("\n").append(messageDao.getMessageText(80));
@@ -224,10 +229,5 @@ public class ShowStockCommand extends Command {
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);
         return keyboardMarkup;
-    }
-
-    private void endStock() throws SQLException, TelegramApiException {
-        sendMessage(75, chatId, bot);   // Напишите отчет
-        waitingType = WaitingType.TEXT;
     }
 }

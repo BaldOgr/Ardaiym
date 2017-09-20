@@ -6,13 +6,23 @@ import com.turlygazhy.entity.*;
 import com.turlygazhy.tool.SheetsAdapter;
 import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendContact;
+import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.w3c.dom.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +118,12 @@ public class SendUserStatisticToSheetsCommand extends Command {
                     waitingType = WaitingType.COMMAND;
                     return false;
                 }
-                if (updateMessageText.equals("prev")){
+                if (updateMessageText.equals("prev")) {
                     userListPage--;
                     sendUserList();
                     return false;
                 }
-                if (updateMessageText.equals("next")){
+                if (updateMessageText.equals("next")) {
                     userListPage++;
                     sendUserList();
                     return false;
@@ -170,7 +180,7 @@ public class SendUserStatisticToSheetsCommand extends Command {
     }
 
     private void sendStockList(List<Stock> stocks) throws SQLException, TelegramApiException {
-        if (stocks.size() == 0){
+        if (stocks.size() == 0) {
             sendMessage("No have done stocks");
         }
         StringBuilder sb = new StringBuilder();
@@ -269,10 +279,22 @@ public class SendUserStatisticToSheetsCommand extends Command {
 
     private void sendStatisticToGoogleSheets() throws SQLException, TelegramApiException {
         sendMessage("Doing..");
-        List<User> users = userDao.getUsers();
+        Document document;
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            DOMImplementation implementation = builder.getDOMImplementation();
+            document = implementation.createDocument(null, null, null);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            return;
+        }
+        Element root = document.createElement("users");
+        document.appendChild(root);
+        List<User> userList = userDao.getUsers();
         List<Stock> stocks = stockDao.getStocks();
         List<List<Object>> writeData = new ArrayList<>();
-        for (User user : users) {
+        for (User user : userList) {
             if (user == null) {
                 continue;
             }
@@ -282,26 +304,56 @@ public class SendUserStatisticToSheetsCommand extends Command {
             List<String> registered = new ArrayList<>();
             List<String> participated = new ArrayList<>();
 
+            Element userElement = document.createElement("user");
+            root.appendChild(userElement);
+
+            addInfoToXml(userElement, document, user);
+
             userData.add(user.getId());
             userData.add(user.getName());
             userData.add(user.getPhoneNumber());
             userData.add(user.getCity());
+
             if (user.isSex()) {
                 userData.add(buttonDao.getButtonText(11));  // Мужчина
             } else {
                 userData.add(buttonDao.getButtonText(12));  // Женщина
             }
             userData.add(user.getBirthday());
+
             List<User> userFriends = friendsDao.getFriends(user.getChatId());
             userData.add(messageDao.getMessageText(145));   // Одобрили
+            Element friends = document.createElement("friends");
+            userElement.appendChild(friends);
             for (User user1 : userFriends) {
+                if (user1 == null) {
+                    continue;
+                }
                 userData.add(user1.getName());
+                Element friend = document.createElement("user");
+                friends.appendChild(friend);
+                friend.setAttribute("id", String.valueOf(user1.getId()));
+
             }
+
+            Element stocksXml = document.createElement("stocks");
+            userElement.appendChild(stocksXml);
+            Element registeredXml = document.createElement("registered");
+            stocksXml.appendChild(registeredXml);
+
+            Element participatedXml = document.createElement("participated");
+            stocksXml.appendChild(participatedXml);
+
             for (Stock stock : stocks) {
+
                 for (Task task : stock.getTaskList()) {                     //Добавляем акции, в которых участвовал волонтер
                     if (addParticipant(task, user)) {
                         registered.add(stock.getTitleForAdmin());
                         registeredInStockCount++;
+
+                        Element stockXml = document.createElement("stock");
+                        registeredXml.appendChild(stockXml);
+                        stockXml.setTextContent(stock.getTitleForAdmin());
                         break;
                     }
                 }
@@ -311,12 +363,20 @@ public class SendUserStatisticToSheetsCommand extends Command {
                     if (participated(groupUsers, user)) {
                         participated.add(stock.getTitleForAdmin());
                         participatedCount++;
+
+                        Element stockXml = document.createElement("stock");
+                        participatedXml.appendChild(stockXml);
+                        stockXml.setTextContent(stock.getTitleForAdmin());
                         break;
                     }
                 }
             }
 
             userData.add(registeredInStockCount + "/" + participatedCount);
+
+            stocksXml.setAttribute("registered", String.valueOf(registeredInStockCount));
+            stocksXml.setAttribute("participated", String.valueOf(participatedCount));
+
             for (String str : registered) {
                 userData.add(str);
                 userData.add(messageDao.getMessageText(134));
@@ -331,10 +391,51 @@ public class SendUserStatisticToSheetsCommand extends Command {
         }
         try {
             SheetsAdapter.writeDataToUsersSheet(writeData);
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(document);
+            File file = new File("users.xml");
+            StreamResult result = new StreamResult(file);
+            transformer.transform(source, result);
+
+            bot.sendDocument(new SendDocument()
+                    .setChatId(chatId)
+                    .setNewDocument(file));
         } catch (Exception e) {
             e.printStackTrace();
         }
         sendMessage(40, chatId, bot);   // Готово
+    }
+
+    private void addInfoToXml(Element userElement, Document document, User user) throws SQLException {
+        Element idXml = document.createElement("id");
+        userElement.appendChild(idXml);
+        idXml.setTextContent(String.valueOf(user.getId()));
+
+        Element nameXml = document.createElement("name");
+        userElement.appendChild(nameXml);
+        nameXml.setTextContent(user.getName());
+
+        Element sexXml = document.createElement("sex");
+        userElement.appendChild(sexXml);
+
+        if (user.isSex()) {
+            sexXml.setTextContent(buttonDao.getButtonText(11));
+        } else {
+            sexXml.setTextContent(buttonDao.getButtonText(12));
+        }
+        Element phoneXml = document.createElement("phone_number");
+        userElement.appendChild(phoneXml);
+        phoneXml.setTextContent(user.getPhoneNumber());
+
+        Element cityXml = document.createElement("city");
+        userElement.appendChild(cityXml);
+        cityXml.setTextContent(user.getCity());
+
+        Element birthdayXml = document.createElement("birthday");
+        userElement.appendChild(birthdayXml);
+        birthdayXml.setTextContent(user.getBirthday());
+
+
     }
 
     private boolean wasParticipated(String str, List<String> participated) {
